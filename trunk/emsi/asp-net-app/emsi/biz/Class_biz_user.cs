@@ -59,17 +59,16 @@ namespace Class_biz_user
     public string[] Roles()
       {
       var result = new string[] {k.EMPTY};
-      if(
-          (ConfigurationManager.AppSettings["application_name"].Contains("WebEMSOF") || ConfigurationManager.AppSettings["application_name"].Contains("ConEdLink"))
-        &&
-          (Kind() == Class_biz_user_Static.KIND_THAT_HAS_ROLES)
-        )
+      if (ConfigurationManager.AppSettings["application_name"].Contains("PACRAT"))
         {
-        result = new TClass_db_user().RolesOf("regional_staffer_", IdNum());
+        result = db_user.RolesOf(IdNum());
         }
       else
         {
-        result = db_user.RolesOf(IdNum());
+        if (Kind() == Class_biz_user_Static.KIND_THAT_HAS_ROLES)
+          {
+          result = new TClass_db_user().RolesOf("regional_staffer_", IdNum());
+          }
         }
       return result;
       }
