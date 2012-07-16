@@ -16,6 +16,23 @@ namespace Class_db_accounts
             // TODO: Add any constructor code here
             db_trail = new TClass_db_trail();
         }
+
+    public bool BeOkForConedSponsorToInputRosterByBatch(string id)
+      {
+      Open();
+      var be_ok_for_coned_sponsor_to_input_roster_by_batch = ("1" == new MySqlCommand("select be_ok_to_input_roster_by_batch from coned_sponsor_user where id = '" + id + "'",connection).ExecuteScalar().ToString());
+      Close();
+      return be_ok_for_coned_sponsor_to_input_roster_by_batch;
+      }
+
+    public bool BeOkForConedSponsorToInputRosterByCopy(string id)
+      {
+      Open();
+      var be_ok_for_coned_sponsor_to_input_roster_by_copy = ("1" == new MySqlCommand("select be_ok_to_input_roster_by_copy from coned_sponsor_user where id = '" + id + "'",connection).ExecuteScalar().ToString());
+      Close();
+      return be_ok_for_coned_sponsor_to_input_roster_by_copy;
+      }
+
         public bool BeStalePassword(string user_kind, string user_id)
         {
             bool result;

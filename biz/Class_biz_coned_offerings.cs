@@ -92,6 +92,15 @@ namespace Class_biz_coned_offerings
       db_coned_offerings.BindClassCatalog(region_code,coned_sponsor_user_id,be_limited_to_needing_coned_sponsor_finalization,start_year,sort_order,be_sort_order_ascending,target);
       }
 
+    public void BindDirectToListControlForCopy
+      (
+      string id,
+      object target
+      )
+      {
+      db_coned_offerings.BindDirectToListControlForCopy(id,target);
+      }
+
     public void BindReadyRosters
       (
       string region_code,

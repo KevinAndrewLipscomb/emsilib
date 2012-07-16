@@ -186,6 +186,37 @@ namespace Class_db_coned_offerings
       Close();
       }
 
+    internal void BindDirectToListControlForCopy
+      (
+      string id,
+      object target
+      )
+      {
+      ((target) as ListControl).Items.Add(new ListItem("-- Select --",k.EMPTY));
+      Open();
+      ((target) as ListControl).Items.Clear();
+      var dr = new MySqlCommand
+        (
+        "SELECT t.id"
+        + " , CONVERT(concat(IFNULL(t.class_number,'-'),'|',IFNULL(t.course_title,'-'),'|',IFNULL(t.location,'-'),'|',IFNULL(t.start_date_time,'-'),'|',IFNULL(t.end_date_time,'-')) USING utf8) as spec"
+        + " FROM coned_offering s"
+        +   " join coned_offering t on (t.sponsor_id=s.sponsor_id and t.id<>s.id)"
+        +   " join coned_offering_roster on (coned_offering_roster.coned_offering_id=t.id)" //prevents coned_offerings with no attendees from showing up in target list
+        + " where s.id = '" + id + "'"
+        +   " and t.end_date_time > DATE_ADD(CURDATE(),INTERVAL -18 MONTH)"
+        + " group by t.id"  //prevents coned_offerings with no attendees from showing up in target list
+        + " order by t.start_date_time desc",
+        connection
+        )
+        .ExecuteReader();
+      while (dr.Read())
+        {
+        ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
+        }
+      dr.Close();
+      Close();
+      }
+
     internal string ClassIdOf(object summary)
       {
       return (summary as coned_offering_summary).class_id;

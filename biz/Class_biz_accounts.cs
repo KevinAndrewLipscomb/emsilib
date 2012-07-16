@@ -26,6 +26,16 @@ namespace Class_biz_accounts
             db_accounts = new TClass_db_accounts();
         }
 
+    public bool BeOkForConedSponsorToInputRosterByBatch()
+      {
+      return ((biz_user.Kind() == "coned_sponsor") && db_accounts.BeOkForConedSponsorToInputRosterByBatch(biz_user.IdNum()));
+      }
+
+    public bool BeOkForConedSponsorToInputRosterByCopy()
+      {
+      return ((biz_user.Kind() == "coned_sponsor") && db_accounts.BeOkForConedSponsorToInputRosterByCopy(biz_user.IdNum()));
+      }
+
         public bool BeStalePassword(string user_kind, string user_id)
         {
             bool result;
