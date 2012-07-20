@@ -18,18 +18,18 @@ namespace Class_biz_counties
           {
           db_counties.BindDirectToListControl(target, unselected_literal, selected_value, region_code);
           }
-        //public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
-        //  {
-        //  BindDirectToListControl(target,unselected_literal,selected_value,region_code:(ConfigurationManager.AppSettings["application_name"].Contains("ConEdLink") ? k.EMPTY : region_code));
-        //  }
-        //public void BindDirectToListControl(object target, string unselected_literal)
-        //  {
-        //  BindDirectToListControl(target, unselected_literal, k.EMPTY);
-        //  }
-        //public void BindDirectToListControl(object target)
-        //  {
-        //  BindDirectToListControl(target, "-- County --");
-        //  }
+        public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
+          {
+          BindDirectToListControl(target,unselected_literal,selected_value,region_code:k.EMPTY);
+          }
+        public void BindDirectToListControl(object target, string unselected_literal)
+          {
+          BindDirectToListControl(target, unselected_literal, k.EMPTY);
+          }
+        public void BindDirectToListControl(object target)
+          {
+          BindDirectToListControl(target, "-- County --");
+          }
 
         public void BindEmsrsToListControl(object target, string unselected_literal, string selected_value)
         {
