@@ -4,6 +4,7 @@ using Class_biz_notifications;
 using Class_db_coned_offering_statuses;
 using Class_db_coned_offerings;
 using Class_db_practitioners;
+using Class_db_regions;
 using ConEdLink.component.ss;
 using kix;
 using System;
@@ -16,6 +17,7 @@ namespace Class_biz_coned_offerings
     private TClass_biz_notifications biz_notifications = null;
     private TClass_db_coned_offerings db_coned_offerings = null;
     private TClass_db_practitioners db_practitioners = null;
+    private TClass_db_regions db_regions = null;
     private Class_ss_emsams ss_emsams = null;
 
     public TClass_biz_coned_offerings() : base()
@@ -23,6 +25,7 @@ namespace Class_biz_coned_offerings
       biz_notifications = new TClass_biz_notifications();
       db_coned_offerings = new TClass_db_coned_offerings();
       db_practitioners = new TClass_db_practitioners();
+      db_regions = new TClass_db_regions();
       ss_emsams = new Class_ss_emsams();
       }
 
@@ -461,6 +464,11 @@ namespace Class_biz_coned_offerings
     public string PhrnOtherHoursOf(object summary)
       {
       return db_coned_offerings.PhrnOtherHoursOf(summary);
+      }
+
+    internal string RegionCodeOf(string class_number)
+      {
+      return db_regions.CodeOfEmsrsCode(class_number.Substring(0,2));
       }
 
     public void Set
