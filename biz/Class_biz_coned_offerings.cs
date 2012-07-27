@@ -1,5 +1,6 @@
 // Derived from KiAspdotnetFramework/component/biz/Class~biz~~template~kicrudhelped~item.cs~template
 
+using Class_biz_accounts;
 using Class_biz_notifications;
 using Class_db_coned_offering_statuses;
 using Class_db_coned_offerings;
@@ -14,6 +15,7 @@ namespace Class_biz_coned_offerings
   {
   public class TClass_biz_coned_offerings
     {
+    private TClass_biz_accounts biz_accounts = null;
     private TClass_biz_notifications biz_notifications = null;
     private TClass_db_coned_offerings db_coned_offerings = null;
     private TClass_db_practitioners db_practitioners = null;
@@ -22,6 +24,7 @@ namespace Class_biz_coned_offerings
 
     public TClass_biz_coned_offerings() : base()
       {
+      biz_accounts = new TClass_biz_accounts();
       biz_notifications = new TClass_biz_notifications();
       db_coned_offerings = new TClass_db_coned_offerings();
       db_practitioners = new TClass_db_practitioners();
@@ -466,9 +469,40 @@ namespace Class_biz_coned_offerings
       return db_coned_offerings.PhrnOtherHoursOf(summary);
       }
 
-    internal string RegionCodeOf(string class_number)
+    public string PublicContactEmailOf(object summary)
+      {
+      return db_coned_offerings.PublicContactEmailOf(summary);
+      }
+
+    public string RegionCodeOf(string class_number)
       {
       return db_regions.CodeOfEmsrsCode(class_number.Substring(0,2));
+      }
+
+    public void ReturnToSponsor
+      (
+      object summary,
+      k.int_nonnegative num_attendees,
+      string actor,
+      string disapproval_reason
+      )
+      {
+      db_coned_offerings.SetStatus(IdOf(summary),coned_offering_status_enumeration.NEEDS_CONED_SPONSOR_FINALIZATION);
+      biz_notifications.IssueForClassUnclosed
+        (
+        sponsor_email_target:(PublicContactEmailOf(summary) + k.COMMA + SponsorContactEmailOf(summary) + k.COMMA + SponsorEmailOf(summary) + k.COMMA + SponsorPublicContactEmailOf(summary)).Replace(k.COMMA + k.COMMA,k.COMMA),
+        class_number:ClassNumberOf(summary),
+        course_title:CourseTitleOf(summary),
+        start:StartDateOf(summary) + k.SPACE + StartOtherOf(summary),
+        end:EndDateOf(summary) + k.SPACE + EndOtherOf(summary),
+        length:LengthOf(summary).val.ToString(),
+        num_attendees:num_attendees.val.ToString(),
+        location:LocationOf(summary),
+        actor:actor,
+        actor_email_address:biz_accounts.SelfEmailAddress(),
+        status_description:coned_offering_status_enumeration.NEEDS_CONED_SPONSOR_FINALIZATION.ToString(),
+        reason:disapproval_reason
+        );
       }
 
     public void Set
@@ -612,9 +646,24 @@ namespace Class_biz_coned_offerings
         );
       }
 
+    public string SponsorContactEmailOf(object summary)
+      {
+      return db_coned_offerings.SponsorContactEmailOf(summary);
+      }
+
+    public string SponsorEmailOf(object summary)
+      {
+      return db_coned_offerings.SponsorEmailOf(summary);
+      }
+
     public string SponsorNumberOf(object summary)
       {
       return db_coned_offerings.SponsorNumberOf(summary);
+      }
+
+    public string SponsorPublicContactEmailOf(object summary)
+      {
+      return db_coned_offerings.SponsorPublicContactEmailOf(summary);
       }
 
     public string StandardSafeRenditionOf(string class_number)

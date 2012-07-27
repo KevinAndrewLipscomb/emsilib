@@ -382,12 +382,10 @@ namespace Class_biz_accounts
             }
         }
 
-        private string SelfEmailAddress()
-        {
-            string result;
-            result = EmailAddressByKindId(biz_user.Kind(), biz_user.IdNum());
-            return result;
-        }
+        public string SelfEmailAddress()
+          {
+          return EmailAddressByKindId(biz_user.Kind(), biz_user.IdNum());
+          }
 
         public void SetPasswordResetEmailAddress
           (
