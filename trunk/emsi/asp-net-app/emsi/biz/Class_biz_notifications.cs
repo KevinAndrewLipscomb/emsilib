@@ -191,7 +191,7 @@ namespace Class_biz_notifications
                 .Replace("<full_name/>", full_name.ToUpper())
                 .Replace("<user_email_address/>", user_email_address)
                 .Replace("<application_name/>", application_name)
-                .Replace("<explanation/>", k.WrapText(explanation, (k.NEW_LINE + "   "), Units.Class_biz_notifications.BreakChars, short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+                .Replace("<explanation/>", k.WrapText(explanation, (k.NEW_LINE + "   "), Class_biz_notifications_Static.BreakChars, short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
                 .Replace("<host_domain_name/>", host_domain_name);
               };
 
@@ -271,10 +271,62 @@ namespace Class_biz_notifications
             template_reader.Close();
         }
 
+        private delegate string IssueForClassUnclosed_Merge(string s);
+        public void IssueForClassUnclosed
+          (
+          string sponsor_email_target,
+          string class_number,
+          string course_title,
+          string start,
+          string end,
+          string length,
+          string num_attendees,
+          string location,
+          string actor,
+          string actor_email_address,
+          string status_description,
+          string reason
+          )
+          {
+
+          IssueForClassUnclosed_Merge Merge = delegate (string s)
+            {
+            return s
+              .Replace("<application_name/>",application_name)
+              .Replace("<host_domain_name/>",host_domain_name)
+              .Replace("<class_number/>",new TClass_biz_coned_offerings().StandardSafeRenditionOf(class_number))
+              .Replace("<course_title/>",course_title)
+              .Replace("<start/>",start)
+              .Replace("<end/>",end)
+              .Replace("<length/>",length)
+              .Replace("<num_attendees/>",num_attendees)
+              .Replace("<location/>",location)
+              .Replace("<actor/>",actor)
+              .Replace("<actor_email_address/>",actor_email_address)
+              .Replace("<status_description/>",status_description)
+              .Replace("<reason/>",k.WrapText(t:reason,insert_string:(k.NEW_LINE + "   "),break_char_array:Class_biz_notifications_Static.BreakChars,max_line_len:short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+              ;
+            };
+
+          var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/class_unclosed.txt"));
+          k.SmtpMailSend
+            (
+            from:ConfigurationManager.AppSettings["sender_email_address"],
+            to:sponsor_email_target,
+            subject:Merge(template_reader.ReadLine()),
+            message_string:Merge(template_reader.ReadToEnd()),
+            be_html:false,
+            cc:actor_email_address,
+            bcc:k.EMPTY,
+            reply_to:actor_email_address
+            );
+          template_reader.Close();
+          }
+
     private delegate string IssueForRosterDue_Merge(string s);
     internal void IssueForRosterDue(TClass_db_coned_offerings.RosterDue roster_due)
       {
-      IssueForClassClosed_Merge Merge = delegate (string s)
+      IssueForRosterDue_Merge Merge = delegate (string s)
         {
         return s
           .Replace("<application_name/>",application_name)
@@ -338,20 +390,3 @@ namespace Class_biz_notifications
     } // end TClass_biz_notifications
 
 }
-
-namespace Class_biz_notifications.Units
-{
-    public class Class_biz_notifications
-    {
-        public static char[] BreakChars = new char[3 + 1];
-        //Constructor  Class_biz_notifications()
-        static Class_biz_notifications()
-        {
-            BreakChars[1] = Convert.ToChar(k.SPACE);
-            BreakChars[2] = Convert.ToChar(k.TAB);
-            BreakChars[3] = Convert.ToChar(k.HYPHEN);
-        }
-    } // end Class_biz_notifications
-
-}
-
