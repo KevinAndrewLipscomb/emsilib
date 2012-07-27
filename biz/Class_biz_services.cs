@@ -362,6 +362,11 @@ namespace Class_biz_services
             return result;
         }
 
+        public string RegionCodeOf(string service_id)
+          {
+          return db_services.RegionCodeOf(service_id);
+          }
+
         public void Set
           (
           string affiliate_num,

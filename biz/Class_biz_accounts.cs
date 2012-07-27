@@ -102,12 +102,14 @@ namespace Class_biz_accounts
             return result;
         }
 
-        public string EmailTargetByRole(string role)
-        {
-            string result;
-            result = db_accounts.EmailTargetByRole(role);
-            return result;
-        }
+        public string EmailTargetByRegionAndRole
+          (
+          string region_code,
+          string role
+          )
+          {
+          return db_accounts.EmailTargetByRegionAndRole(region_code,role);
+          }
 
         public bool Exists(string user_kind, string user_id, string encoded_password)
         {
@@ -120,7 +122,7 @@ namespace Class_biz_accounts
         {
             string emsof_coordinator_email_address;
             string service_name;
-            emsof_coordinator_email_address = EmailTargetByRole("emsof-coordinator");
+            emsof_coordinator_email_address = EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-coordinator");
             service_name = biz_services.NameOf(service_id);
             // be_html
             // cc
@@ -143,7 +145,7 @@ namespace Class_biz_accounts
             string emsof_coord_email_address;
             string message_text;
             // Get the next approver's email address.
-            emsof_coord_email_address = EmailTargetByRole("emsof-coordinator");
+            emsof_coord_email_address = EmailTargetByRegionAndRole(db_emsof_requests.RegionCodeOfMasterId(master_id),"emsof-coordinator");
             // Generate the base message.
             message_text = "Recently, " + service_name + " submitted a request to conduct an EMSOF Category 4 Provider Equipment project.  " + "This message documents the approval by all the necessary parties of that request as recorded in " + ConfigurationManager.AppSettings["application_name"] + k.PERIOD + k.NEW_LINE + k.NEW_LINE + "Congratulations!  YOU MAY NOW PROCEED WITH THE PROJECT SPECIFIED BELOW.  Please print this message and keep it for your " + "records." + k.NEW_LINE + k.NEW_LINE + "To complete this project and receive proper reimbursement, please do the following:" + k.NEW_LINE + k.NEW_LINE + "1. Purchase the items specified below." + k.NEW_LINE + k.NEW_LINE + "2. FAX OR SEND COPIES OF YOUR INVOICES AND/OR RECEIPTS TO THE REGIONAL" + k.NEW_LINE + "   COUNCIL." + k.NEW_LINE + k.NEW_LINE + "3. Take delivery of the specified equipment." + k.NEW_LINE + k.NEW_LINE + "4. Send proof of payment to the regional council.  Documents acceptable" + k.NEW_LINE + "   for this purpose include:" + k.NEW_LINE + k.NEW_LINE + "   -  Copy of canceled check" + k.NEW_LINE + "   -  Copy of bank draft" + k.NEW_LINE + "   -  Copy of bank statement" + k.NEW_LINE + "   -  Copy of wire transfer slip" + k.NEW_LINE + "   -  Copy of credit card statement" + k.NEW_LINE + k.NEW_LINE + "5. Watch your mailbox for the reimbursement check!" + k.NEW_LINE + k.NEW_LINE + k.NEW_LINE + "=== PROJECT DETAILS ===" + k.NEW_LINE + "This Notice To Proceed only applies to the following project:" + k.NEW_LINE + k.NEW_LINE + "--- Master data ---" + k.NEW_LINE + "Fiscal year:     " + fy_designator + k.NEW_LINE + "Sponsor region:  " + sponsor_region_name + k.NEW_LINE + "Sponsor county:  " + sponsor_county_name + k.NEW_LINE + k.NEW_LINE + "--- Detail data ---" + k.NEW_LINE + db_emsof_requests.DetailText(master_id) + k.NEW_LINE + "You can review your EMSOF requests by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact your Regional EMSOF Coordinator at:" + k.NEW_LINE + k.NEW_LINE + "   " + emsof_coord_email_address + "  (mailto:" + emsof_coord_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"];
             // Send notification to service.
@@ -160,7 +162,7 @@ namespace Class_biz_accounts
         {
             string emsof_coordinator_email_address;
             string service_name;
-            emsof_coordinator_email_address = EmailTargetByRole("emsof-coordinator");
+            emsof_coordinator_email_address = EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-coordinator");
             service_name = biz_services.NameOf(service_id);
             // be_html
             // cc
@@ -179,7 +181,7 @@ namespace Class_biz_accounts
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailTargetByRole("emsof-request-withdrawal-stakeholder") + k.COMMA + EmailAddressByKindId("county", county_code), "Service is WITHDRAWING an entire EMSOF request", service_name + " is withdrawing EMSOF request W#" + master_id + " in its totality.  The associated sponsor county is " + biz_counties.NameOf(county_code) + k.PERIOD + k.NEW_LINE + k.NEW_LINE + service_name + " is aware that this action effectively surrenders " + (db_emsof_requests.EmsofAnteOf(master_id)).ToString("C") + " of EMSOF matching funds for use by others." + k.NEW_LINE + k.NEW_LINE + "You can see the effect of this action by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact the " + service_name + " EMSOF Coordinator at:" + k.NEW_LINE + k.NEW_LINE + "   " + service_email_address + "  (mailto:" + service_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, service_email_address);
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-request-withdrawal-stakeholder") + k.COMMA + EmailAddressByKindId("county", county_code), "Service is WITHDRAWING an entire EMSOF request", service_name + " is withdrawing EMSOF request W#" + master_id + " in its totality.  The associated sponsor county is " + biz_counties.NameOf(county_code) + k.PERIOD + k.NEW_LINE + k.NEW_LINE + service_name + " is aware that this action effectively surrenders " + (db_emsof_requests.EmsofAnteOf(master_id)).ToString("C") + " of EMSOF matching funds for use by others." + k.NEW_LINE + k.NEW_LINE + "You can see the effect of this action by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact the " + service_name + " EMSOF Coordinator at:" + k.NEW_LINE + k.NEW_LINE + "   " + service_email_address + "  (mailto:" + service_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, service_email_address);
         }
 
         public void MakeDeadlineFailureNotification(milestone_type milestone, string service_id, string county_code)
@@ -232,7 +234,7 @@ namespace Class_biz_accounts
                 message_text = message_text + "WebEMSOF has advised the service not to proceed with any activity related to that request." + k.NEW_LINE + k.NEW_LINE;
             }
             message_text = message_text + "You can use WebEMSOF by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact the affected service at:" + k.NEW_LINE + k.NEW_LINE + "   " + service_email_address + "  (mailto:" + service_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"];
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], county_coord_email_address + k.COMMA + EmailTargetByRole("emsof-coordinator"), "Service missed deadline", message_text);
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], county_coord_email_address + k.COMMA + EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-coordinator"), "Service missed deadline", message_text);
         }
 
         public void MakeDemotionNotification(string role, string reviewer_descriptor, string new_status_description, string service_id, string service_name, string fy_designator, bool be_ok_to_rework, string reason, string county_code, string emsof_ante)
@@ -270,7 +272,7 @@ namespace Class_biz_accounts
                 // Get other stakeholder's email address.
                 if (biz_user.Kind() == "county")
                 {
-                    other_stakeholder_email_address = EmailTargetByRole("emsof-coordinator");
+                    other_stakeholder_email_address = EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-coordinator");
                 }
                 else if (biz_user.Kind() == "regional_staffer")
                 {
@@ -308,7 +310,7 @@ namespace Class_biz_accounts
             // Get the next approver's email address.
             if (next_reviewer_role != k.EMPTY)
             {
-                next_reviewer_email_target = EmailTargetByRole(next_reviewer_role);
+                next_reviewer_email_target = EmailTargetByRegionAndRole(biz_services.RegionCodeOf(service_id),next_reviewer_role);
             }
             else
             {
@@ -405,7 +407,7 @@ namespace Class_biz_accounts
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailTargetByRole("emsof-coordinator"), "POC has assumed EMSOF resposibility for Service", "Dear Regional Council EMSOF Coordinator," + k.NEW_LINE + k.NEW_LINE + contact_person_name + " has successfully logged into WebEMSOF and has agreed to assume EMSOF Point Of Contact responsibilities " + "for " + service_name + ".  Furthermore, " + contact_person_name + " has agreed to give " + "reasonable advance notice to both the service and the regional council if it becomes necessary to relinquish such " + "responsibilities." + k.NEW_LINE + k.NEW_LINE + "You can contact " + contact_person_name + " at:" + k.NEW_LINE + k.NEW_LINE + "   " + poc_email_address + "  (mailto:" + poc_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, poc_email_address);
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailTargetByRegionAndRole(biz_services.RegionCodeOf(service_id),"emsof-coordinator"), "POC has assumed EMSOF resposibility for Service", "Dear Regional Council EMSOF Coordinator," + k.NEW_LINE + k.NEW_LINE + contact_person_name + " has successfully logged into WebEMSOF and has agreed to assume EMSOF Point Of Contact responsibilities " + "for " + service_name + ".  Furthermore, " + contact_person_name + " has agreed to give " + "reasonable advance notice to both the service and the regional council if it becomes necessary to relinquish such " + "responsibilities." + k.NEW_LINE + k.NEW_LINE + "You can contact " + contact_person_name + " at:" + k.NEW_LINE + k.NEW_LINE + "   " + poc_email_address + "  (mailto:" + poc_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, poc_email_address);
         }
 
         public void Remind(milestone_type milestone, uint num_days_left, DateTime deadline_date, string service_id)

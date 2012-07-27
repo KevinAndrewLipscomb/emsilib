@@ -86,6 +86,11 @@ namespace Class_biz_counties
           return db_counties.NameOfSummary(summary);
           }
 
+        public string RegionCodeOf(string county_code)
+          {
+          return db_counties.RegionCodeOf(county_code);
+          }
+
         public void Set
           (
           string code,

@@ -624,6 +624,21 @@ namespace Class_db_services
             return result;
         }
 
+        internal string RegionCodeOf(string service_id)
+          {
+          Open();
+          var region_code_of = new MySqlCommand
+            (
+            "select region_code"
+            + " from service join county_region_map on (county_region_map.county_code=service.county_code)"
+            + " where service.id = '" + service_id + "'",
+            connection
+            )
+            .ExecuteScalar().ToString();
+          Close();
+          return region_code_of;
+          }
+
         public void Set
           (
           string affiliate_num,

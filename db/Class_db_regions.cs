@@ -119,6 +119,14 @@ namespace Class_db_regions
       BindEmsrsToListControl(target, "-- region --");
       }
 
+    internal string CodeOfEmsrsCode(string emsrs_code)
+      {
+      Open();
+      var code_of_emsrs_code = new MySqlCommand("select code from region_code_name_map where emsrs_code = '" + emsrs_code + "'",connection).ExecuteScalar().ToString();
+      Close();
+      return code_of_emsrs_code;
+      }
+
     public bool Delete(string code)
       {
       var result = true;

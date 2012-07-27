@@ -155,6 +155,14 @@ namespace Class_db_counties
       return (summary as county_summary).name;
       }
 
+    public string RegionCodeOf(string county_code)
+      {
+      Open();
+      var region_code_of = new MySqlCommand("select region_code from county_region_map where county_code = '" + county_code + "'",connection).ExecuteScalar().ToString();
+      Close();
+      return region_code_of;
+      }
+
     internal void Set
       (
       string code,

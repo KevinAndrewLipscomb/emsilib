@@ -169,23 +169,34 @@ namespace Class_db_accounts
             return result;
         }
 
-        public string EmailTargetByRole(string role)
-        {
-            string result;
-            MySqlDataReader dr;
-            string email_target;
-            email_target = k.EMPTY;
-            this.Open();
-            dr = new MySqlCommand("select password_reset_email_address" + " from regional_staffer_user" + " join regional_staffer_role on (regional_staffer_role.user_id=regional_staffer_user.id)" + " join regional_staffer_group on (regional_staffer_group.id=regional_staffer_role.group_id)" + " where regional_staffer_group.name = \"" + role + "\"", this.connection).ExecuteReader();
-            while (dr.Read())
+        public string EmailTargetByRegionAndRole
+          (
+          string region_code,
+          string role
+          )
+          {
+          var email_target = k.EMPTY;
+          Open();
+          var dr = new MySqlCommand
+            (
+            "select password_reset_email_address"
+            + " from regional_staffer_user"
+            +   " join regional_staffer_role on (regional_staffer_role.user_id=regional_staffer_user.id)"
+            +   " join regional_staffer_group on (regional_staffer_group.id=regional_staffer_role.group_id)"
+            +   " join regional_staffer on (regional_staffer.id=regional_staffer_user.id)"
+            + " where regional_staffer.region_code = '" + region_code + "'"
+            +   " and regional_staffer_group.name = '" + role + "'",
+            connection
+            )
+            .ExecuteReader();
+          while (dr.Read())
             {
-                email_target = email_target + dr["password_reset_email_address"].ToString() + k.COMMA;
+            email_target = email_target + dr["password_reset_email_address"].ToString() + k.COMMA;
             }
-            dr.Close();
-            this.Close();
-            result = email_target.Substring(0, email_target.Length - 1);
-            return result;
-        }
+          dr.Close();
+          Close();
+          return email_target.Substring(0, email_target.Length - 1);
+          }
 
         public bool Exists(string user_kind, string user_id, string encoded_password)
         {

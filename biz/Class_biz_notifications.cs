@@ -98,12 +98,15 @@ namespace Class_biz_notifications
       string status_description
       )
       {
+      var biz_accounts = new TClass_biz_accounts();
+      var biz_coned_offerings = new TClass_biz_coned_offerings();
+
       IssueForClassClosed_Merge Merge = delegate (string s)
         {
         return s
           .Replace("<application_name/>",application_name)
           .Replace("<host_domain_name/>",host_domain_name)
-          .Replace("<class_number/>",new TClass_biz_coned_offerings().StandardSafeRenditionOf(class_number))
+          .Replace("<class_number/>",biz_coned_offerings.StandardSafeRenditionOf(class_number))
           .Replace("<sponsor_number/>",sponsor_number)
           .Replace("<sponsor_name/>",sponsor_name)
           .Replace("<status_description/>",status_description)
@@ -120,12 +123,12 @@ namespace Class_biz_notifications
           ;
         };
 
-      var biz_accounts = new TClass_biz_accounts();
+      var region_code = biz_coned_offerings.RegionCodeOf(class_number);
       var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/roster_ready.txt"));
       k.SmtpMailSend
         (
         from:ConfigurationManager.AppSettings["sender_email_address"],
-        to:biz_accounts.EmailTargetByRole("education-coordinator") + k.COMMA + biz_accounts.EmailTargetByRole("education-specialist"),
+        to:biz_accounts.EmailTargetByRegionAndRole(region_code,"education-coordinator") + k.COMMA + biz_accounts.EmailTargetByRegionAndRole(region_code,"education-specialist"),
         subject:Merge(template_reader.ReadLine()),
         message_string:Merge(template_reader.ReadToEnd()),
         be_html:false,

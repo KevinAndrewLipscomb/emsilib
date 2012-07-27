@@ -64,7 +64,8 @@ namespace Class_biz_practitioners
       out string street_address_1,
       out string street_address_2,
       out string city_state_zip,
-      out bool be_instructor
+      out bool be_instructor,
+      out bool be_past
       )
       {
       return db_practitioners.Get
@@ -84,7 +85,8 @@ namespace Class_biz_practitioners
         out street_address_1,
         out street_address_2,
         out city_state_zip,
-        out be_instructor
+        out be_instructor,
+        out be_past
         );
       }
 
@@ -141,7 +143,8 @@ namespace Class_biz_practitioners
       string street_address_1,
       string street_address_2,
       string city_state_zip,
-      bool be_instructor
+      bool be_instructor,
+      bool be_past
       )
       {
       db_practitioners.Set
@@ -161,7 +164,8 @@ namespace Class_biz_practitioners
         street_address_1,
         street_address_2,
         city_state_zip,
-        be_instructor
+        be_instructor,
+        be_past
         );
       }
 

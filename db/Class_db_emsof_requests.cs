@@ -1224,6 +1224,27 @@ namespace Class_db_emsof_requests
             return result;
         }
 
+        internal string RegionCodeOfMasterId(string master_id)
+          {
+          Open();
+          var region_code_of_master_id = new MySqlCommand
+            (
+            "select region_code"
+            + " from emsof_request_master"
+            +   " join county_dictated_appropriation"
+            +     " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)"
+            +   " join region_dictated_appropriation"
+            +     " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)"
+            +   " join state_dictated_appropriation"
+            +     " on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+            + " where emsof_request_master.id = " + master_id,
+            connection
+            )
+            .ExecuteScalar().ToString();
+          Close();
+          return region_code_of_master_id;
+          }
+
         public void Regress(string master_id)
         {
             this.Open();

@@ -154,7 +154,8 @@ namespace Class_db_practitioners
       out string street_address_1,
       out string street_address_2,
       out string city_state_zip,
-      out bool be_instructor
+      out bool be_instructor,
+      out bool be_past
       )
       {
       last_name = k.EMPTY;
@@ -172,6 +173,7 @@ namespace Class_db_practitioners
       street_address_2 = k.EMPTY;
       city_state_zip = k.EMPTY;
       be_instructor = false;
+      be_past = false;
       var result = false;
       //
       Open();
@@ -193,6 +195,7 @@ namespace Class_db_practitioners
         street_address_2 = dr["street_address_2"].ToString();
         city_state_zip = dr["city_state_zip"].ToString();
         be_instructor = (dr["be_instructor"].ToString() == "1");
+        be_past = (dr["be_past"].ToString() == "1");
         result = true;
         }
       dr.Close();
@@ -474,7 +477,8 @@ namespace Class_db_practitioners
       string street_address_1,
       string street_address_2,
       string city_state_zip,
-      bool be_instructor
+      bool be_instructor,
+      bool be_past
       )
       {
       var childless_field_assignments_clause = k.EMPTY
@@ -493,6 +497,7 @@ namespace Class_db_practitioners
       + " , street_address_2 = NULLIF('" + street_address_2 + "','')"
       + " , city_state_zip = NULLIF('" + city_state_zip + "','')"
       + " , be_instructor = " + be_instructor.ToString()
+      + " , be_past = " + be_past.ToString()
       + k.EMPTY;
       Open();
       new MySqlCommand
