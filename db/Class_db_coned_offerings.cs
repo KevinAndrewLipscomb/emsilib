@@ -107,6 +107,7 @@ namespace Class_db_coned_offerings
         + " , CONCAT(start_date_time,' ',IFNULL(start_time,'')) as start"
         + " , CONCAT(end_date_time,' ',IFNULL(end_time,'')) as end"
         + " , count(coned_offering_roster.id) as num_attendees"
+        + " , IF(coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION','Yes','No') as be_in_process"
         + " from coned_offering"
         +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
         +   " join county_code_name_map on (county_code_name_map.emsrs_code=coned_offering.class_county_code)"
