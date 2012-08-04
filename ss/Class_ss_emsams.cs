@@ -1753,9 +1753,12 @@ namespace ConEdLink.component.ss
           if (city_state_zip.Length > 0)
             {
             var city_state_zip_index_of_comma = city_state_zip.IndexOf(k.COMMA);
-            teaching_entity.city = k.Safe(city_state_zip.Substring(0, city_state_zip_index_of_comma), k.safe_hint_type.POSTAL_CITY);
-            teaching_entity.state = k.Safe(city_state_zip.Substring(city_state_zip_index_of_comma), k.safe_hint_type.ALPHA);
-            teaching_entity.zip = k.Safe(city_state_zip.Substring(city_state_zip_index_of_comma), k.safe_hint_type.HYPHENATED_NUM);
+            if (city_state_zip_index_of_comma > -1)
+              {
+              teaching_entity.city = k.Safe(city_state_zip.Substring(0, city_state_zip_index_of_comma), k.safe_hint_type.POSTAL_CITY);
+              teaching_entity.state = k.Safe(city_state_zip.Substring(city_state_zip_index_of_comma), k.safe_hint_type.ALPHA);
+              teaching_entity.zip = k.Safe(city_state_zip.Substring(city_state_zip_index_of_comma), k.safe_hint_type.HYPHENATED_NUM);
+              }
             }
           teaching_entity.county_name = county_name;
           teaching_entity.sponsor_number = k.Safe(hnc_sponsor_number[i.val].InnerText.Trim(), k.safe_hint_type.HYPHENATED_NUM);
