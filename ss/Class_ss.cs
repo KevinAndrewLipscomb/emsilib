@@ -52,6 +52,7 @@ namespace Class_ss
         consumed_stream_of = stream_reader.ReadToEnd();
         stream_reader.Close();
         stream_reader.Dispose();
+        response.Close();  // Prevents timeout errors in later calls to HttpWebRequest.GetResponse() via Fiddler-based scraping code.
         }
       return consumed_stream_of;
       }
