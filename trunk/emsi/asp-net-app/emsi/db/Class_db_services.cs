@@ -867,7 +867,21 @@ namespace Class_db_services
             + " , radio_channel_6 = NULLIF('" + radio_channel_6 +  "', '')"
             + " , primary_response_area = NULLIF('" + primary_response_area + "','')";
             Open();
-            new MySqlCommand(db_trail.Saved("insert service" + " set affiliate_num = NULLIF('" + affiliate_num + "','')" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), connection).ExecuteNonQuery();
+            new MySqlCommand
+              (
+              db_trail.Saved
+                (
+                k.InsertOnDuplicateKeyUpdateTraditionalMimic
+                  (
+                  target_table_name:"service",
+                  key_field_name:"affiliate_num",
+                  key_field_value:affiliate_num,
+                  childless_field_assignments_clause:childless_field_assignments_clause
+                  )
+                ),
+              connection
+              )
+              .ExecuteNonQuery();
             Close();
           }
 
