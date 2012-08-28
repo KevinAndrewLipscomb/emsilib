@@ -755,134 +755,124 @@ namespace Class_db_services
           string primary_response_area
           )
           {
-            var childless_field_assignments_clause = " name = NULLIF('" + name + "','')"
-            + " , county_code = NULLIF('" + county_code + "','')"
-            + " , business_phone_num = NULLIF('" + business_phone_num + "','')"
-            + " , business_fax_num = NULLIF('" + business_fax_num + "','')"
-            + " , website_address = NULLIF('" + website_address + "','')"
-            + " , charter_kind = NULLIF('" + charter_kind + "','')"
-            + " , corpadmin_contact_name = NULLIF('" + corpadmin_contact_name + "','')"
-            + " , corpadmin_primary_phone_num = NULLIF('" + corpadmin_primary_phone_num + "','')"
-            + " , corpadmin_secondary_phone_num = NULLIF('" + corpadmin_secondary_phone_num + "','')"
-            + " , corpadmin_email_address = NULLIF('" + corpadmin_email_address + "','')"
-            + " , be_emsof_participant = " + be_emsof_participant.ToString()
-            + " , emsof_nonparticipation_reason = NULLIF('" + emsof_nonparticipation_reason + "','')"
-            + " , emsof_contact_name = NULLIF('" + emsof_contact_name + "','')"
-            + " , emsof_contact_primary_phone_num = NULLIF('" + emsof_contact_primary_phone_num + "','')"
-            + " , emsof_contact_sms_phone_num = NULLIF('" + emsof_contact_sms_phone_num + "','')"
-            + " , coo_name = NULLIF('" + coo_name + "','')"
-            + " , coo_work_phone_num = NULLIF('" + coo_work_phone_num + "','')"
-            + " , coo_home_phone_num = NULLIF('" + coo_home_phone_num + "','')"
-            + " , coo_email_address = NULLIF('" + coo_email_address + "','')"
-            + " , coo_mobile_phone_or_pager_num = NULLIF('" + coo_mobile_phone_or_pager_num + "','')"
-            + " , md_name = NULLIF('" + md_name + "','')"
-            + " , md_office_phone_num = NULLIF('" + md_office_phone_num + "','')"
-            + " , md_home_phone_num = NULLIF('" + md_home_phone_num + "','')"
-            + " , md_email_address = NULLIF('" + md_email_address + "','')"
-            + " , md_mobile_phone_or_pager_num = NULLIF('" + md_mobile_phone_or_pager_num + "','')"
-            + " , physical_street_address_line_1 = NULLIF('" + physical_street_address_line_1 + "','')"
-            + " , physical_street_address_line_2 = NULLIF('" + physical_street_address_line_2 + "','')"
-            + " , physical_city = NULLIF('" + physical_city + "','')"
-            + " , physical_state = NULLIF('" + physical_state + "','')"
-            + " , physical_zip_code = NULLIF('" + physical_zip_code + "','')"
-            + " , mail_address_line_1 = NULLIF('" + mail_address_line_1 + "','')"
-            + " , mail_address_line_2 = NULLIF('" + mail_address_line_2 + "','')"
-            + " , mail_city = NULLIF('" + mail_city + "','')"
-            + " , mail_state = NULLIF('" + mail_state + "','')"
-            + " , mail_zip_code = NULLIF('" + mail_zip_code + "','')"
-            + " , be_qrs = " + be_qrs.ToString()
-            + " , be_bls_amb = " + be_bls_amb.ToString()
-            + " , be_als_amb = " + be_als_amb.ToString()
-            + " , be_als_squad = " + be_als_squad.ToString()
-            + " , be_air_amb = " + be_air_amb.ToString()
-            + " , be_rescue = " + be_rescue.ToString()
-            + " , be_pa_turnpike_contractor = " + be_pa_turnpike_contractor.ToString()
-            + " , num_doh_licensed_vehicles = NULLIF('" + num_doh_licensed_vehicles + "','')"
-            + " , num_ambulances = NULLIF('" + num_ambulances + "','')"
-            + " , be_dera = " + be_dera.ToString()
-            + " , charter_other_kind = NULLIF('" + charter_other_kind + "','')"
-            + " , be_valid_profile = " + be_valid_profile.ToString()
-            + " , federal_tax_id_num = NULLIF('" + federal_tax_id + "','')"
-            + " , be_qrs_unrecognized = " + be_qrs_unrecognized.ToString()
-            + " , be_rescue_unrecognized = " + be_rescue_unrecognized.ToString()
-            + " , be_distressed = " + be_distressed.ToString()
-            + " , num_staff_typical_als_08_16 = NULLIF('" + num_staff_typical_als_08_16 +  "', '')"
-            + " , num_staff_typical_als_16_00 = NULLIF('" + num_staff_typical_als_16_00 +  "', '')"
-            + " , num_staff_typical_als_00_08 = NULLIF('" + num_staff_typical_als_00_08 +  "', '')"
-            + " , num_staff_typical_bls_08_16 = NULLIF('" + num_staff_typical_bls_08_16 +  "', '')"
-            + " , num_staff_typical_bls_16_00 = NULLIF('" + num_staff_typical_bls_16_00 +  "', '')"
-            + " , num_staff_typical_bls_00_08 = NULLIF('" + num_staff_typical_bls_00_08 +  "', '')"
-            + " , num_units_typical_als_08_16 = NULLIF('" + num_units_typical_als_08_16 +  "', '')"
-            + " , num_units_typical_als_16_00 = NULLIF('" + num_units_typical_als_16_00 +  "', '')"
-            + " , num_units_typical_als_00_08 = NULLIF('" + num_units_typical_als_00_08 +  "', '')"
-            + " , num_units_typical_bls_08_16 = NULLIF('" + num_units_typical_bls_08_16 +  "', '')"
-            + " , num_units_typical_bls_16_00 = NULLIF('" + num_units_typical_bls_16_00 +  "', '')"
-            + " , num_units_typical_bls_00_08 = NULLIF('" + num_units_typical_bls_00_08 +  "', '')"
-            + " , num_n95_masks = NULLIF('" + num_n95_masks +  "', '')"
-            + " , num_scba = NULLIF('" + num_scba +  "', '')"
-            + " , num_pfd = NULLIF('" + num_pfd +  "', '')"
-            + " , num_portable_vents = NULLIF('" + num_portable_vents +  "', '')"
-            + " , num_infusion_pumps = NULLIF('" + num_infusion_pumps +  "', '')"
-            + " , num_bariatric_stretchers = NULLIF('" + num_bariatric_stretchers +  "', '')"
-            + " , num_golf_carts = NULLIF('" + num_golf_carts +  "', '')"
-            + " , num_gators = NULLIF('" + num_gators +  "', '')"
-            + " , num_quads = NULLIF('" + num_quads +  "', '')"
-            + " , num_mci_special_event_trailers = NULLIF('" + num_mci_special_event_trailers +  "', '')"
-            + " , num_bariatric_equipped_units = NULLIF('" + num_bariatric_equipped_units +  "', '')"
-            + " , num_wheelchair_vans = NULLIF('" + num_wheelchair_vans +  "', '')"
-            + " , num_opensky_radios = NULLIF('" + num_opensky_radios +  "', '')"
-            + " , num_uhf_portables = NULLIF('" + num_uhf_portables +  "', '')"
-            + " , num_uhf_mobiles = NULLIF('" + num_uhf_mobiles +  "', '')"
-            + " , num_vhf_portables = NULLIF('" + num_vhf_portables +  "', '')"
-            + " , num_vhf_mobiles = NULLIF('" + num_vhf_mobiles +  "', '')"
-            + " , num_trunked_radios = NULLIF('" + num_trunked_radios +  "', '')"
-            + " , num_gps_receivers = NULLIF('" + num_gps_receivers +  "', '')"
-            + " , num_mark_1_kits = NULLIF('" + num_mark_1_kits +  "', '')"
-            + " , num_cases_potable_h2o = NULLIF('" + num_cases_potable_h2o +  "', '')"
-            + " , num_recognized_rescue_units = NULLIF('" + num_recognized_rescue_units +  "', '')"
-            + " , num_4wd_ambulances = NULLIF('" + num_4wd_ambulances +  "', '')"
-            + " , num_recognized_qrs_units = NULLIF('" + num_recognized_qrs_units +  "', '')"
-            + " , num_unrecognized_qrs_units = NULLIF('" + num_unrecognized_qrs_units +  "', '')"
-            + " , num_boats = NULLIF('" + num_boats +  "', '')"
-            + " , num_ballistic_vests = NULLIF('" + num_ballistic_vests +  "', '')"
-            + " , num_cases_mre = NULLIF('" + num_cases_mre +  "', '')"
-            + " , inventory_memo = NULLIF('" + inventory_memo +  "', '')"
-            + " , key_cell_phone_1_num = NULLIF('" + key_cell_phone_1_num +  "', '')"
-            + " , key_cell_phone_1_assignee = NULLIF('" + key_cell_phone_1_assignee +  "', '')"
-            + " , key_cell_phone_2_num = NULLIF('" + key_cell_phone_2_num +  "', '')"
-            + " , key_cell_phone_2_assignee = NULLIF('" + key_cell_phone_2_assignee +  "', '')"
-            + " , key_cell_phone_3_num = NULLIF('" + key_cell_phone_3_num +  "', '')"
-            + " , key_cell_phone_3_assignee = NULLIF('" + key_cell_phone_3_assignee +  "', '')"
-            + " , key_cell_phone_4_num = NULLIF('" + key_cell_phone_4_num +  "', '')"
-            + " , key_cell_phone_4_assignee = NULLIF('" + key_cell_phone_4_assignee +  "', '')"
-            + " , key_cell_phone_5_num = NULLIF('" + key_cell_phone_5_num +  "', '')"
-            + " , key_cell_phone_5_assignee = NULLIF('" + key_cell_phone_5_assignee +  "', '')"
-            + " , key_cell_phone_6_num = NULLIF('" + key_cell_phone_6_num +  "', '')"
-            + " , key_cell_phone_6_assignee = NULLIF('" + key_cell_phone_6_assignee +  "', '')"
-            + " , radio_channel_1 = NULLIF('" + radio_channel_1 +  "', '')"
-            + " , radio_channel_2 = NULLIF('" + radio_channel_2 +  "', '')"
-            + " , radio_channel_3 = NULLIF('" + radio_channel_3 +  "', '')"
-            + " , radio_channel_4 = NULLIF('" + radio_channel_4 +  "', '')"
-            + " , radio_channel_5 = NULLIF('" + radio_channel_5 +  "', '')"
-            + " , radio_channel_6 = NULLIF('" + radio_channel_6 +  "', '')"
-            + " , primary_response_area = NULLIF('" + primary_response_area + "','')";
-            Open();
-            new MySqlCommand
-              (
-              db_trail.Saved
-                (
-                k.InsertOnDuplicateKeyUpdateTraditionalMimic
-                  (
-                  target_table_name:"service",
-                  key_field_name:"affiliate_num",
-                  key_field_value:affiliate_num,
-                  childless_field_assignments_clause:childless_field_assignments_clause
-                  )
-                ),
-              connection
-              )
-              .ExecuteNonQuery();
-            Close();
+          var childless_field_assignments_clause = " name = NULLIF('" + name + "','')"
+          + " , county_code = NULLIF('" + county_code + "','')"
+          + " , business_phone_num = NULLIF('" + business_phone_num + "','')"
+          + " , business_fax_num = NULLIF('" + business_fax_num + "','')"
+          + " , website_address = NULLIF('" + website_address + "','')"
+          + " , charter_kind = NULLIF('" + charter_kind + "','')"
+          + " , corpadmin_contact_name = NULLIF('" + corpadmin_contact_name + "','')"
+          + " , corpadmin_primary_phone_num = NULLIF('" + corpadmin_primary_phone_num + "','')"
+          + " , corpadmin_secondary_phone_num = NULLIF('" + corpadmin_secondary_phone_num + "','')"
+          + " , corpadmin_email_address = NULLIF('" + corpadmin_email_address + "','')"
+          + " , be_emsof_participant = " + be_emsof_participant.ToString()
+          + " , emsof_nonparticipation_reason = NULLIF('" + emsof_nonparticipation_reason + "','')"
+          + " , emsof_contact_name = NULLIF('" + emsof_contact_name + "','')"
+          + " , emsof_contact_primary_phone_num = NULLIF('" + emsof_contact_primary_phone_num + "','')"
+          + " , emsof_contact_sms_phone_num = NULLIF('" + emsof_contact_sms_phone_num + "','')"
+          + " , coo_name = NULLIF('" + coo_name + "','')"
+          + " , coo_work_phone_num = NULLIF('" + coo_work_phone_num + "','')"
+          + " , coo_home_phone_num = NULLIF('" + coo_home_phone_num + "','')"
+          + " , coo_email_address = NULLIF('" + coo_email_address + "','')"
+          + " , coo_mobile_phone_or_pager_num = NULLIF('" + coo_mobile_phone_or_pager_num + "','')"
+          + " , md_name = NULLIF('" + md_name + "','')"
+          + " , md_office_phone_num = NULLIF('" + md_office_phone_num + "','')"
+          + " , md_home_phone_num = NULLIF('" + md_home_phone_num + "','')"
+          + " , md_email_address = NULLIF('" + md_email_address + "','')"
+          + " , md_mobile_phone_or_pager_num = NULLIF('" + md_mobile_phone_or_pager_num + "','')"
+          + " , physical_street_address_line_1 = NULLIF('" + physical_street_address_line_1 + "','')"
+          + " , physical_street_address_line_2 = NULLIF('" + physical_street_address_line_2 + "','')"
+          + " , physical_city = NULLIF('" + physical_city + "','')"
+          + " , physical_state = NULLIF('" + physical_state + "','')"
+          + " , physical_zip_code = NULLIF('" + physical_zip_code + "','')"
+          + " , mail_address_line_1 = NULLIF('" + mail_address_line_1 + "','')"
+          + " , mail_address_line_2 = NULLIF('" + mail_address_line_2 + "','')"
+          + " , mail_city = NULLIF('" + mail_city + "','')"
+          + " , mail_state = NULLIF('" + mail_state + "','')"
+          + " , mail_zip_code = NULLIF('" + mail_zip_code + "','')"
+          + " , be_qrs = " + be_qrs.ToString()
+          + " , be_bls_amb = " + be_bls_amb.ToString()
+          + " , be_als_amb = " + be_als_amb.ToString()
+          + " , be_als_squad = " + be_als_squad.ToString()
+          + " , be_air_amb = " + be_air_amb.ToString()
+          + " , be_rescue = " + be_rescue.ToString()
+          + " , be_pa_turnpike_contractor = " + be_pa_turnpike_contractor.ToString()
+          + " , num_doh_licensed_vehicles = NULLIF('" + num_doh_licensed_vehicles + "','')"
+          + " , num_ambulances = NULLIF('" + num_ambulances + "','')"
+          + " , be_dera = " + be_dera.ToString()
+          + " , charter_other_kind = NULLIF('" + charter_other_kind + "','')"
+          + " , be_valid_profile = " + be_valid_profile.ToString()
+          + " , federal_tax_id_num = NULLIF('" + federal_tax_id + "','')"
+          + " , be_qrs_unrecognized = " + be_qrs_unrecognized.ToString()
+          + " , be_rescue_unrecognized = " + be_rescue_unrecognized.ToString()
+          + " , be_distressed = " + be_distressed.ToString()
+          + " , num_staff_typical_als_08_16 = NULLIF('" + num_staff_typical_als_08_16 +  "', '')"
+          + " , num_staff_typical_als_16_00 = NULLIF('" + num_staff_typical_als_16_00 +  "', '')"
+          + " , num_staff_typical_als_00_08 = NULLIF('" + num_staff_typical_als_00_08 +  "', '')"
+          + " , num_staff_typical_bls_08_16 = NULLIF('" + num_staff_typical_bls_08_16 +  "', '')"
+          + " , num_staff_typical_bls_16_00 = NULLIF('" + num_staff_typical_bls_16_00 +  "', '')"
+          + " , num_staff_typical_bls_00_08 = NULLIF('" + num_staff_typical_bls_00_08 +  "', '')"
+          + " , num_units_typical_als_08_16 = NULLIF('" + num_units_typical_als_08_16 +  "', '')"
+          + " , num_units_typical_als_16_00 = NULLIF('" + num_units_typical_als_16_00 +  "', '')"
+          + " , num_units_typical_als_00_08 = NULLIF('" + num_units_typical_als_00_08 +  "', '')"
+          + " , num_units_typical_bls_08_16 = NULLIF('" + num_units_typical_bls_08_16 +  "', '')"
+          + " , num_units_typical_bls_16_00 = NULLIF('" + num_units_typical_bls_16_00 +  "', '')"
+          + " , num_units_typical_bls_00_08 = NULLIF('" + num_units_typical_bls_00_08 +  "', '')"
+          + " , num_n95_masks = NULLIF('" + num_n95_masks +  "', '')"
+          + " , num_scba = NULLIF('" + num_scba +  "', '')"
+          + " , num_pfd = NULLIF('" + num_pfd +  "', '')"
+          + " , num_portable_vents = NULLIF('" + num_portable_vents +  "', '')"
+          + " , num_infusion_pumps = NULLIF('" + num_infusion_pumps +  "', '')"
+          + " , num_bariatric_stretchers = NULLIF('" + num_bariatric_stretchers +  "', '')"
+          + " , num_golf_carts = NULLIF('" + num_golf_carts +  "', '')"
+          + " , num_gators = NULLIF('" + num_gators +  "', '')"
+          + " , num_quads = NULLIF('" + num_quads +  "', '')"
+          + " , num_mci_special_event_trailers = NULLIF('" + num_mci_special_event_trailers +  "', '')"
+          + " , num_bariatric_equipped_units = NULLIF('" + num_bariatric_equipped_units +  "', '')"
+          + " , num_wheelchair_vans = NULLIF('" + num_wheelchair_vans +  "', '')"
+          + " , num_opensky_radios = NULLIF('" + num_opensky_radios +  "', '')"
+          + " , num_uhf_portables = NULLIF('" + num_uhf_portables +  "', '')"
+          + " , num_uhf_mobiles = NULLIF('" + num_uhf_mobiles +  "', '')"
+          + " , num_vhf_portables = NULLIF('" + num_vhf_portables +  "', '')"
+          + " , num_vhf_mobiles = NULLIF('" + num_vhf_mobiles +  "', '')"
+          + " , num_trunked_radios = NULLIF('" + num_trunked_radios +  "', '')"
+          + " , num_gps_receivers = NULLIF('" + num_gps_receivers +  "', '')"
+          + " , num_mark_1_kits = NULLIF('" + num_mark_1_kits +  "', '')"
+          + " , num_cases_potable_h2o = NULLIF('" + num_cases_potable_h2o +  "', '')"
+          + " , num_recognized_rescue_units = NULLIF('" + num_recognized_rescue_units +  "', '')"
+          + " , num_4wd_ambulances = NULLIF('" + num_4wd_ambulances +  "', '')"
+          + " , num_recognized_qrs_units = NULLIF('" + num_recognized_qrs_units +  "', '')"
+          + " , num_unrecognized_qrs_units = NULLIF('" + num_unrecognized_qrs_units +  "', '')"
+          + " , num_boats = NULLIF('" + num_boats +  "', '')"
+          + " , num_ballistic_vests = NULLIF('" + num_ballistic_vests +  "', '')"
+          + " , num_cases_mre = NULLIF('" + num_cases_mre +  "', '')"
+          + " , inventory_memo = NULLIF('" + inventory_memo +  "', '')"
+          + " , key_cell_phone_1_num = NULLIF('" + key_cell_phone_1_num +  "', '')"
+          + " , key_cell_phone_1_assignee = NULLIF('" + key_cell_phone_1_assignee +  "', '')"
+          + " , key_cell_phone_2_num = NULLIF('" + key_cell_phone_2_num +  "', '')"
+          + " , key_cell_phone_2_assignee = NULLIF('" + key_cell_phone_2_assignee +  "', '')"
+          + " , key_cell_phone_3_num = NULLIF('" + key_cell_phone_3_num +  "', '')"
+          + " , key_cell_phone_3_assignee = NULLIF('" + key_cell_phone_3_assignee +  "', '')"
+          + " , key_cell_phone_4_num = NULLIF('" + key_cell_phone_4_num +  "', '')"
+          + " , key_cell_phone_4_assignee = NULLIF('" + key_cell_phone_4_assignee +  "', '')"
+          + " , key_cell_phone_5_num = NULLIF('" + key_cell_phone_5_num +  "', '')"
+          + " , key_cell_phone_5_assignee = NULLIF('" + key_cell_phone_5_assignee +  "', '')"
+          + " , key_cell_phone_6_num = NULLIF('" + key_cell_phone_6_num +  "', '')"
+          + " , key_cell_phone_6_assignee = NULLIF('" + key_cell_phone_6_assignee +  "', '')"
+          + " , radio_channel_1 = NULLIF('" + radio_channel_1 +  "', '')"
+          + " , radio_channel_2 = NULLIF('" + radio_channel_2 +  "', '')"
+          + " , radio_channel_3 = NULLIF('" + radio_channel_3 +  "', '')"
+          + " , radio_channel_4 = NULLIF('" + radio_channel_4 +  "', '')"
+          + " , radio_channel_5 = NULLIF('" + radio_channel_5 +  "', '')"
+          + " , radio_channel_6 = NULLIF('" + radio_channel_6 +  "', '')"
+          + " , primary_response_area = NULLIF('" + primary_response_area + "','')";
+          db_trail.MimicTraditionalInsertOnDuplicateKeyUpdate
+            (
+            target_table_name:"service",
+            key_field_name:"affiliate_num",
+            key_field_value:affiliate_num,
+            childless_field_assignments_clause:childless_field_assignments_clause
+            );
           }
 
         internal System.Collections.Queue SusceptibleTo(milestone_type milestone)
