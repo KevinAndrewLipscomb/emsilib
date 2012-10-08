@@ -9,10 +9,12 @@ using Class_db_regions;
 using ConEdLink.component.ss;
 using kix;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Class_biz_coned_offerings
   {
+
   public class TClass_biz_coned_offerings
     {
     private TClass_biz_accounts biz_accounts = null;
@@ -453,9 +455,17 @@ namespace Class_biz_coned_offerings
         }
       }
 
-    public void MarkCanceled(object summary)
+    public void MarkCanceled
+      (
+      object summary,
+      string region_code
+      )
       {
-      ss_emsams.MarkClassCanceled(ClassIdOf(summary));
+      ss_emsams.MarkClassCanceled
+        (
+        class_id:ClassIdOf(summary),
+        region_code:region_code
+        );
       db_coned_offerings.MarkCanceled(IdOf(summary));
       }
 

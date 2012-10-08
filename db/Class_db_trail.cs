@@ -31,7 +31,7 @@ namespace Class_db_trail
       //    + " , business_fax_num = NULLIF('" + business_fax_num + "','')"
       //    + " , website_address = NULLIF('" + website_address + "','')"
       //    ;
-      //    db_trail.InsertOnDuplicateKeyUpdateTraditionalMimicScript
+      //    db_trail.MimicTraditionalInsertOnDuplicateKeyUpdate
       //      (
       //      target_table_name:"service",
       //      key_field_name:"affiliate_num",

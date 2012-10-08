@@ -117,8 +117,12 @@ namespace Class_db_services
               + " , county_code_name_map.name as county_name"
               + " , IF(be_valid_profile,IF(be_emsof_participant,'YES','No'),'no response') as be_emsof_participant"
               + " , IF(be_valid_profile,IF(be_emsof_participant,1,0),-1) as participation_pecking_order"
+              + " , IFNULL(password_reset_email_address,'') as password_reset_email_address"
+              + " , IFNULL(corpadmin_email_address,'') as corpadmin_email_address"
+              + " , IFNULL(coo_email_address,'') as coo_email_address"
               + " from service"
-              + " join county_code_name_map on (county_code_name_map.code=service.county_code)"
+              +   " join service_user using (id)"
+              +   " join county_code_name_map on (county_code_name_map.code=service.county_code)"
               + " order by " + sort_order,
               connection
               )

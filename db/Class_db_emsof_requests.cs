@@ -21,20 +21,6 @@ namespace Class_db_emsof_requests
 
     public class Class_db_emsof_requests_Static
       {
-      // column 0
-      // column 1
-      // column 2
-      // column 3
-      // column 4
-      // column 5
-      // column 6
-      // column 7
-      // column 8
-      // column 9
-      // column 10
-      // column 11
-      // column 12
-      // column 13
       public const string FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION = k.EMPTY
       + "select emsof_request_master.id"
       + " , service.id as service_id"
@@ -61,7 +47,10 @@ namespace Class_db_emsof_requests
       +   " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
       +   " join request_status_code_description_map on (request_status_code_description_map.code=status_code)"
       +   " join county_user on (county_user.id=region_dictated_appropriation.county_code)";
-      public const int MAX_FULL_REQUEST_REVIEW_APPROVE_DGI_INDEX = 13;
+      public const int MAX_FULL_REQUEST_REVIEW_APPROVE_DGI_INDEX = 14;
+      //
+      // Keep the following set of values in sync with the above FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION.
+      //
       public const int TCCI_ID = 0;
       public const int TCCI_SERVICE_ID = 1;
       public const int TCCI_AFFILIATE_NUM = 2;
@@ -77,6 +66,10 @@ namespace Class_db_emsof_requests
       public const int TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 12;
       public const int TCCI_STATUS_CODE = 13;
       public const int TCCI_STATUS_DESCRIPTION = 14;
+      //
+      public const int TCCI_LINKBUTTON_SELECT = 15;
+      public const int TCCI_SELECT_FOR_QUICKMESSAGE = 16;
+      //
       public const int TCCI_FULL_REQUEST_PRIORITY = 0;
       public const int TCCI_FULL_REQUEST_ALLOWABLE_COST = 1;
       public const int TCCI_FULL_REQUEST_DETAIL = 2;

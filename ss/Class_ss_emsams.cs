@@ -601,7 +601,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspended_Submit
+    private bool Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspendedExpired_Submit
       (
       CookieContainer cookie_container,
       string view_state,
@@ -628,7 +628,7 @@ namespace ConEdLink.component.ss
 
 		    request.Method = "POST";
 
-		    string postString = @"__EVENTTARGET=&__EVENTARGUMENT=&__LASTFOCUS=&__VIEWSTATE=" + HttpUtility.UrlEncode(view_state) + "&__EVENTVALIDATION=" + HttpUtility.UrlEncode(event_validation) + "&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxLastName=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxFirstName=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlGender=0&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlBirthdateOperator=%3E&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxBirthDateStart=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxBirthDateEnd=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxCertificationNumber=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AlbxPractitionerStatus=1&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AlbxPractitionerStatus=4&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlCertificationDateOperator=%3E&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxCertificationDate=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlExpirationDateOperator=%3E&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxExpirationDate=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlRegion=-1&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AbtnSubmit=Submit";
+		    string postString = @"__EVENTTARGET=&__EVENTARGUMENT=&__LASTFOCUS=&__VIEWSTATE=" + HttpUtility.UrlEncode(view_state) + "&__EVENTVALIDATION=" + HttpUtility.UrlEncode(event_validation) + "&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxLastName=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxFirstName=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlGender=0&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlBirthdateOperator=%3E&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxBirthDateStart=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxBirthDateEnd=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxCertificationNumber=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AlbxPractitionerStatus=1&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AlbxPractitionerStatus=4&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AlbxPractitionerStatus=6&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlCertificationDateOperator=%3E&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxCertificationDate=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlExpirationDateOperator=%3E&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AtbxExpirationDate=&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddlRegion=-1&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AbtnSubmit=Submit";
 		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(postString);
 		    request.ContentLength = postBytes.Length;
 		    Stream stream = request.GetRequestStream();
@@ -2460,7 +2460,7 @@ namespace ConEdLink.component.ss
         html_document = HtmlDocumentOf(ConsumedStreamOf(response));
         context.view_state = ViewstateOf(html_document);
         context.event_validation = EventValidationOf(html_document);
-        if (!Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspended_Submit(context.cookie_container,context.view_state,context.event_validation,out response))
+        if (!Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspendedExpired_Submit(context.cookie_container,context.view_state,context.event_validation,out response))
           {
           throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspended_Submit() returned FALSE.");
           }
@@ -2521,11 +2521,15 @@ namespace ConEdLink.component.ss
       return detailed_current_practitioners;
       }
 
-    internal void MarkClassCanceled(string class_id)
+    internal void MarkClassCanceled
+      (
+      string class_id,
+      string region_code
+      )
       {
       var cookie_container = new CookieContainer();
       //
-      Login(region_code:"1",cookie_container:cookie_container);
+      Login(region_code:region_code,cookie_container:cookie_container);
       //
       HttpWebResponse response;
       if (!Request_ems_health_state_pa_us_EmsportalApplicationtransfersTransfertoconed(cookie_container,out response))
