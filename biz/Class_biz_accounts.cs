@@ -22,6 +22,7 @@ namespace Class_biz_accounts
         {
             // TODO: Add any constructor code here
             biz_counties = new TClass_biz_counties();
+            biz_services = new TClass_biz_services();
             biz_user = new TClass_biz_user();
             db_accounts = new TClass_db_accounts();
         }
