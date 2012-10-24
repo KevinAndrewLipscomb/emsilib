@@ -299,7 +299,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch
+    private string Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -325,15 +325,15 @@ namespace ConEdLink.component.ss
 	    catch (WebException e)
 	    {
 		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
-		    else return false;
+		    else return e.Message + k.NEW_LINE + e.StackTrace;
 	    }
-	    catch (Exception)
+	    catch (Exception e)
 	    {
 		    if(response != null) response.Close();
-		    return false;
+		    return e.Message + k.NEW_LINE + e.StackTrace;
 	    }
 
-	    return true;
+	    return k.EMPTY;
     }
 
     private bool Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport
@@ -1638,9 +1638,10 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsReportlist() returned FALSE.");
         }
-      if (!Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch(cookie_container,out response))
+      var request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch = Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch(cookie_container,out response);
+      if (request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch.Length > 0)
         {
-        throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch() returned FALSE.");
+        throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch() returned [" + request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch + "]");
         }
       var html_document = HtmlDocumentOf(ConsumedStreamOf(response));
       if (!Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport(cookie_container,ViewstateOf(html_document),EventValidationOf(html_document),out response))
