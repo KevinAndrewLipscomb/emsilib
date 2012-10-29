@@ -262,7 +262,7 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private bool Request_ems_health_state_pa_us_EmsregPractitionerHome
+    private string Request_ems_health_state_pa_us_EmsregPractitionerHome
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -288,15 +288,15 @@ namespace ConEdLink.component.ss
 	    catch (WebException e)
 	    {
 		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
-		    else return false;
+		    else return e.Message + k.NEW_LINE + e.StackTrace;
 	    }
-	    catch (Exception)
+	    catch (Exception e)
 	    {
 		    if(response != null) response.Close();
-		    return false;
+		    return e.Message + k.NEW_LINE + e.StackTrace;
 	    }
 
-	    return true;
+	    return k.EMPTY;
     }
 
     private string Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch
@@ -319,10 +319,6 @@ namespace ConEdLink.component.ss
 		    request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)";
 		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
 		    //request.Headers.Set(HttpRequestHeader.Cookie, @"__utma=106443904.163291999.1326547990.1326547990.1326547990.1; __utmz=106443904.1326547990.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); ASP.NET_SessionId=3nniwgkydva5klmzj4qfwdva; loginid=rekaufman; EMSREG=C90DF9762916149C733B4F536D25D83E247198F04399FC17422F2CAFF95E772FF9E809F85D2171CDF6EB45658845D72C6D8623EE0B8F00E6319640AB0267276F4E1936ADC022B95EBCE9714DBB9F7CDF96C48BF8E9C624AFDADB108EC30D1836FD394C83FCB90BAFAB9AFE3432F51C0409D3795EDBFB79996B3786FA1272A35F9E9DB152537F859CDDA933858514D4A1D6F14838332C070979EE632612A630B41DA59CC2198BD71E0330976AC8D890DFE4BF162194E570A5E60460F63957410E0A33DD15F3D2A3B39849F5FE2EACC3A08F1678D83D94360EAC525C5360E275EFFA3DDF03BC9C16ED742A37EDE0DB1A74");
-        //
-        // The following line is intended to prevent a "The operation has timed out" error in the call to HttpWebResponse.GetResponse().
-        //
-        request.KeepAlive = false;
 
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
@@ -1634,9 +1630,10 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregDefault() returned FALSE.");
         }
-      if (!Request_ems_health_state_pa_us_EmsregPractitionerHome(cookie_container,out response))
+      var request_ems_health_state_pa_us_emsregpractitionerhome = Request_ems_health_state_pa_us_EmsregPractitionerHome(cookie_container,out response);
+      if (request_ems_health_state_pa_us_emsregpractitionerhome.Length > 0)
         {
-        throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned FALSE.");
+        throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned [" + request_ems_health_state_pa_us_emsregpractitionerhome + "]");
         }
       if (!Request_ems_health_state_pa_us_EmsregReportsReportlist(cookie_container,out response))
         {
@@ -1648,6 +1645,7 @@ namespace ConEdLink.component.ss
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch() returned [" + request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch + "]");
         }
       var html_document = HtmlDocumentOf(ConsumedStreamOf(response));
+      response.Close();
       if (!Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport(cookie_container,ViewstateOf(html_document),EventValidationOf(html_document),out response))
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport() returned FALSE.");
@@ -1923,9 +1921,10 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregDefault() returned FALSE.");
         }
-      if (!Request_ems_health_state_pa_us_EmsregPractitionerHome(cookie_container,out response))
+      var request_ems_health_state_pa_us_emsregpractitionerhome = Request_ems_health_state_pa_us_EmsregPractitionerHome(cookie_container,out response);
+      if (request_ems_health_state_pa_us_emsregpractitionerhome.Length > 0)
         {
-        throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned FALSE.");
+        throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned [" + request_ems_health_state_pa_us_emsregpractitionerhome + "]");
         }
       if (!Request_ems_health_state_pa_us_EmsregReportsReportlist(cookie_container,out response))
         {
@@ -2454,9 +2453,10 @@ namespace ConEdLink.component.ss
           {
           throw new Exception("Request_ems_health_state_pa_us_EmsregDefault() returned FALSE.");
           }
-        if (!Request_ems_health_state_pa_us_EmsregPractitionerHome(context.cookie_container,out response))
-          {
-          throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned FALSE.");
+      var request_ems_health_state_pa_us_emsregpractitionerhome = Request_ems_health_state_pa_us_EmsregPractitionerHome(context.cookie_container,out response);
+      if (request_ems_health_state_pa_us_emsregpractitionerhome.Length > 0)
+        {
+        throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned [" + request_ems_health_state_pa_us_emsregpractitionerhome + "]");
           }
         if (!Request_ems_health_state_pa_us_emsregPractitionerSearch(context.cookie_container,out response))
           {
