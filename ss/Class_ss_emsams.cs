@@ -302,6 +302,7 @@ namespace ConEdLink.component.ss
     private string Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch
       (
       CookieContainer cookie_container,
+      string region_code,
       out HttpWebResponse response
       )
     {
@@ -325,12 +326,12 @@ namespace ConEdLink.component.ss
 	    catch (WebException e)
 	    {
 		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
-		    else return e.Message + k.NEW_LINE + e.StackTrace;
+		    else return e.Message + k.NEW_LINE + e.StackTrace + k.NEW_LINE + k.NEW_LINE + "region_code = '" + region_code + "'" + k.NEW_LINE;
 	    }
 	    catch (Exception e)
 	    {
 		    if(response != null) response.Close();
-		    return e.Message + k.NEW_LINE + e.StackTrace;
+		    return e.Message + k.NEW_LINE + e.StackTrace + k.NEW_LINE + k.NEW_LINE + "region_code = '" + region_code + "'" + k.NEW_LINE;
 	    }
 
 	    return k.EMPTY;
@@ -1639,7 +1640,7 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsReportlist() returned FALSE.");
         }
-      var request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch = Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch(cookie_container,out response);
+      var request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch = Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch(cookie_container,region_code,out response);
       if (request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch.Length > 0)
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch() returned [" + request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch + "]");
