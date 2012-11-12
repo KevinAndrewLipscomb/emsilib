@@ -116,8 +116,7 @@ namespace Class_db_coned_offerings
         +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
         +   " left join coned_offering_class_final_status on (coned_offering_class_final_status.id=coned_offering.class_final_status_id)"
         +   " left join coned_offering_roster on (coned_offering_roster.coned_offering_id=coned_offering.id)"
-        + " where region_code_name_map.code = '" + region_code + "'"
-        +   " and county_region_map.region_code = '" + region_code + "'"
+        + " where region_code_name_map.be_conedlink_subscriber"
         +     (be_limited_to_needing_coned_sponsor_finalization ? " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'" : k.EMPTY)
         +     (start_year.Length > 0 ? " and YEAR(start_date_time) = '" + start_year + "'" : k.EMPTY)
         +     (coned_sponsor_user_id.Length > 0 ? " and teaching_entity.id = '" + coned_sponsor_user_id + "'" : k.EMPTY)
