@@ -109,7 +109,7 @@ namespace Class_biz_practitioners
 
     public void ImportLatestInstructorsFromEmsrs()
       {
-      db_practitioners.ClearAllBeInstructorFlags();
+      db_practitioners.ClearBeInstructorFlagsInSubscriberRegions();
       var subscriber_region_code_q = db_regions.SubscriberQ();
       while (subscriber_region_code_q.Count > 0)
         {
