@@ -14,6 +14,11 @@ namespace Class_biz_regions
       db_regions = new TClass_db_regions();
       }
 
+    public bool BeConedlinkSubscriber(string code)
+      {
+      return db_regions.BeConedlinkSubscriber(code);
+      }
+
     public bool Bind
       (
       string partial_code,
