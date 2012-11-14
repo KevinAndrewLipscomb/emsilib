@@ -484,7 +484,7 @@ namespace Class_db_practitioners
       var childless_field_assignments_clause = k.EMPTY
       + "last_name = NULLIF('" + last_name + "','')"
       + " , first_name = NULLIF('" + first_name + "','')"
-      + " , middle_initial = NULLIF('" + middle_initial + "','')"
+      + " , middle_initial = '" + (middle_initial.Length > 0 ? middle_initial : k.SPACE) + "'"
       + " , certification_number = NULLIF('" + certification_number + "','')"
       + " , level_id = NULLIF('" + level_id + "','')"
       + " , regional_council_code = NULLIF('" + regional_council_code + "','')"

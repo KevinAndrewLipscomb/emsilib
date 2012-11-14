@@ -18,6 +18,14 @@ namespace Class_db_regions
       db_trail = new TClass_db_trail();
       }
 
+    internal bool BeConedlinkSubscriber(string code)
+      {
+      Open();
+      var be_conedlink_subscriber = ("1" == new MySqlCommand("select be_conedlink_subscriber from region_code_name_map where code = '" + code + "'",connection).ExecuteScalar().ToString());
+      Close();
+      return be_conedlink_subscriber;
+      }
+
     public bool Bind
       (
       string partial_spec,
