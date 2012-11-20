@@ -25,6 +25,7 @@ namespace Class_biz_accounts
             biz_services = new TClass_biz_services();
             biz_user = new TClass_biz_user();
             db_accounts = new TClass_db_accounts();
+            db_emsof_requests = new TClass_db_emsof_requests();
         }
 
     public bool BeOkForConedSponsorToInputRosterByBatch()
@@ -174,15 +175,19 @@ namespace Class_biz_accounts
 
         public void IssueWithdrawalNotice(string master_id, string service_id, string county_code)
         {
-            string service_email_address;
-            string service_name;
-            service_email_address = EmailAddressByKindId("service", service_id);
-            service_name = biz_services.NameOf(service_id);
-            // be_html
-            // cc
-            // bcc
-            // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-request-withdrawal-stakeholder") + k.COMMA + EmailAddressByKindId("county", county_code), "Service is WITHDRAWING an entire EMSOF request", service_name + " is withdrawing EMSOF request W#" + master_id + " in its totality.  The associated sponsor county is " + biz_counties.NameOf(county_code) + k.PERIOD + k.NEW_LINE + k.NEW_LINE + service_name + " is aware that this action effectively surrenders " + (db_emsof_requests.EmsofAnteOf(master_id)).ToString("C") + " of EMSOF matching funds for use by others." + k.NEW_LINE + k.NEW_LINE + "You can see the effect of this action by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact the " + service_name + " EMSOF Coordinator at:" + k.NEW_LINE + k.NEW_LINE + "   " + service_email_address + "  (mailto:" + service_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, service_email_address);
+            var service_email_address = EmailAddressByKindId("service", service_id);
+            var service_name = biz_services.NameOf(service_id);
+            k.SmtpMailSend
+              (
+              from:ConfigurationManager.AppSettings["sender_email_address"],
+              to:EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-request-withdrawal-stakeholder") + k.COMMA + EmailAddressByKindId("county", county_code),
+              subject:"Service is WITHDRAWING an entire EMSOF request",
+              message_string:service_name + " is withdrawing EMSOF request W#" + master_id + " in its totality.  The associated sponsor county is " + biz_counties.NameOf(county_code) + k.PERIOD + k.NEW_LINE + k.NEW_LINE + service_name + " is aware that this action effectively surrenders " + (db_emsof_requests.EmsofAnteOf(master_id)).ToString("C") + " of EMSOF matching funds for use by others." + k.NEW_LINE + k.NEW_LINE + "You can see the effect of this action by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact the " + service_name + " EMSOF Coordinator at:" + k.NEW_LINE + k.NEW_LINE + "   " + service_email_address + "  (mailto:" + service_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"],
+              be_html:false,
+              cc:k.EMPTY,
+              bcc:k.EMPTY,
+              reply_to:service_email_address
+              );
         }
 
         public void MakeDeadlineFailureNotification(milestone_type milestone, string service_id, string county_code)
