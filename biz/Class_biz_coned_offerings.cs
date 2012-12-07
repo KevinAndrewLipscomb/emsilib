@@ -691,6 +691,11 @@ namespace Class_biz_coned_offerings
       return db_coned_offerings.StartOtherOf(summary);
       }
 
+    public string StatusOf(object summary)
+      {
+      return db_coned_offerings.StatusOf(summary).ToString();
+      }
+
     public object Summary(string id)
       {
       return db_coned_offerings.Summary(id);
