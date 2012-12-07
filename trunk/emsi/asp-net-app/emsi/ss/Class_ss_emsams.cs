@@ -387,9 +387,10 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregReportsReportlist
+    private string Request_ems_health_state_pa_us_EmsregReportsReportlist
       (
       CookieContainer cookie_container,
+      string region_code,
       out HttpWebResponse response
       )
     {
@@ -413,15 +414,15 @@ namespace ConEdLink.component.ss
 	    catch (WebException e)
 	    {
 		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
-		    else return false;
+		    else return e.Message + k.NEW_LINE + e.StackTrace + k.NEW_LINE + k.NEW_LINE + "region_code = '" + region_code + "'" + k.NEW_LINE;
 	    }
-	    catch (Exception)
+	    catch (Exception e)
 	    {
 		    if(response != null) response.Close();
-		    return false;
+		    return e.Message + k.NEW_LINE + e.StackTrace + k.NEW_LINE + k.NEW_LINE + "region_code = '" + region_code + "'" + k.NEW_LINE;;
 	    }
 
-	    return true;
+	    return k.EMPTY;
     }
 
     private bool Request_ems_health_state_pa_us_emsregPractitionerSearch
@@ -1627,26 +1628,30 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsportalApplicationtransfersTransfertoemsreg() returned FALSE.");
         }
+      response.Close();
       if (!Request_ems_health_state_pa_us_EmsregDefault(cookie_container,out response))
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregDefault() returned FALSE.");
         }
+      response.Close();
       var request_ems_health_state_pa_us_emsregpractitionerhome = Request_ems_health_state_pa_us_EmsregPractitionerHome(cookie_container,out response);
       if (request_ems_health_state_pa_us_emsregpractitionerhome.Length > 0)
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned [" + request_ems_health_state_pa_us_emsregpractitionerhome + "]");
         }
-      if (!Request_ems_health_state_pa_us_EmsregReportsReportlist(cookie_container,out response))
+      response.Close();
+      var request_ems_health_state_pa_us_emsregreportsreportlist = Request_ems_health_state_pa_us_EmsregReportsReportlist(cookie_container,region_code,out response);
+      if (request_ems_health_state_pa_us_emsregreportsreportlist.Length > 0)
         {
-        throw new Exception("Request_ems_health_state_pa_us_EmsregReportsReportlist() returned FALSE.");
+        throw new Exception("Request_ems_health_state_pa_us_EmsregReportsReportlist() returned [" + request_ems_health_state_pa_us_emsregreportsreportlist + "]");
         }
+      response.Close();
       var request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch = Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch(cookie_container,region_code,out response);
       if (request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch.Length > 0)
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch() returned [" + request_ems_health_state_pa_us_emsregreportsemsinstructorlistsearch + "]");
         }
       var html_document = HtmlDocumentOf(ConsumedStreamOf(response));
-      response.Close();
       if (!Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport(cookie_container,ViewstateOf(html_document),EventValidationOf(html_document),out response))
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport() returned FALSE.");
@@ -1927,9 +1932,10 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_EmsregPractitionerHome() returned [" + request_ems_health_state_pa_us_emsregpractitionerhome + "]");
         }
-      if (!Request_ems_health_state_pa_us_EmsregReportsReportlist(cookie_container,out response))
+      var request_ems_health_state_pa_us_emsregreportsreportlist = Request_ems_health_state_pa_us_EmsregReportsReportlist(cookie_container,region_code,out response);
+      if (request_ems_health_state_pa_us_emsregreportsreportlist.Length > 0)
         {
-        throw new Exception("Request_ems_health_state_pa_us_EmsregReportsReportlist() returned FALSE.");
+        throw new Exception("Request_ems_health_state_pa_us_EmsregReportsReportlist() returned [" + request_ems_health_state_pa_us_emsregreportsreportlist + "]");
         }
       if (!Request_ems_health_state_pa_us_EmsregReportsAvailablececlasseslistsearch(cookie_container,out response))
         {
