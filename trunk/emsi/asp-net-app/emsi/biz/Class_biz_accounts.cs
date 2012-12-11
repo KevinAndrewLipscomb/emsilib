@@ -76,7 +76,7 @@ namespace Class_biz_accounts
           object target
           )
           {
-          db_accounts.BindRegionalStaffersInRegion(region_code,"'director','education-coordinator','education-specialist'",target);
+          db_accounts.BindRegionalStaffersInRegion(region_code,"'director','education-coordinator','education-specialist','education-reservist'",target);
           }
 
         public void BindRegionalStaffersInRegionForWebEMSOF
