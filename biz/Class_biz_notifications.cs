@@ -125,10 +125,11 @@ namespace Class_biz_notifications
 
       var region_code = biz_coned_offerings.RegionCodeOf(class_number);
       var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/roster_ready.txt"));
+      var education_specialist_target = biz_accounts.EmailTargetByRegionAndRole(region_code,"education-specialist");
       k.SmtpMailSend
         (
         from:ConfigurationManager.AppSettings["sender_email_address"],
-        to:biz_accounts.EmailTargetByRegionAndRole(region_code,"education-coordinator") + k.COMMA + biz_accounts.EmailTargetByRegionAndRole(region_code,"education-specialist"),
+        to:biz_accounts.EmailTargetByRegionAndRole(region_code,"education-coordinator") + (education_specialist_target.Length > 0 ? k.COMMA + education_specialist_target : k.EMPTY),
         subject:Merge(template_reader.ReadLine()),
         message_string:Merge(template_reader.ReadToEnd()),
         be_html:false,
