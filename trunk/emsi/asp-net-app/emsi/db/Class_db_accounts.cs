@@ -195,7 +195,7 @@ namespace Class_db_accounts
             }
           dr.Close();
           Close();
-          return email_target.Substring(0, email_target.Length - 1);
+          return (email_target.Length > 0 ? email_target.Substring(0, email_target.Length - 1) : email_target);
           }
 
         public bool Exists(string user_kind, string user_id, string encoded_password)
