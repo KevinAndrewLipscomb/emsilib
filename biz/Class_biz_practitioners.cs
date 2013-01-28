@@ -5,6 +5,7 @@ using Class_db_regions;
 using ConEdLink.component.ss;
 using kix;
 using System;
+using System.Collections;
 
 namespace Class_biz_practitioners
   {
@@ -113,7 +114,11 @@ namespace Class_biz_practitioners
       var subscriber_region_code_q = db_regions.SubscriberQ();
       while (subscriber_region_code_q.Count > 0)
         {
-        db_practitioners.ImportLatestInstructorsFromEmsrs(ss_emsams.EmsInstructorsList(subscriber_region_code_q.Dequeue()));
+        var subscriber_region_code = subscriber_region_code_q.Dequeue();
+        if (!new ArrayList() {"15"}.Contains(subscriber_region_code))  //Don't attempt when EMSRS login access to associated regions has been lost.
+          {
+          db_practitioners.ImportLatestInstructorsFromEmsrs(ss_emsams.EmsInstructorsList(subscriber_region_code));
+          }
         }
       }
 

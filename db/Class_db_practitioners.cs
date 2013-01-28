@@ -110,7 +110,16 @@ namespace Class_db_practitioners
     public void ClearBeInstructorFlagsInSubscriberRegions()
       {
       Open();
-      new MySqlCommand("update practitioner join region_code_name_map on (region_code_name_map.code=practitioner.regional_council_code) set be_instructor = FALSE where be_conedlink_subscriber",connection).ExecuteNonQuery();
+      new MySqlCommand
+        (
+        "update practitioner"
+        + " join region_code_name_map on (region_code_name_map.code=practitioner.regional_council_code)"
+        + " set be_instructor = FALSE"
+        + " where be_conedlink_subscriber"
+        +   " and code not in (15)",  //Don't clear flags when EMSRS login access to associated regions has been lost.
+        connection
+        )
+        .ExecuteNonQuery();
       Close();
       }
 
