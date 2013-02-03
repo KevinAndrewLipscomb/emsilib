@@ -308,7 +308,10 @@ namespace Class_db_practitioners
                 first_name = unparsed_name.Substring(0,unparsed_name.Length - 2);
                 }
               //
-              id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + (rec as Class_ss_emsams.DetailedPractitioner).certification_number + "' and not be_past",connection).ExecuteScalar();
+              // The following logic will prevent this app from detecting when EMSRS reassigns a certification_number to a different person.  The latest person to hold the certification number will therefore be associated, in
+              // this app, with the prior assignee's history of class attendance.  But that doesn't seem to be a concern since EMSRS, not this app, is the authoritative source for a practitioner's historical class attendance.
+              //
+              id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + (rec as Class_ss_emsams.DetailedPractitioner).certification_number + "'",connection).ExecuteScalar();
               if (id_obj == null)
                 {
                 built_insert_values_string.Append
@@ -348,6 +351,7 @@ namespace Class_db_practitioners
                   + " , gender_id = (select id from gender where description = '" + (rec as Class_ss_emsams.DetailedPractitioner).gender + "')"
                   + " , status_id = (select id from practitioner_status where description = '" + (rec as Class_ss_emsams.DetailedPractitioner).status + "')"
                   + " , be_stale = false"
+                  + " , be_past = false"
                   + " where id = '" + id_obj.ToString() + "'",
                   connection
                   )
