@@ -2608,7 +2608,7 @@ namespace ConEdLink.component.ss
       var location_state = hdn.SelectSingleNode("//input[@name='LocationState']").Attributes["value"].Value;
       var location_zip = hdn.SelectSingleNode("//input[@name='LocationZIP']").Attributes["value"].Value;
       var location_zip_plus_4 = hdn.SelectSingleNode("//input[@name='LocationZipPlus4']").Attributes["value"].Value;
-      var county_code = hdn.SelectSingleNode("//input[@name='CountyCode']").Attributes["value"].Value;
+      var county_code = hdn.SelectSingleNode("//input[@name='ClassCountyCode']").Attributes["value"].Value;
       var county_name = hdn.SelectSingleNode("//input[@name='CountyName']").Attributes["value"].Value;
       var regional_council_name = hdn.SelectSingleNode("//input[@name='RegionalCouncilName']").Attributes["value"].Value;
       var location_phone = hdn.SelectSingleNode("//input[@name='LocationPhone']").Attributes["value"].Value;
@@ -2617,13 +2617,13 @@ namespace ConEdLink.component.ss
       var public_contact_email = hdn.SelectSingleNode("//input[@name='PublicContactEmail']").Attributes["value"].Value;
       var public_contact_phone = hdn.SelectSingleNode("//input[@name='PublicContactPhone']").Attributes["value"].Value;
       var public_contact_website = hdn.SelectSingleNode("//input[@name='PublicContactWebsite']").Attributes["value"].Value;
-      var public_contact_notes = hdn.SelectSingleNode("//textarea[@name='PublicContactNotes']").InnerText;
+      var public_contact_notes = hdn.SelectSingleNode("//input[@name='PublicContactNotes']").InnerText;
       var student_cost = hdn.SelectSingleNode("//input[@name='StudentCost']").Attributes["value"].Value;
       var total_class_hours = hdn.SelectSingleNode("//input[@name='TotalClassHours']").Attributes["value"].Value;
       var total_class_hours_chk = hdn.SelectSingleNode("//input[@name='TotalClassHoursChk']").Attributes["value"].Value;
       var length_of_course_in_hours = hdn.SelectSingleNode("//input[@name='LengthOfCourseInHours']").Attributes["value"].Value;
-      var tuition_includes = hdn.SelectSingleNode("//textarea[@name='TuitionIncludes']").InnerText;
-      var closed = hdn.SelectSingleNode("//input[@name='Closed']").Attributes["value"].Value;
+      var tuition_includes = hdn.SelectSingleNode("//input[@name='TuitionIncludes']").InnerText;
+      var closed = hdn.SelectSingleNode("//input[@name='closed']").Attributes["value"].Value;
       var estimated_students = hdn.SelectSingleNode("//input[@name='EstimatedStudents']").Attributes["value"].Value;
       var start_date_time = hdn.SelectSingleNode("//input[@name='StartDateTime']").Attributes["value"].Value;
       var start_date_time_chk = hdn.SelectSingleNode("//input[@name='StartDateTimeChk']").Attributes["value"].Value;
@@ -2644,7 +2644,7 @@ namespace ConEdLink.component.ss
       var held_on_thu = (hdn.SelectSingleNode("//input[@name='HeldOnThu' and @checked]") == null ? k.EMPTY : "CHECKED");
       var held_on_fri = (hdn.SelectSingleNode("//input[@name='HeldOnFri' and @checked]") == null ? k.EMPTY : "CHECKED");
       var held_on_sat = (hdn.SelectSingleNode("//input[@name='HeldOnSat' and @checked]") == null ? k.EMPTY : "CHECKED");
-      var other_dates_and_times = hdn.SelectSingleNode("//textarea[@name='OtherDatesAndTimes']").InnerText;
+      var other_dates_and_times = hdn.SelectSingleNode("//input[@name='OtherDatesAndTimes']").InnerText;
       var date_received_by_region = hdn.SelectSingleNode("//input[@name='DateReceivedByRegion']").Attributes["value"].Value;
       var ret_to_applicant_comment = hdn.SelectSingleNode("//input[@name='RetToApplicantComment']").Attributes["value"].Value;
       var date_sponsor_notified = hdn.SelectSingleNode("//input[@name='DateSponsorNotified']").Attributes["value"].Value;
@@ -2654,7 +2654,7 @@ namespace ConEdLink.component.ss
       var date_cards_sent_to_sponsor = hdn.SelectSingleNode("//input[@name='DateCardsSentToSponsor']").Attributes["value"].Value;
       var date_materials_to_be_returned = hdn.SelectSingleNode("//input[@name='DateMaterialsToBeReturned']").Attributes["value"].Value;
       var disapproval_reason_id = (hn_disapproval_reason_id == null ? k.EMPTY : hn_disapproval_reason_id.Attributes["value"].Value);
-      var region_comments = hdn.SelectSingleNode("//textarea[@name='RegionComments']").InnerText;
+      var region_comments = hdn.SelectSingleNode("//input[@name='RegionComments']").InnerText;
       var practical_exam_date = hdn.SelectSingleNode("//input[@name='PracticalExamDate']").Attributes["value"].Value;
       var practical_exam_time = hdn.SelectSingleNode("//input[@name='PracticalExamTime']").Attributes["value"].Value;
       var written_exam_date = hdn.SelectSingleNode("//input[@name='WrittenExamDate']").Attributes["value"].Value;
