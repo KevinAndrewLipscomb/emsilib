@@ -90,14 +90,13 @@ namespace Class_biz_coned_offerings
       (
       string region_code,
       string coned_sponsor_user_id,
-      bool be_limited_to_needing_coned_sponsor_finalization,
-      string start_year,
+      string range,
       string sort_order,
       bool be_sort_order_ascending,
       object target
       )
       {
-      db_coned_offerings.BindClassCatalog(region_code,coned_sponsor_user_id,be_limited_to_needing_coned_sponsor_finalization,start_year,sort_order,be_sort_order_ascending,target);
+      db_coned_offerings.BindClassCatalog(region_code,coned_sponsor_user_id,range,sort_order,be_sort_order_ascending,target);
       }
 
     public void BindDirectToListControlForCopy

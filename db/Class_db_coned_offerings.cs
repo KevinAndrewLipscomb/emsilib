@@ -90,13 +90,25 @@ namespace Class_db_coned_offerings
       (
       string region_code,
       string coned_sponsor_user_id,
-      bool be_limited_to_needing_coned_sponsor_finalization,
-      string start_year,
+      string range,
       string sort_order,
       bool be_sort_order_ascending,
       object target
       )
       {
+      var range_condition = k.EMPTY;
+      if (range == "InProcess")
+        {
+        range_condition = " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'";
+        }
+      else if (range == "ClosedLastThreeYears")
+        {
+        range_condition = " and (coned_offering_status.description <> 'NEEDS_CONED_SPONSOR_FINALIZATION') and (end_date_time between SUBDATE(CURDATE(),INTERVAL 3 YEAR) and CURDATE())";
+        }
+      else if (range != "All") // range is a particular year
+        {
+        range_condition = " and YEAR(start_date_time) = '" + range + "'";
+        }
       Open();
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
@@ -117,8 +129,7 @@ namespace Class_db_coned_offerings
         +   " left join coned_offering_class_final_status on (coned_offering_class_final_status.id=coned_offering.class_final_status_id)"
         +   " left join coned_offering_roster on (coned_offering_roster.coned_offering_id=coned_offering.id)"
         + " where region_code_name_map.be_conedlink_subscriber"
-        +     (be_limited_to_needing_coned_sponsor_finalization ? " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'" : k.EMPTY)
-        +     (start_year.Length > 0 ? " and YEAR(start_date_time) = '" + start_year + "'" : k.EMPTY)
+        +     range_condition
         +     (coned_sponsor_user_id.Length > 0 ? " and teaching_entity.id = '" + coned_sponsor_user_id + "'" : k.EMPTY)
         +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
         + " group by coned_offering.id"
