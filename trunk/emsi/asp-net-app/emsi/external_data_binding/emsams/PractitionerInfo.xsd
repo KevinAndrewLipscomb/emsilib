@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<xs:schema xmlns="http://ems.health.state.pa.us/WcfWebServices/Schemas/PractitionerInfo" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ems.health.state.pa.us/WcfWebServices/Schemas/PractitionerInfo" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Practitioners">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Practitioner">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CertificationNumber" type="xs:string" />
+              <xs:element name="LevelDescription" type="xs:string" />
+              <xs:element minOccurs="0" name="CountyName" type="xs:string" />
+              <xs:element minOccurs="0" name="RegionalCouncilName" type="xs:string" />
+              <xs:element minOccurs="0" name="BirthDate" type="xs:string" />
+              <xs:element name="Status" type="xs:string" />
+              <xs:element name="LastName" type="xs:string" />
+              <xs:element name="FirstName" type="xs:string" />
+              <xs:element name="MI" type="xs:string" />
+              <xs:element name="IsInstructor" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

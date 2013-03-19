@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<xs:schema xmlns="http://ems.health.state.pa.us/WcfWebServices/Schemas/ConEdSponsorInfo" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ems.health.state.pa.us/WcfWebServices/Schemas/ConEdSponsorInfo" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Sponsors">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Sponsor">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SponsorID" type="xs:unsignedShort" />
+              <xs:element minOccurs="0" name="Email" type="xs:string" />
+              <xs:element minOccurs="0" name="Name" type="xs:string" />
+              <xs:element minOccurs="0" name="Region" type="xs:unsignedByte" />
+              <xs:element name="SponsorNumber" type="xs:string" />
+              <xs:element name="SponsorStatusDescription" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

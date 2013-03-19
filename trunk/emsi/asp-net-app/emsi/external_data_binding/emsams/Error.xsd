@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns="http://ems.health.state.pa.us/WcfWebServices/Schemas/Error"
+		   targetNamespace="http://ems.health.state.pa.us/WcfWebServices/Schemas/Error"
+		   elementFormDefault="qualified"
+>
+	<xs:element name="Error">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string" />				
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
