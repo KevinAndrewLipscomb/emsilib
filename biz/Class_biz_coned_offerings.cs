@@ -7,10 +7,16 @@ using Class_db_coned_offerings;
 using Class_db_practitioners;
 using Class_db_regions;
 using ConEdLink.component.ss;
+using emsi.ServiceReference_emsams_ConEd;
+using external_data_binding.emsams.ConEdClassInfo;
+using external_data_binding.emsams.EmptyRequest;
 using kix;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Class_biz_coned_offerings
   {
@@ -423,9 +429,13 @@ namespace Class_biz_coned_offerings
 
     public void ImportLatestFromEmsrs()
       {
-      db_coned_offerings.ImportLatestFromEmsrs(ss_emsams.ClassSearchTabDelimited());
-      db_coned_offerings.ImportLatestFromEmsrs_RelatedHours(ss_emsams.ClassSearchScreen());
-      //db_coned_offerings.ImportLatestFromEmsrsAvailableConedClassesList(ss_emsams.AvailableConedClassesList());
+      var client = new ConedClient();
+      var empty_request_obj = new EmptyRequest();
+      empty_request_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
+      var empty_request = new StringWriter();
+      new XmlSerializer(typeof(EmptyRequest)).Serialize(empty_request,empty_request_obj);
+      db_coned_offerings.ImportLatestFromEmsrs(recs:ArrayList.Adapter(((ClassInfo)new XmlSerializer(typeof(ClassInfo)).Deserialize(new StringReader(client.GetClassInfo(emptyRequest:empty_request.ToString())))).Class));
+      client.Close();
       }
 
     public k.decimal_nonnegative LengthOf(object summary)
@@ -481,6 +491,11 @@ namespace Class_biz_coned_offerings
     public string PublicContactEmailOf(object summary)
       {
       return db_coned_offerings.PublicContactEmailOf(summary);
+      }
+
+    public void PurgeStaleUnused()
+      {
+      db_coned_offerings.PurgeStaleUnused();
       }
 
     public string RegionCodeOf(string class_number)

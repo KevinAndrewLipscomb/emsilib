@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<xs:schema xmlns="http://ems.health.state.pa.us/WcfWebServices/Schemas/ConEdClassInfo" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ems.health.state.pa.us/WcfWebServices/Schemas/ConEdClassInfo" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ClassInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Class">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ClassID" type="xs:unsignedInt" />
+              <xs:element minOccurs="0" name="ClassNumber" type="xs:unsignedLong" />
+              <xs:element minOccurs="0" name="CourseNumber" type="xs:unsignedInt" />
+              <xs:element minOccurs="0" name="CourseTitle" type="xs:string" />
+              <xs:element name="Location" type="xs:string" />
+              <xs:element name="StartDateTime" type="xs:string" />
+              <xs:element minOccurs="0" name="StartTime" type="xs:string" />
+              <xs:element name="EndDateTime" type="xs:string" />
+              <xs:element minOccurs="0" name="EndTime" type="xs:string" />
+              <xs:element name="Approved" type="xs:unsignedByte" />
+              <xs:element name="SponsorID" type="xs:unsignedShort" />
+              <xs:element minOccurs="0" name="SponsorNumber" type="xs:string" />
+              <xs:element name="SponsorName" type="xs:string" />
+              <xs:element minOccurs="0" name="PublicContactEmail" type="xs:string" />
+              <xs:element minOccurs="0" name="FR_MedTrauma_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="FR_Other_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="EMT_MedTrauma_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="EMT_Other_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="EMTP_MedTrauma_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="EMTP_Other_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="PHRN_MedTrauma_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="PHRN_Other_Hrs" type="xs:decimal" />
+              <xs:element minOccurs="0" name="Length" type="xs:string" />
+              <xs:element minOccurs="0" name="Email" type="xs:string" />
+              <xs:element name="RegionCouncilNum" type="xs:unsignedByte" />
+              <xs:element name="ClassCountyCode" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" name="LocationEmail" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

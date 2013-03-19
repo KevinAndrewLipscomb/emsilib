@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0fd501a7-1939-4b2b-b02e-85efcb367b15" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Practitioner.wsdl" MetadataType="Wsdl" ID="681e67f2-f4ef-4a95-b5a8-dfd6c191bf7f" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?wsdl" />
+    <MetadataFile FileName="Practitioner.xsd" MetadataType="Schema" ID="22bcb1b5-f19f-4fd2-9538-120c65ce47ce" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?xsd=xsd1" />
+    <MetadataFile FileName="Practitioner.disco" MetadataType="Disco" ID="3daec356-0663-449c-8961-8c58668199ad" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?disco" />
+    <MetadataFile FileName="Practitioner1.xsd" MetadataType="Schema" ID="f56769bb-c1bf-4b96-a664-816332e33ee2" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

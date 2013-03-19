@@ -3,9 +3,15 @@
 using Class_db_practitioners;
 using Class_db_regions;
 using ConEdLink.component.ss;
+using emsi.ServiceReference_emsams_Practitioner;
+using external_data_binding.emsams.PractitionerInfo;
+using external_data_binding.emsams.PractitionerStatusList;
 using kix;
 using System;
 using System.Collections;
+using System.Configuration;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Class_biz_practitioners
   {
@@ -93,33 +99,17 @@ namespace Class_biz_practitioners
 
     public void ImportLatestFromEmsrs()
       {
+      var client = new PractitionerClient();
+      var practitioner_status_list_obj = new PractitionerStatusList();
+      practitioner_status_list_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
+      practitioner_status_list_obj.Items = new Status[] {Status.Active,Status.Expired,Status.Probation,Status.Suspended};
+      var practitioner_status_list = new StringWriter();
+      new XmlSerializer(typeof(PractitionerStatusList)).Serialize(practitioner_status_list,practitioner_status_list_obj);
       db_practitioners.MarkAllStale();
-      //
-      var context = new Class_ss_emsams.DetailedCurrentPractitionersContext();
-      do
-        {
-        db_practitioners.ImportLatestFromEmsrs(ss_emsams.DetailedCurrentPractitioners(context));
-        }
-      while (context.disposition.val == 0);
-      //
-      if (context.disposition.val == 1)
-        {
-        db_practitioners.RemoveStale();
-        }
-      }
-
-    public void ImportLatestInstructorsFromEmsrs()
-      {
-      db_practitioners.ClearBeInstructorFlagsInSubscriberRegions();
-      var subscriber_region_code_q = db_regions.SubscriberQ();
-      while (subscriber_region_code_q.Count > 0)
-        {
-        var subscriber_region_code = subscriber_region_code_q.Dequeue();
-        if (!new ArrayList() {"15"}.Contains(subscriber_region_code))  //Don't attempt when EMSRS login access to associated regions has been lost.
-          {
-          db_practitioners.ImportLatestInstructorsFromEmsrs(ss_emsams.EmsInstructorsList(subscriber_region_code));
-          }
-        }
+      db_practitioners.ImportLatestFromEmsrs
+        (recs:ArrayList.Adapter(((Practitioners)new XmlSerializer(typeof(Practitioners)).Deserialize(new StringReader(client.GetInfoByStatus(statusXML:practitioner_status_list.ToString())))).Practitioner));
+      db_practitioners.RemoveStale();
+      client.Close();
       }
 
     public k.int_nonnegative MaxSpecLength

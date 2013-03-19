@@ -46,6 +46,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,11 +96,98 @@
     <Compile Include="db\Class_db_user.cs" />
     <Compile Include="db\Class_db_users.cs" />
     <Compile Include="db\Class_db__information_schema.cs" />
+    <Compile Include="external_data_binding\emsams\ConEdClassInfo.cs">
+      <DependentUpon>ConEdClassInfo.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="external_data_binding\emsams\ConEdSponsorInfo.cs">
+      <DependentUpon>ConEdSponsorInfo.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="external_data_binding\emsams\ConEdSponsorStatusList.cs">
+      <DependentUpon>ConEdSponsorStatusList.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="external_data_binding\emsams\EmptyRequest.cs">
+      <DependentUpon>EmptyRequest.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="external_data_binding\emsams\Error.cs">
+      <DependentUpon>Error.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="external_data_binding\emsams\PractitionerInfo.cs">
+      <DependentUpon>PractitionerInfo.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="external_data_binding\emsams\PractitionerStatusList.cs">
+      <DependentUpon>PractitionerStatusList.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\ServiceReference_emsams_ConEd\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ServiceReference_emsams_Practitioner\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ss\Class_ss.cs" />
     <Compile Include="ss\Class_ss_emsams.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="external_data_binding\emsams\ConEdClassInfo.xsd" />
+    <None Include="external_data_binding\emsams\ConEdSponsorInfo.xsd" />
+    <None Include="external_data_binding\emsams\ConEdSponsorStatusList.xsd" />
+    <None Include="external_data_binding\emsams\EmptyRequest.xsd" />
+    <None Include="external_data_binding\emsams\Error.xsd" />
+    <None Include="external_data_binding\emsams\PractitionerInfo.xsd" />
+    <None Include="external_data_binding\emsams\PractitionerStatusList.xsd" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\Coned.wsdl" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd.xsd" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd1.xsd" />
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner.wsdl" />
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner.xsd" />
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner1.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ServiceReference_emsams_ConEd\" />
+    <WCFMetadataStorage Include="Service References\ServiceReference_emsams_Practitioner\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_Practitioner\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_Practitioner\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_ConEd\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_ConEd\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_ConEd\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="external_data_binding\emsams\000-README.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

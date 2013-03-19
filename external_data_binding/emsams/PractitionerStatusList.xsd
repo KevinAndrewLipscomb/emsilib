@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   xmlns="http://ems.health.state.pa.us/WcfWebServices/Schemas/PractitionerStatusList"
+		   targetNamespace="http://ems.health.state.pa.us/WcfWebServices/Schemas/PractitionerStatusList"
+		   elementFormDefault="qualified"
+>
+	<xs:element name="PractitionerStatusList">
+		<xs:complexType>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<!-- Choice might have maxOccurs=unbounded, but the list of possible values in the Status Type and
+					 the unique constraint limit the number of values to the number of values in the list. -->
+				<xs:element name="Status" type="Status" minOccurs="1" nillable="false" />
+			</xs:choice>
+			<xs:attribute name="GUID" type="GUID" use="required" />
+		</xs:complexType>
+		<xs:unique name="StatusesUniqueInList">
+			<xs:selector xpath="Status" />
+			<xs:field xpath="."  />
+		</xs:unique>
+	</xs:element>
+
+	<xs:simpleType name="Status">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Active" />
+			<xs:enumeration value="InActive" />
+			<xs:enumeration value="Revoked" />
+			<xs:enumeration value="Suspended" />
+			<xs:enumeration value="Dropped" />
+			<xs:enumeration value="Expired" />
+			<xs:enumeration value="Incomplete" />
+			<xs:enumeration value="Do Not Certify and Expired" />
+			<xs:enumeration value="Probation" />
+			<xs:enumeration value="Denied" />
+			<xs:enumeration value="Deceased" />
+			<xs:enumeration value="Deceased - LODD" />
+			<xs:enumeration value="SSA" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="GUID">
+		<xs:restriction base="xs:string">
+			<xs:length fixed="true" value="36" />
+			<xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

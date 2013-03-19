@@ -2,7 +2,7 @@
 
 using Class_db;
 using Class_db_trail;
-using ConEdLink.component.ss;
+using external_data_binding.emsams.PractitionerInfo;
 using kix;
 using MySql.Data.MySqlClient;
 using System;
@@ -270,139 +270,98 @@ namespace Class_db_practitioners
         //  sb.Append
         //    (
         //    "("
-        //    + "NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
-        //    + ",'" + (rec as Class_ss_emsams.Practitioner).first_name + "'"
-        //    + ",'" + (rec as Class_ss_emsams.Practitioner).middle_initial + "'"
-        //    + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
-        //    + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
-        //    + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
+        //    + "NULLIF('" + (rec as Practitioner).last_name + "','')"
+        //    + ",'" + (rec as Practitioner).first_name + "'"
+        //    + ",'" + (rec as Practitioner).middle_initial + "'"
+        //    + ",NULLIF('" + (rec as Practitioner).certification_number + "','')"
+        //    + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Practitioner).level + "'),''),'')"
+        //    + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Practitioner).regional_council + "'),''),'')"
         //    + "),"
         //    );
         //  }
         //new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection).ExecuteNonQuery();
         //Close();
         //
-        var built_insert_values_string = new StringBuilder();
+        var combined_name = k.EMPTY;
         var first_name = k.EMPTY;
         var id_obj = new object();
-        var index_of_comma = new k.subtype<int>(-1,int.MaxValue);
         var last_name = k.EMPTY;
         var middle_initial = k.EMPTY;
-        var unparsed_name = k.EMPTY;
+        var certification_number = k.EMPTY;
+        var level_description = k.EMPTY;
+        var region_name = k.EMPTY;
+        var birth_date = k.EMPTY;
+        var county_name = k.EMPTY;
+        var status = k.EMPTY;
+        var be_instructor = false;
         Open();
         foreach (var rec in recs)
           {
-          unparsed_name = (rec as Class_ss_emsams.DetailedPractitioner).name;
-          index_of_comma.val = unparsed_name.IndexOf(k.COMMA);
-          if (index_of_comma.val >= 0)
+          last_name = k.Safe((rec as PractitionersPractitioner).LastName,k.safe_hint_type.HUMAN_NAME).Replace(k.SPACE + k.SPACE,k.SPACE).Trim();
+          region_name = ((rec as PractitionersPractitioner).RegionalCouncilName == null ? k.EMPTY : k.Safe((rec as PractitionersPractitioner).RegionalCouncilName,k.safe_hint_type.ORG_NAME));
+          if ((last_name.Length > 0) && (region_name.Length > 0))
             {
-            last_name = unparsed_name.Substring(0,index_of_comma.val);
-            if ((last_name.Length > 0) && ((rec as Class_ss_emsams.DetailedPractitioner).region != "&nbsp"))
+            combined_name = (k.Safe((rec as PractitionersPractitioner).FirstName,k.safe_hint_type.HUMAN_NAME) + k.SPACE + k.Safe((rec as PractitionersPractitioner).MI,k.safe_hint_type.HUMAN_NAME)).Trim();
+            first_name = combined_name;
+            middle_initial = k.EMPTY;
+            if ((combined_name.Contains(k.SPACE)) && (combined_name.LastIndexOf(k.SPACE) == combined_name.Length - 2))
               {
-              unparsed_name = unparsed_name.Replace(last_name + k.COMMA_SPACE,k.EMPTY);
-              first_name = unparsed_name;
-              middle_initial = k.EMPTY;
-              if ((unparsed_name.Contains(k.SPACE)) && (unparsed_name.LastIndexOf(k.SPACE) == unparsed_name.Length - 2))
-                {
-                middle_initial = unparsed_name.Substring(unparsed_name.Length - 1);
-                first_name = unparsed_name.Substring(0,unparsed_name.Length - 2);
-                }
-              //
-              // The following logic will prevent this app from detecting when EMSRS reassigns a certification_number to a different person.  The latest person to hold the certification number will therefore be associated, in
-              // this app, with the prior assignee's history of class attendance.  But that doesn't seem to be a concern since EMSRS, not this app, is the authoritative source for a practitioner's historical class attendance.
-              //
-              id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + (rec as Class_ss_emsams.DetailedPractitioner).certification_number + "'",connection).ExecuteScalar();
-              if (id_obj == null)
-                {
-                built_insert_values_string.Append
-                  (
-                  "("
-                  + "'" + last_name + "'"
-                  + ",'" + first_name + "'"
-                  + ",'" + middle_initial + "'"
-                  + ",'" + (rec as Class_ss_emsams.DetailedPractitioner).certification_number + "'"
-                  + ",(select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.DetailedPractitioner).level + "')"
-                  + ",(select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.DetailedPractitioner).region + "')"
-                  + ",STR_TO_DATE('" + (rec as Class_ss_emsams.DetailedPractitioner).birth_date + "','%m/%d/%Y')"
-                  + ",TRUE"
-                  + ",STR_TO_DATE('" + (rec as Class_ss_emsams.DetailedPractitioner).issue_date + "','%m/%d/%Y')"
-                  + ",STR_TO_DATE('" + (rec as Class_ss_emsams.DetailedPractitioner).expiration_date + "','%m/%d/%Y')"
-                  + ",(select code from county_code_name_map where name = '" + (rec as Class_ss_emsams.DetailedPractitioner).county + "')"
-                  + ",(select id from gender where description = '" + (rec as Class_ss_emsams.DetailedPractitioner).gender + "')"
-                  + ",(select id from practitioner_status where description = '" + (rec as Class_ss_emsams.DetailedPractitioner).status + "')"
-                  + "),"
-                  );
-                }
-              else
-                {
-                new MySqlCommand
-                  (
-                  "update ignore practitioner"
-                  + " set last_name = '" + last_name + "'"
-                  + " , first_name = '" + first_name + "'"
-                  + " , middle_initial = '" + middle_initial + "'"
-                  + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.DetailedPractitioner).level + "')"
-                  + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.DetailedPractitioner).region + "')"
-                  + " , birth_date = STR_TO_DATE('" + (rec as Class_ss_emsams.DetailedPractitioner).birth_date + "','%m/%d/%Y')"
-                  + " , be_birth_date_confirmed = TRUE"
-                  + " , issue_date = STR_TO_DATE('" + (rec as Class_ss_emsams.DetailedPractitioner).issue_date + "','%m/%d/%Y')"
-                  + " , expiration_date = STR_TO_DATE('" + (rec as Class_ss_emsams.DetailedPractitioner).expiration_date + "','%m/%d/%Y')"
-                  + " , residence_county_code = (select code from county_code_name_map where name = '" + (rec as Class_ss_emsams.DetailedPractitioner).county + "')"
-                  + " , gender_id = (select id from gender where description = '" + (rec as Class_ss_emsams.DetailedPractitioner).gender + "')"
-                  + " , status_id = (select id from practitioner_status where description = '" + (rec as Class_ss_emsams.DetailedPractitioner).status + "')"
-                  + " , be_stale = false"
-                  + " , be_past = false"
-                  + " where id = '" + id_obj.ToString() + "'",
-                  connection
-                  )
-                  .ExecuteNonQuery();
-                }
+              middle_initial = combined_name.Substring(combined_name.Length - 1);
+              first_name = combined_name.Substring(0,combined_name.Length - 2);
+              }
+            certification_number = (rec as PractitionersPractitioner).CertificationNumber.ToString();
+            level_description = k.Safe((rec as PractitionersPractitioner).LevelDescription,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
+            birth_date = ((rec as PractitionersPractitioner).BirthDate == null ? k.EMPTY : k.Safe((rec as PractitionersPractitioner).BirthDate,k.safe_hint_type.DATE_TIME));
+            county_name = ((rec as PractitionersPractitioner).CountyName == null ? k.EMPTY : k.Safe((rec as PractitionersPractitioner).CountyName,k.safe_hint_type.POSTAL_CITY));
+            status = k.Safe((rec as PractitionersPractitioner).Status,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
+            be_instructor = ((rec as PractitionersPractitioner).IsInstructor == "Y");
+            //
+            // The following logic will prevent this app from detecting when EMSRS reassigns a certification_number to a different person.  The latest person to hold the certification number will therefore be associated, in
+            // this app, with the prior assignee's history of class attendance.  But that doesn't seem to be a concern since EMSRS, not this app, is the authoritative source for a practitioner's historical class attendance.
+            //
+            id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + certification_number + "'",connection).ExecuteScalar();
+            if (id_obj == null)
+              {
+              new MySqlCommand
+                (
+                "insert ignore practitioner set last_name = '" + last_name + "'"
+                + " , first_name = '" + first_name + "'"
+                + " , middle_initial = '" + middle_initial + "'"
+                + " , certification_number = '" + certification_number + "'"
+                + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
+                + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
+                + " , birth_date = STR_TO_DATE('" + birth_date + "','%m/%d/%Y')"
+                + " , be_birth_date_confirmed = TRUE"
+                + " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')"
+                + " , status_id = (select id from practitioner_status where description = '" + status + "')"
+                + " , be_instructor = " + be_instructor.ToString(),
+                connection
+                )
+                .ExecuteNonQuery();
+              }
+            else
+              {
+              new MySqlCommand
+                (
+                "update ignore practitioner"
+                + " set last_name = '" + last_name + "'"
+                + " , first_name = '" + first_name + "'"
+                + " , middle_initial = '" + middle_initial + "'"
+                + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
+                + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
+                + (birth_date.Length > 0 ? " , birth_date = STR_TO_DATE('" + birth_date + "','%m/%d/%Y') , be_birth_date_confirmed = TRUE" : k.EMPTY)
+                + (county_name.Length > 0 ? " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')" : k.EMPTY)
+                + " , status_id = (select id from practitioner_status where description = '" + status + "')"
+                + " , be_stale = false"
+                + " , be_past = false"
+                + " , be_instructor = " + be_instructor.ToString()
+                + " where id = '" + id_obj.ToString() + "'",
+                connection
+                )
+                .ExecuteNonQuery();
               }
             }
           }
-        if (built_insert_values_string.Length > 0)
-          {
-          new MySqlCommand
-            (
-            "insert ignore practitioner"
-            + " ("
-            + " last_name"
-            + " ,first_name"
-            + " ,middle_initial"
-            + " ,certification_number"
-            + " ,level_id"
-            + " ,regional_council_code"
-            + " ,birth_date"
-            + " ,be_birth_date_confirmed"
-            + " ,issue_date"
-            + " ,expiration_date"
-            + " ,residence_county_code"
-            + " ,gender_id"
-            + " ,status_id"
-            + " )"
-            + " values "
-            + built_insert_values_string.ToString().TrimEnd(Convert.ToChar(k.COMMA)),
-            connection
-            )
-            .ExecuteNonQuery();
-          }
-        Close();
-        }
-      }
-
-    public void ImportLatestInstructorsFromEmsrs(ArrayList recs)
-      {
-      if (recs.Count > 0)
-        {
-        var built_instructor_certification_numbers_list = new StringBuilder();
-        foreach (var rec in recs)
-          {
-          built_instructor_certification_numbers_list.Append((rec as Class_ss_emsams.EmsInstructor).certification_number + k.COMMA);
-          }
-        Open();
-        new MySqlCommand
-          ("update practitioner set be_instructor = TRUE where certification_number in (" + built_instructor_certification_numbers_list.ToString().TrimEnd(new char[] {Convert.ToChar(k.COMMA)}) + ")",connection)
-          .ExecuteNonQuery();
         Close();
         }
       }
