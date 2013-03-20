@@ -18,13 +18,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://ems.health.state.pa.us/WcfWebServices/Practitioner.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Practitioner.wsdl" MetadataType="Wsdl" ID="681e67f2-f4ef-4a95-b5a8-dfd6c191bf7f" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?wsdl" />
-    <MetadataFile FileName="Practitioner.xsd" MetadataType="Schema" ID="22bcb1b5-f19f-4fd2-9538-120c65ce47ce" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?xsd=xsd1" />
-    <MetadataFile FileName="Practitioner.disco" MetadataType="Disco" ID="3daec356-0663-449c-8961-8c58668199ad" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?disco" />
-    <MetadataFile FileName="Practitioner1.xsd" MetadataType="Schema" ID="f56769bb-c1bf-4b96-a664-816332e33ee2" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/Practitioner.svc?xsd=xsd0" />
+    <MetadataFile FileName="Practitioner2.xsd" MetadataType="Schema" ID="f3779f9c-eafa-4a88-9a76-bf831671b7d1" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/Practitioner.svc?xsd=xsd0" />
+    <MetadataFile FileName="Practitioner1.wsdl" MetadataType="Wsdl" ID="64be948f-aa9d-4b15-92c4-6204cb9906f8" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/Practitioner.svc?wsdl" />
+    <MetadataFile FileName="Practitioner21.xsd" MetadataType="Schema" ID="86a94a56-49df-414a-8a9a-d44ba443531e" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/Practitioner.svc?xsd=xsd1" />
+    <MetadataFile FileName="Practitioner1.disco" MetadataType="Disco" ID="d21d153d-da84-434a-a5d9-579ecd1f436a" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/Practitioner.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
