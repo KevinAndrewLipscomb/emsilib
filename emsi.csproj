@@ -143,19 +143,13 @@
     <None Include="external_data_binding\emsams\Error.xsd" />
     <None Include="external_data_binding\emsams\PractitionerInfo.xsd" />
     <None Include="external_data_binding\emsams\PractitionerStatusList.xsd" />
-    <None Include="Service References\ServiceReference_emsams_ConEd\Coned.wsdl" />
-    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd.xsd" />
-    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd1.xsd" />
-    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner.wsdl" />
-    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner.xsd" />
-    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner1.xsd" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\Coned1.wsdl" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd2.xsd" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd21.xsd" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ServiceReference_emsams_ConEd\" />
     <WCFMetadataStorage Include="Service References\ServiceReference_emsams_Practitioner\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\ServiceReference_emsams_Practitioner\configuration91.svcinfo" />
@@ -164,13 +158,13 @@
     <None Include="Service References\ServiceReference_emsams_Practitioner\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner1.wsdl" />
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner2.xsd" />
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner21.xsd" />
     <None Include="Service References\ServiceReference_emsams_Practitioner\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\ServiceReference_emsams_ConEd\configuration91.svcinfo" />
@@ -187,6 +181,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="external_data_binding\emsams\000-README.txt" />
+    <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner1.disco" />
+    <None Include="Service References\ServiceReference_emsams_ConEd\ConEd1.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

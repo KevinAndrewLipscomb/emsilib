@@ -18,13 +18,13 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="https://ems.health.state.pa.us/WcfWebServices/ConEd.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ConEd.disco" MetadataType="Disco" ID="69d2fb58-58e9-4eab-8792-057ede6b4a83" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc?disco" />
-    <MetadataFile FileName="ConEd.xsd" MetadataType="Schema" ID="8938dfed-ccf8-4b19-a385-9775a1ad67f7" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc?xsd=xsd1" />
-    <MetadataFile FileName="ConEd1.xsd" MetadataType="Schema" ID="1d983e64-ab1a-468d-ad9d-2ecb7a740984" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc?xsd=xsd0" />
-    <MetadataFile FileName="Coned.wsdl" MetadataType="Wsdl" ID="1e46b682-8e19-40a2-b31f-b6000831e5e7" SourceId="1" SourceUrl="https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc?wsdl" />
+    <MetadataFile FileName="ConEd1.disco" MetadataType="Disco" ID="80dd4059-b8b4-4cd4-a946-797479e32e76" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/ConEd.svc?disco" />
+    <MetadataFile FileName="ConEd2.xsd" MetadataType="Schema" ID="39473a83-3d37-494a-bfdd-0b4a8e412342" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/ConEd.svc?xsd=xsd1" />
+    <MetadataFile FileName="ConEd21.xsd" MetadataType="Schema" ID="be8bc677-103d-4397-9052-cc72df3a8222" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/ConEd.svc?xsd=xsd0" />
+    <MetadataFile FileName="Coned1.wsdl" MetadataType="Wsdl" ID="27bb2020-e927-4a0f-b549-239b0e79c3d1" SourceId="1" SourceUrl="https://ems.health.state.pa.us/WcfWebServices/ConEd.svc?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

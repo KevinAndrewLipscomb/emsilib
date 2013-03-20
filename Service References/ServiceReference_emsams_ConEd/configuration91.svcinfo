@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="L7c6WCLS3pYFujbocB5hlUCb8BE=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="A9xDpljKlWrBursBp4nkw/TebDs=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="wsHttpBinding" name="WSHttpBinding_IConed">
       <properties>
@@ -127,10 +127,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="WSHttpBinding_IConed" contract="ServiceReference_emsams_ConEd.IConed" bindingType="wsHttpBinding" address="https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc" bindingConfiguration="WSHttpBinding_IConed">
+    <endpoint name="WSHttpBinding_IConed" contract="ServiceReference_emsams_ConEd.IConed" bindingType="wsHttpBinding" address="https://ems.health.state.pa.us/WcfWebServices/ConEd.svc" bindingConfiguration="WSHttpBinding_IConed">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>https://ems.health.beta.state.pa.us/WcfWebServices/ConEd.svc</serializedValue>
+          <serializedValue>https://ems.health.state.pa.us/WcfWebServices/ConEd.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
