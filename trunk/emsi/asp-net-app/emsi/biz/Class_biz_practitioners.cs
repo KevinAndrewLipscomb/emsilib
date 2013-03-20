@@ -106,8 +106,9 @@ namespace Class_biz_practitioners
       var practitioner_status_list = new StringWriter();
       new XmlSerializer(typeof(PractitionerStatusList)).Serialize(practitioner_status_list,practitioner_status_list_obj);
       db_practitioners.MarkAllStale();
+      var response = client.GetInfoByStatus(statusXML:practitioner_status_list.ToString());
       db_practitioners.ImportLatestFromEmsrs
-        (recs:ArrayList.Adapter(((Practitioners)new XmlSerializer(typeof(Practitioners)).Deserialize(new StringReader(client.GetInfoByStatus(statusXML:practitioner_status_list.ToString())))).Practitioner));
+        (recs:ArrayList.Adapter(((Practitioners)new XmlSerializer(typeof(Practitioners)).Deserialize(new StringReader(response))).Practitioner));
       db_practitioners.RemoveStale();
       client.Close();
       }
