@@ -680,7 +680,7 @@ namespace Class_db_coned_offerings
             {
             class_number = k.Safe((rec as ClassInfoClass).ClassNumber.ToString(),k.safe_hint_type.NUM).PadLeft(14,'0');
             //
-            public_contact_email = (be_production_instance ? k.Safe((rec as ClassInfoClass).PublicContactEmail,k.safe_hint_type.EMAIL_ADDRESS) : "CeOffering" + class_number + "Pce@frompaper2web.com");
+            public_contact_email = (be_production_instance ? ((rec as ClassInfoClass).PublicContactEmail == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).PublicContactEmail,k.safe_hint_type.EMAIL_ADDRESS)) : "CeOffering" + class_number + "Pce@frompaper2web.com");
             location_email = (be_production_instance ? ((rec as ClassInfoClass).LocationEmail == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).LocationEmail,k.safe_hint_type.EMAIL_ADDRESS)) : "CeOffering" + class_number + "Le@frompaper2web.com");
             length = ((rec as ClassInfoClass).Length == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Length,k.safe_hint_type.NUM));
             //
