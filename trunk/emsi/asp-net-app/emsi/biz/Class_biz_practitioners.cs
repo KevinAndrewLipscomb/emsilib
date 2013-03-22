@@ -102,13 +102,20 @@ namespace Class_biz_practitioners
       var client = new PractitionerClient();
       var practitioner_status_list_obj = new PractitionerStatusList();
       practitioner_status_list_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
-      practitioner_status_list_obj.Items = new Status[] {Status.Active,Status.Expired,Status.Probation,Status.Suspended};
-      var practitioner_status_list = new StringWriter();
-      new XmlSerializer(typeof(PractitionerStatusList)).Serialize(practitioner_status_list,practitioner_status_list_obj);
+      //
       db_practitioners.MarkAllStale();
-      var response = client.GetInfoByStatus(statusXML:practitioner_status_list.ToString());
-      db_practitioners.ImportLatestFromEmsrs
-        (recs:ArrayList.Adapter(((Practitioners)new XmlSerializer(typeof(Practitioners)).Deserialize(new StringReader(response))).Practitioner));
+      foreach (var status in new Status[] {Status.Active,Status.Expired,Status.Probation,Status.Suspended})
+        {
+        practitioner_status_list_obj.Items = new Status[] {status};
+        var practitioner_status_list = new StringWriter();
+        new XmlSerializer(typeof(PractitionerStatusList)).Serialize(practitioner_status_list,practitioner_status_list_obj);
+        var response = client.GetInfoByStatus(statusXML:practitioner_status_list.ToString());
+        if (response != "<DocumentElement />")
+          {
+          db_practitioners.ImportLatestFromEmsrs
+            (recs:ArrayList.Adapter(((Practitioners)new XmlSerializer(typeof(Practitioners)).Deserialize(new StringReader(response))).Practitioner));
+          }
+        }
       db_practitioners.RemoveStale();
       client.Close();
       }
