@@ -687,7 +687,7 @@ namespace Class_db_coned_offerings
             childless_field_assignments_clause = k.EMPTY
             + "class_id = NULLIF('" + (rec as ClassInfoClass).ClassID + "','')"
             + " , sponsor_id = NULLIF('" + (rec as ClassInfoClass).SponsorID + "','')"
-            + " , sponsor_number = NULLIF('" + k.Safe((rec as ClassInfoClass).SponsorNumber,k.safe_hint_type.HYPHENATED_NUM) + "','')"
+            + " , sponsor_number = NULLIF('" + ((rec as ClassInfoClass).SponsorNumber == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).SponsorNumber,k.safe_hint_type.HYPHENATED_NUM)) + "','')"
             + " , course_number = NULLIF('" + (rec as ClassInfoClass).CourseNumber + "','')"
             + " , location = NULLIF('" + k.Safe((rec as ClassInfoClass).Location,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim() + "','')"
             + " , start_date_time = STR_TO_DATE(NULLIF('" + k.Safe((rec as ClassInfoClass).StartDateTime,k.safe_hint_type.DATE_TIME) + "',''),'%m/%d/%Y %H:%i:%s')"
@@ -699,7 +699,7 @@ namespace Class_db_coned_offerings
             + " , region_council_num = IFNULL(NULLIF('" + (rec as ClassInfoClass).RegionCouncilNum + "',''),0)"
             + " , class_county_code = NULLIF('" + (rec as ClassInfoClass).ClassCountyCode + "','')"
             + " , location_email = NULLIF('" + location_email + "','')"
-            + " , sponsor_name = NULLIF('" + k.Safe((rec as ClassInfoClass).SponsorName,k.safe_hint_type.ORG_NAME).Trim() + "','')"
+            + " , sponsor_name = NULLIF('" + ((rec as ClassInfoClass).SponsorName == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).SponsorName,k.safe_hint_type.ORG_NAME).Trim()) + "','')"
             + " , courses_course_number = NULLIF('" + (rec as ClassInfoClass).CourseNumber + "','')"
             + " , course_title = NULLIF('" + k.Safe((rec as ClassInfoClass).CourseTitle,k.safe_hint_type.PUNCTUATED).Trim() + "','')"
             + " , fr_med_trauma_hours = NULLIF('" + (rec as ClassInfoClass).FR_MedTrauma_Hrs + "','')"
