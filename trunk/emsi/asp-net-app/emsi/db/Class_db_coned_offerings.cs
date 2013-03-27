@@ -676,7 +676,7 @@ namespace Class_db_coned_offerings
         Open();
         foreach (var rec in recs)
           {
-          if ((rec as ClassInfoClass).CourseTitle != null)
+          if (((rec as ClassInfoClass).CourseTitle != null) && ((rec as ClassInfoClass).SponsorID > 0))
             {
             class_number = k.Safe((rec as ClassInfoClass).ClassNumber.ToString(),k.safe_hint_type.NUM).PadLeft(14,'0');
             //
