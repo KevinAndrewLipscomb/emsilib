@@ -477,6 +477,24 @@ namespace Class_biz_coned_offerings
         region_code:region_code
         );
       db_coned_offerings.MarkCanceled(IdOf(summary));
+      biz_notifications.IssueForClassCanceled
+        (
+        sponsor_id:db_coned_offerings.SponsorIdOf(summary),
+        sponsor_number:db_coned_offerings.SponsorNumberOf(summary),
+        sponsor_name:db_coned_offerings.SponsorNameOf(summary),
+        sponsor_email:db_coned_offerings.SponsorEmailOf(summary),
+        sponsor_contact_email:db_coned_offerings.SponsorContactEmailOf(summary),
+        sponsor_public_contact_email:db_coned_offerings.SponsorPublicContactEmailOf(summary),
+        coned_offering_public_contact_email:db_coned_offerings.PublicContactEmailOf(summary),
+        class_number:db_coned_offerings.ClassNumberOf(summary),
+        course_title:db_coned_offerings.CourseTitleOf(summary),
+        start:db_coned_offerings.StartDateOf(summary) + k.SPACE + db_coned_offerings.StartOtherOf(summary),
+        end:db_coned_offerings.EndDateOf(summary) + k.SPACE + db_coned_offerings.EndOtherOf(summary),
+        length:db_coned_offerings.LengthOf(summary),
+        location:db_coned_offerings.LocationOf(summary),
+        num_attendees:new k.int_nonnegative(0),
+        status_description:coned_offering_status_enumeration.ARCHIVED.ToString()
+        );
       }
 
     public string PhrnMedTraumaHoursOf(object summary)
