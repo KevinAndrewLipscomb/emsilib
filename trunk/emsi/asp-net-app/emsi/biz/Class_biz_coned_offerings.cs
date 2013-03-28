@@ -114,6 +114,17 @@ namespace Class_biz_coned_offerings
       db_coned_offerings.BindDirectToListControlForCopy(id,target);
       }
 
+    public void BindOutstandingRosters
+      (
+      string region_code,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      db_coned_offerings.BindOutstandingRosters(region_code,sort_order,be_sort_order_ascending,target);
+      }
+
     public void BindReadyRosters
       (
       string region_code,
