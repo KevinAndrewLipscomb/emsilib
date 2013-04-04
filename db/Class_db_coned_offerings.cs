@@ -166,10 +166,12 @@ namespace Class_db_coned_offerings
         +   " join county_region_map on (county_region_map.county_code=county_code_name_map.code)"
         +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
         +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
+        +   " left join coned_offering_class_final_status on (coned_offering_class_final_status.id=coned_offering.class_final_status_id)"
         + " where region_code_name_map.code = '" + region_code + "'"
         +   " and county_region_map.region_code = '" + region_code + "'"
         +   " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'"
         +   " and end_date_time between CURDATE() - INTERVAL 10 DAY and CURDATE() - INTERVAL 1 DAY"
+        +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
@@ -853,8 +855,10 @@ namespace Class_db_coned_offerings
         +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
         +   " join county_code_name_map on (county_code_name_map.emsrs_code=coned_offering.class_county_code)"
         +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
+        +   " left join coned_offering_class_final_status on (coned_offering_class_final_status.id=coned_offering.class_final_status_id)"
         + " where region_code_name_map.be_conedlink_subscriber"
         +   " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'"
+        +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
         +   " and end_date_time + '" + days_after.val + "' = CURDATE()",
         connection
         )
