@@ -443,10 +443,13 @@ namespace Class_biz_coned_offerings
       var client = new ConedClient();
       var empty_request_obj = new EmptyRequest();
       empty_request_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
+      //
+      db_coned_offerings.MarkAllStale();
       var empty_request = new StringWriter();
       new XmlSerializer(typeof(EmptyRequest)).Serialize(empty_request,empty_request_obj);
       var response = client.GetClassInfo(emptyRequest:empty_request.ToString());
       db_coned_offerings.ImportLatestFromEmsrs(recs:ArrayList.Adapter(((ClassInfo)new XmlSerializer(typeof(ClassInfo)).Deserialize(new StringReader(response))).Class));
+      db_coned_offerings.MarkStaleAsCanceled();
       client.Close();
       }
 
