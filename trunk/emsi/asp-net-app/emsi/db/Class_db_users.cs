@@ -22,10 +22,8 @@ namespace Class_db_users
           (
           string certification_number,
           string level_id,
-          DateTime expiration_date,
           string regional_council_code,
           DateTime birth_date,
-          string gender_id,
           string id
           )
           {
@@ -39,10 +37,8 @@ namespace Class_db_users
             + " from member"
             + " where certification_number = '" + certification_number + "'"
             +   " and level_id = '" + level_id + "'"
-            +   " and expiration_date = '" + expiration_date.ToString("yyyy-MM-dd") + "'"
             +   " and regional_council_code = '" + regional_council_code + "'"
-            +   " and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
-            +   " and gender_id = '" + gender_id + "'",
+            +   " and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'",
             connection
             )
             .ExecuteScalar();

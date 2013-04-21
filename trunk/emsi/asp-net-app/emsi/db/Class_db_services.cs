@@ -12,6 +12,11 @@ namespace Class_db_services
 {
     public class TClass_db_services: TClass_db
     {
+    private class service_summary
+      {
+      public string id;
+      }
+
         private TClass_biz_notifications biz_notifications = null;
         private TClass_db_trail db_trail = null;
         //Constructor  Create()
@@ -171,6 +176,17 @@ namespace Class_db_services
         {
             BindListControl(county_user_id, target, be_unfiltered, false);
         }
+
+        internal void BindStrikeTeamAffiliationBaseDataList
+          (
+          string member_id,
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target
+          )
+          {
+          throw new NotImplementedException();
+          }
 
         public bool Delete(string affiliate_num)
         {
@@ -878,6 +894,29 @@ namespace Class_db_services
             childless_field_assignments_clause:childless_field_assignments_clause
             );
           }
+
+    internal object Summary(string id)
+      {
+      //Open();
+      //var dr =
+      //  (
+      //  new MySqlCommand
+      //    (
+      //    "SELECT "
+      //    + " FROM service"
+      //    + " where id = '" + id + "'",
+      //    connection
+      //    )
+      //    .ExecuteReader()
+      //  );
+      //dr.Read();
+      var the_summary = new service_summary()
+        {
+        id = id
+        };
+      //Close();
+      return the_summary;
+      }
 
         internal System.Collections.Queue SusceptibleTo(milestone_type milestone)
           {
