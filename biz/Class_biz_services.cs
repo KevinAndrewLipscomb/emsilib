@@ -85,6 +85,17 @@ namespace Class_biz_services
             BindListControl(county_user_id, target, be_unfiltered, false);
         }
 
+    public void BindStrikeTeamAffiliationBaseDataList
+      (
+      string member_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      db_services.BindStrikeTeamAffiliationBaseDataList(member_id,sort_order,be_sort_order_ascending,target);
+      }
+
         public bool Delete(string affiliate_num)
         {
             bool result;
@@ -600,6 +611,11 @@ namespace Class_biz_services
             primary_response_area
             );
           db_appropriations.ApplyToExisting(affiliate_num, be_distressed);
+          }
+
+        public object Summary(string id)
+          {
+          return db_services.Summary(id);
           }
 
         internal Queue SusceptibleTo(milestone_type milestone)

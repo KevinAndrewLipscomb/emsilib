@@ -33,14 +33,14 @@ namespace Class_biz_regions
       object target,
       string unselected_literal,
       string selected_value,
-      bool do_limit_to_subscribers
+      string application_filter
       )
       {
-      db_regions.BindDirectToListControl(target, unselected_literal, selected_value, do_limit_to_subscribers);
+      db_regions.BindDirectToListControl(target, unselected_literal, selected_value, application_filter);
       }
     public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
       {
-      BindDirectToListControl(target, unselected_literal, selected_value, do_limit_to_subscribers:true);
+      BindDirectToListControl(target, unselected_literal, selected_value, application_filter:"conedlink");
       }
     public void BindDirectToListControl(object target, string unselected_literal)
       {
@@ -79,6 +79,17 @@ namespace Class_biz_regions
       return db_regions.EmsportalUsernameOf(code);
       }
 
+    public void BindStrikeTeamAffiliationBaseDataList
+      (
+      string member_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      db_regions.BindStrikeTeamAffiliationBaseDataList(member_id,sort_order,be_sort_order_ascending,target);
+      }
+
     public bool Delete(string code)
       {
       return db_regions.Delete(code);
@@ -105,6 +116,11 @@ namespace Class_biz_regions
       )
       {
       db_regions.Set(code,description);
+      }
+
+    public object Summary(string id)
+      {
+      return db_regions.Summary(id);
       }
 
     } // end TClass_biz_regions

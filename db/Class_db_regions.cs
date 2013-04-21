@@ -2,6 +2,7 @@ using Class_db;
 using Class_db_trail;
 using kix;
 using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
@@ -10,6 +11,11 @@ namespace Class_db_regions
 
   public class TClass_db_regions: TClass_db
     {
+
+    private class region_summary
+      {
+      public string id;
+      }
 
     private TClass_db_trail db_trail = null;
 
@@ -58,7 +64,7 @@ namespace Class_db_regions
       object target,
       string unselected_literal,
       string selected_value,
-      bool do_limit_to_subscribers
+      string application_filter
       )
       {
       ((target) as ListControl).Items.Clear();
@@ -67,7 +73,7 @@ namespace Class_db_regions
         ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
         }
       Open();
-      var dr = new MySqlCommand("SELECT code,name FROM region_code_name_map where name <> '(none specified)'" + (do_limit_to_subscribers ? " and be_conedlink_subscriber" : k.EMPTY) + " order by code", connection)
+      var dr = new MySqlCommand("SELECT code,name FROM region_code_name_map where name <> '(none specified)'" + (application_filter.Length > 0 ? " and be_" + application_filter + "_subscriber" : k.EMPTY) + " order by code", connection)
         .ExecuteReader();
       while (dr.Read())
         {
@@ -82,7 +88,7 @@ namespace Class_db_regions
       }
     public void BindDirectToListControl(object target,string unselected_literal,string selected_value)
       {
-      BindDirectToListControl(target, unselected_literal, selected_value, do_limit_to_subscribers:true);
+      BindDirectToListControl(target, unselected_literal, selected_value, application_filter:"conedlink");
       }
     public void BindDirectToListControl(object target,string unselected_literal)
       {
@@ -134,6 +140,17 @@ namespace Class_db_regions
       Close();
       return code_of_emsrs_code;
       }
+
+        internal void BindStrikeTeamAffiliationBaseDataList
+          (
+          string member_id,
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target
+          )
+          {
+          throw new NotImplementedException();
+          }
 
     public bool Delete(string code)
       {
@@ -238,6 +255,29 @@ namespace Class_db_regions
       dr.Close();
       Close();
       return subscriber_q;
+      }
+
+    internal object Summary(string id)
+      {
+      //Open();
+      //var dr =
+      //  (
+      //  new MySqlCommand
+      //    (
+      //    "SELECT "
+      //    + " FROM region_code_name_map"
+      //    + " where id = '" + id + "'",
+      //    connection
+      //    )
+      //    .ExecuteReader()
+      //  );
+      //dr.Read();
+      var the_summary = new region_summary()
+        {
+        id = id
+        };
+      //Close();
+      return the_summary;
       }
 
     } // end TClass_db_regions
