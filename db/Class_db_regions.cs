@@ -133,6 +133,39 @@ namespace Class_db_regions
       BindEmsrsToListControl(target, "-- region --");
       }
 
+    internal void BindPacratManagementBaseDataList
+      (
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select code"
+        + " , name"
+        + " , IF(be_pacrat_subscriber,'YES','no') as be_pacrat_subscriber"
+        + " from region_code_name_map"
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
+    internal void BindStrikeTeamAffiliationBaseDataList
+      (
+      string member_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      throw new NotImplementedException();
+      }
+
     internal string CodeOfEmsrsCode(string emsrs_code)
       {
       Open();
@@ -140,17 +173,6 @@ namespace Class_db_regions
       Close();
       return code_of_emsrs_code;
       }
-
-        internal void BindStrikeTeamAffiliationBaseDataList
-          (
-          string member_id,
-          string sort_order,
-          bool be_sort_order_ascending,
-          object target
-          )
-          {
-          throw new NotImplementedException();
-          }
 
     public bool Delete(string code)
       {
@@ -240,6 +262,17 @@ namespace Class_db_regions
         connection
         )
         .ExecuteNonQuery();
+      Close();
+      }
+
+    internal void SetPacratSubscriber
+      (
+      string code,
+      bool value
+      )
+      {
+      Open();
+      new MySqlCommand("update region_code_name_map set be_pacrat_subscriber = " + value.ToString() + " where code = '" + code + "'",connection).ExecuteNonQuery();
       Close();
       }
 
