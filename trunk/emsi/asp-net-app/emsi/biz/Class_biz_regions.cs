@@ -79,6 +79,11 @@ namespace Class_biz_regions
       return db_regions.EmsportalUsernameOf(code);
       }
 
+    public void BindPacratManagementBaseDataList(string sort_order, bool be_sort_order_ascending, object target)
+      {
+      db_regions.BindPacratManagementBaseDataList(sort_order,be_sort_order_ascending,target);
+      }
+
     public void BindStrikeTeamAffiliationBaseDataList
       (
       string member_id,
@@ -116,6 +121,15 @@ namespace Class_biz_regions
       )
       {
       db_regions.Set(code,description);
+      }
+
+    public void SetPacratSubscriber
+      (
+      string code,
+      bool value
+      )
+      {
+      db_regions.SetPacratSubscriber(code,value);
       }
 
     public object Summary(string id)
