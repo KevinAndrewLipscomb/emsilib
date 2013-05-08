@@ -14,7 +14,11 @@ namespace Class_db_regions
 
     private class region_summary
       {
-      public string id;
+      public string code;
+      public string name;
+      public string emsrs_code;
+      public string emsrs_active_practitioners_name;
+      public bool be_pacrat_subscriber;
       }
 
     private TClass_db_trail db_trail = null;
@@ -166,6 +170,11 @@ namespace Class_db_regions
       throw new NotImplementedException();
       }
 
+    internal string CodeOf(object summary)
+      {
+      return (summary as region_summary).code;
+      }
+
     internal string CodeOfEmsrsCode(string emsrs_code)
       {
       Open();
@@ -195,6 +204,11 @@ namespace Class_db_regions
         }
       Close();
       return result;
+      }
+
+    internal string EmsrsCodeOf(object summary)
+      {
+      return (summary as region_summary).emsrs_code;
       }
 
     internal string EmsrsCodeOfCode(string code)
@@ -239,6 +253,16 @@ namespace Class_db_regions
       dr.Close();
       Close();
       return result;
+      }
+
+    internal string EmsrsActivePractitionersNameOf(object summary)
+      {
+      return (summary as region_summary).emsrs_active_practitioners_name;
+      }
+
+    internal string NameOf(object summary)
+      {
+      return (summary as region_summary).name;
       }
 
     public void Set
@@ -290,26 +314,33 @@ namespace Class_db_regions
       return subscriber_q;
       }
 
-    internal object Summary(string id)
+    internal object Summary(string code)
       {
-      //Open();
-      //var dr =
-      //  (
-      //  new MySqlCommand
-      //    (
-      //    "SELECT "
-      //    + " FROM region_code_name_map"
-      //    + " where id = '" + id + "'",
-      //    connection
-      //    )
-      //    .ExecuteReader()
-      //  );
-      //dr.Read();
+      Open();
+      var dr =
+        (
+        new MySqlCommand
+          (
+          "SELECT name"
+          + " , emsrs_code"
+          + " , emsrs_active_practitioners_name"
+          + " , be_pacrat_subscriber"
+          + " FROM region_code_name_map"
+          + " where code = '" + code + "'",
+          connection
+          )
+          .ExecuteReader()
+        );
+      dr.Read();
       var the_summary = new region_summary()
         {
-        id = id
+        code = code,
+        name = dr["name"].ToString(),
+        emsrs_code = dr["emsrs_code"].ToString(),
+        emsrs_active_practitioners_name = dr["emsrs_active_practitioners_name"].ToString(),
+        be_pacrat_subscriber = (dr["be_pacrat_subscriber"].ToString() == "1")
         };
-      //Close();
+      Close();
       return the_summary;
       }
 

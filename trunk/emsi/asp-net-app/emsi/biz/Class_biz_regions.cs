@@ -95,9 +95,19 @@ namespace Class_biz_regions
       db_regions.BindStrikeTeamAffiliationBaseDataList(member_id,sort_order,be_sort_order_ascending,target);
       }
 
+    public string CodeOf(object summary)
+      {
+      return db_regions.CodeOf(summary);
+      }
+
     public bool Delete(string code)
       {
       return db_regions.Delete(code);
+      }
+
+    public string EmsrsCodeOf(object summary)
+      {
+      return db_regions.EmsrsCodeOf(summary);
       }
 
     internal string EmsrsCodeOfCode(string code)
@@ -112,6 +122,16 @@ namespace Class_biz_regions
       )
       {
       return db_regions.Get(code,out description);
+      }
+
+    public string EmsrsActivePractitionersNameOf(object summary)
+      {
+      return db_regions.EmsrsActivePractitionersNameOf(summary);
+      }
+
+    public string NameOf(object summary)
+      {
+      return db_regions.NameOf(summary);
       }
 
     public void Set
