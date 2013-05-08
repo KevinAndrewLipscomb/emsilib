@@ -19,6 +19,11 @@ namespace Class_biz_regions
       return db_regions.BeConedlinkSubscriber(code);
       }
 
+    public bool BePacratSubscriberOf(object summary)
+      {
+      return db_regions.BePacratSubscriberOf(summary);
+      }
+
     public bool Bind
       (
       string partial_code,

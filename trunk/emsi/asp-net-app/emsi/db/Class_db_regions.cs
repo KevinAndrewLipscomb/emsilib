@@ -36,6 +36,11 @@ namespace Class_db_regions
       return be_conedlink_subscriber;
       }
 
+    internal bool BePacratSubscriberOf(object summary)
+      {
+      return (summary as region_summary).be_pacrat_subscriber;
+      }
+
     public bool Bind
       (
       string partial_spec,
