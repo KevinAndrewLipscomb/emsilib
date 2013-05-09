@@ -726,6 +726,7 @@ namespace Class_db_coned_offerings
             + "class_id = NULLIF('" + (rec as ClassInfoClass).ClassID + "','')"
             + " , sponsor_id = NULLIF('" + (rec as ClassInfoClass).SponsorID + "','')"
             + " , sponsor_number = NULLIF('" + ((rec as ClassInfoClass).SponsorNumber == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).SponsorNumber,k.safe_hint_type.HYPHENATED_NUM)) + "','')"
+            + " , class_final_status_id = null"
             + " , course_number = NULLIF('" + (rec as ClassInfoClass).CourseNumber + "','')"
             + " , location = NULLIF('" + ((rec as ClassInfoClass).Location == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Location,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim()) + "','')"
             + " , start_date_time = STR_TO_DATE(NULLIF('" + k.Safe((rec as ClassInfoClass).StartDateTime,k.safe_hint_type.DATE_TIME) + "',''),'%m/%d/%Y %H:%i:%s')"
