@@ -1,6 +1,7 @@
 using Class_biz_accounts;
 using Class_biz_coned_offerings;
 using Class_biz_members;
+using Class_biz_regions;
 using Class_biz_roles;
 using Class_biz_user;
 using Class_biz_users;
@@ -223,6 +224,92 @@ namespace Class_biz_notifications
         );
       template_reader.Close();
       }
+
+        private delegate string IssueForExplicitRegionRoleChange_Merge(string s);
+        public void IssueForExplicitRegionRoleChange
+          (
+          string member_id,
+          string role_id,
+          bool be_granted,
+          string region_code
+          )
+          {
+          string actor = k.EMPTY;
+          string actor_email_address = k.EMPTY;
+          string actor_member_id;
+          TClass_biz_members biz_members;
+          TClass_biz_regions biz_regions;
+          TClass_biz_roles biz_roles;
+          TClass_biz_user biz_user;
+          TClass_biz_users biz_users;
+          string changed = k.EMPTY;
+          string first_name = k.EMPTY;
+          string last_name = k.EMPTY;
+          string region = k.EMPTY;
+          string role_name = k.EMPTY;
+          StreamReader template_reader;
+          string to_or_from = k.EMPTY;
+
+          IssueForRoleChange_Merge Merge = delegate (string s)
+            {
+            return s
+              .Replace("<application_name/>", application_name)
+              .Replace("<host_domain_name/>", host_domain_name)
+              .Replace("<actor/>", actor)
+              .Replace("<actor_email_address/>", actor_email_address)
+              .Replace("<changed/>", changed)
+              .Replace("<to_or_from/>", to_or_from)
+              .Replace("<first_name/>", first_name)
+              .Replace("<last_name/>", last_name)
+              .Replace("<region/>", region)
+              .Replace("<role_name/>", role_name)
+              .Replace("<runtime_root_fullspec/>", runtime_root_fullspec);
+            };
+
+          biz_members = new TClass_biz_members();
+          biz_regions = new TClass_biz_regions();
+          biz_roles = new TClass_biz_roles();
+          biz_user = new TClass_biz_user();
+          biz_users = new TClass_biz_users();
+          actor_member_id = biz_members.IdOfUserId(biz_user.IdNum());
+          actor = biz_user.Roles()[0] + k.SPACE + biz_members.FirstNameOfMemberId(actor_member_id) + k.SPACE + biz_members.LastNameOfMemberId(actor_member_id);
+          actor_email_address = biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum());
+          if (be_granted)
+            {
+            changed = "granted";
+            to_or_from = "to";
+            }
+          else
+            {
+            changed = "removed";
+            to_or_from = "from";
+            }
+          first_name = biz_members.FirstNameOfMemberId(member_id);
+          last_name = biz_members.LastNameOfMemberId(member_id);
+          region = biz_regions.NameOfCode(region_code);
+          role_name = biz_roles.NameOfId(role_id);
+          template_reader = System.IO.File.OpenText(HttpContext.Current.Server.MapPath("template/notification/explicit_region_role_change.txt"));
+          // from
+          // to
+          // subject
+          // body
+          // be_html
+          // cc
+          // bcc
+          // reply_to
+          k.SmtpMailSend
+            (
+            from:ConfigurationManager.AppSettings["sender_email_address"],
+            to:biz_members.EmailAddressOf(member_id) + k.COMMA + actor_email_address + k.COMMA + db_notifications.TargetOf("role-change", member_id),
+            subject:Merge(template_reader.ReadLine()),
+            message_string:Merge(template_reader.ReadToEnd()),
+            be_html:false,
+            cc:k.EMPTY,
+            bcc:k.EMPTY,
+            reply_to:actor_email_address
+            );
+          template_reader.Close();
+          }
 
         private delegate string IssueForForgottenUsername_Merge(string s);
         public void IssueForForgottenUsername(string email_address, string username, string client_host_name)
