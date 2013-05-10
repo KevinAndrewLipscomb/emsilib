@@ -139,6 +139,11 @@ namespace Class_biz_regions
       return db_regions.NameOf(summary);
       }
 
+    internal string NameOfCode(string code)
+      {
+      return db_regions.NameOfCode(code);
+      }
+
     public void Set
       (
       string code,

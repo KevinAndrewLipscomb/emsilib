@@ -270,6 +270,14 @@ namespace Class_db_regions
       return (summary as region_summary).name;
       }
 
+    internal string NameOfCode(string code)
+      {
+      Open();
+      var name_of_code = new MySqlCommand("select name from region_code_name_map where code = '" + code + "'",connection).ExecuteScalar().ToString();
+      Close();
+      return name_of_code;
+      }
+
     public void Set
       (
       string code,

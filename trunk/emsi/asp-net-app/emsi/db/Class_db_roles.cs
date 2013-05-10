@@ -125,6 +125,14 @@ namespace Class_db_roles
             return result;
         }
 
+        internal string IdOfName(string name)
+          {
+          Open();
+          var id_of_name = new MySqlCommand("select id from role where name = '" + name + "'",connection).ExecuteScalar().ToString();
+          Close();
+          return id_of_name;
+          }
+
         public string NameOfId(string id)
         {
             string result;

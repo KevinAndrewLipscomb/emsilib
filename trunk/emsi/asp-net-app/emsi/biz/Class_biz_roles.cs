@@ -49,6 +49,11 @@ namespace Class_biz_roles
             return result;
         }
 
+        public string IdOfName(string name)
+          {
+          return db_roles.IdOfName(name);
+          }
+
         public string NameOfId(string id)
         {
             string result;
