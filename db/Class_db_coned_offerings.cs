@@ -823,15 +823,9 @@ namespace Class_db_coned_offerings
     internal void PurgeStaleUnused()
       {
       Open();
-      new MySqlCommand("delete from coned_offering where end_date_time < SUBDATE(CURDATE(),INTERVAL 2 MONTH) and (select count(*) from coned_offering_roster where coned_offering_id = coned_offering.id) = 0",connection)
+      new MySqlCommand
+        ("delete from coned_offering where be_stale and start_date_time < SUBDATE(CURDATE(),INTERVAL 6 MONTH) and (select count(*) from coned_offering_roster where coned_offering_id = coned_offering.id) = 0",connection)
         .ExecuteNonQuery();
-      Close();
-      }
-
-    public void MarkStaleAsCanceled()
-      {
-      Open();
-      new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where be_stale",connection).ExecuteNonQuery();
       Close();
       }
 
