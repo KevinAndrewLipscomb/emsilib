@@ -34,6 +34,17 @@ namespace Class_biz_roles
             BindDirectToListControl(target, has_config_roles_and_matrices, unselected_literal, k.EMPTY);
         }
 
+        public void BindDirectToListControlByTier
+          (
+          object target,
+          string unselected_literal,
+          string selected_value,
+          string tier_id
+          )
+          {
+          db_roles.BindDirectToListControlByTier(target, unselected_literal, selected_value, tier_id);
+          }
+
         public bool Delete(string name)
         {
             bool result;
