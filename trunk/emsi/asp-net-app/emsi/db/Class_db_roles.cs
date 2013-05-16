@@ -42,7 +42,7 @@ namespace Class_db_roles
             return result;
         }
 
-        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string unselected_literal, string selected_value)
+        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string tier_quoted_value_list, string unselected_literal, string selected_value)
         {
             MySqlDataReader dr;
             string where_clause;
@@ -52,6 +52,10 @@ namespace Class_db_roles
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
             where_clause = " where name <> \"Member\"";
+            if (tier_quoted_value_list != k.DOUBLE_QUOTE)
+            {
+                where_clause = where_clause + " and (tier_id in (" + tier_quoted_value_list + "))";
+            }
             if (!has_config_roles_and_matrices)
             {
                 where_clause = where_clause + " and (name <> \"Application Administrator\")";
@@ -73,24 +77,18 @@ namespace Class_db_roles
 
         public void BindDirectToListControl(object target, bool has_config_roles_and_matrices)
         {
-            BindDirectToListControl(target, has_config_roles_and_matrices, "-- Role --");
+            BindDirectToListControl(target, has_config_roles_and_matrices, k.DOUBLE_QUOTE);
         }
 
-        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string unselected_literal)
+        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string tier_quoted_value_list)
         {
-            BindDirectToListControl(target, has_config_roles_and_matrices, unselected_literal, k.EMPTY);
+            BindDirectToListControl(target, has_config_roles_and_matrices, tier_quoted_value_list, "-- Role --");
         }
 
-        internal void BindDirectToListControlByTier
-          (
-          object target,
-          string unselected_literal,
-          string selected_value,
-          string tier_id
-          )
-          {
-          throw new NotImplementedException();
-          }
+        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string tier_quoted_value_list, string unselected_literal)
+        {
+            BindDirectToListControl(target, has_config_roles_and_matrices, tier_quoted_value_list, unselected_literal, k.EMPTY);
+        }
 
         public bool Delete(string name)
         {
