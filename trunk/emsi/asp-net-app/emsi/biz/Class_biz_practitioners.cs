@@ -189,6 +189,21 @@ namespace Class_biz_practitioners
         );
       }
 
+    public void SetFieldsNotImportedFromState
+      (
+      string id,
+      DateTime birth_date,
+      string email_address
+      )
+      {
+      db_practitioners.SetFieldsNotImportedFromState
+        (
+        id,
+        birth_date,
+        email_address
+        );
+      }
+
     } // end TClass_biz_practitioners
 
   }
