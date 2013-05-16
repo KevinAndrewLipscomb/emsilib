@@ -510,7 +510,7 @@ namespace Class_biz_notifications
       k.SmtpMailSend
         (
         from:ConfigurationManager.AppSettings["sender_email_address"],
-        to:roster_due.public_contact_email,
+        to:roster_due.coned_offering_public_contact_email + k.COMMA + roster_due.sponsor_email,
         subject:Merge(template_reader.ReadLine()),
         message_string:Merge(template_reader.ReadToEnd()),
         be_html:false,
