@@ -19,31 +19,35 @@ namespace Class_biz_roles
             return result;
         }
 
-        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string unselected_literal, string selected_value)
+        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string tier_filter, string unselected_literal, string selected_value)
         {
-            db_roles.BindDirectToListControl(target, has_config_roles_and_matrices, unselected_literal, selected_value);
+            string tier_quoted_value_list;
+            if (tier_filter == "2")
+            {
+                tier_quoted_value_list = "2" + k.QUOTE + k.COMMA + k.QUOTE + "3";
+            }
+            else
+            {
+                tier_quoted_value_list = tier_filter;
+            }
+            tier_quoted_value_list = k.QUOTE + tier_quoted_value_list + k.QUOTE;
+            db_roles.BindDirectToListControl(target, has_config_roles_and_matrices, tier_quoted_value_list, unselected_literal, selected_value);
         }
 
         public void BindDirectToListControl(object target, bool has_config_roles_and_matrices)
         {
-            BindDirectToListControl(target, has_config_roles_and_matrices, "-- Role --");
+            BindDirectToListControl(target, has_config_roles_and_matrices, k.EMPTY);
         }
 
-        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string unselected_literal)
+        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string tier_filter)
         {
-            BindDirectToListControl(target, has_config_roles_and_matrices, unselected_literal, k.EMPTY);
+            BindDirectToListControl(target, has_config_roles_and_matrices, tier_filter, "-- Role --");
         }
 
-        public void BindDirectToListControlByTier
-          (
-          object target,
-          string unselected_literal,
-          string selected_value,
-          string tier_id
-          )
-          {
-          db_roles.BindDirectToListControlByTier(target, unselected_literal, selected_value, tier_id);
-          }
+        public void BindDirectToListControl(object target, bool has_config_roles_and_matrices, string tier_filter, string unselected_literal)
+        {
+            BindDirectToListControl(target, has_config_roles_and_matrices, tier_filter, unselected_literal, k.EMPTY);
+        }
 
         public bool Delete(string name)
         {
