@@ -839,10 +839,11 @@ namespace Class_db_coned_offerings
       internal string start_time;
       internal string end_date_time;
       internal string end_time;
-      internal string public_contact_email;
+      internal string coned_offering_public_contact_email;
       internal string county;
       internal string sponsor_name;
       internal string course_title;
+      internal string sponsor_email;
       }
     internal Queue<RosterDue> RosterDueQueue(k.int_nonnegative days_after)
       {
@@ -851,21 +852,23 @@ namespace Class_db_coned_offerings
       var dr = new MySqlCommand
         (
         "SELECT class_number"
-        + " , sponsor_number"
+        + " , coned_offering.sponsor_number as sponsor_number"
         + " , location"
         + " , DATE_FORMAT(start_date_time,'%a %d %b %Y') as start_date_time"
         + " , start_time"
         + " , DATE_FORMAT(end_date_time,'%a %d %b %Y') as end_date_time"
         + " , end_time"
-        + " , public_contact_email"
+        + " , coned_offering.public_contact_email as coned_offering_public_contact_email"
         + " , county_code_name_map.name as county"
         + " , sponsor_name"
         + " , course_title"
+        + " , teaching_entity.email as sponsor_email"
         + " FROM coned_offering"
         +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
         +   " join county_code_name_map on (county_code_name_map.emsrs_code=coned_offering.class_county_code)"
         +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
         +   " left join coned_offering_class_final_status on (coned_offering_class_final_status.id=coned_offering.class_final_status_id)"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
         + " where region_code_name_map.be_conedlink_subscriber"
         +   " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'"
         +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
@@ -887,10 +890,11 @@ namespace Class_db_coned_offerings
             start_time = dr["start_time"].ToString(),
             end_date_time = dr["end_date_time"].ToString(),
             end_time = dr["end_time"].ToString(),
-            public_contact_email = dr["public_contact_email"].ToString(),
+            coned_offering_public_contact_email = dr["coned_offering_public_contact_email"].ToString(),
             county = dr["county"].ToString(),
             sponsor_name = dr["sponsor_name"].ToString(),
-            course_title = dr["course_title"].ToString()
+            course_title = dr["course_title"].ToString(),
+            sponsor_email = dr["sponsor_email"].ToString()
             }
           );
         }
