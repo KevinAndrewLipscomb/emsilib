@@ -512,6 +512,28 @@ namespace Class_db_practitioners
       Close();
       }
 
+    public void SetFieldsNotImportedFromState
+      (
+      string id,
+      DateTime birth_date,
+      string email_address
+      )
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update practitioner set birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
+          + " , email_address = NULLIF('" + email_address + "','')"
+          + " where id = '" + id + "'"
+          ),
+          connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
     } // end TClass_db_practitioners
 
   }
