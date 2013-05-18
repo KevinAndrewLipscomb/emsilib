@@ -16,6 +16,12 @@ namespace Class_biz_services
             db_appropriations = new TClass_db_appropriations();
             db_services = new TClass_db_services();
         }
+
+        public string AffiliateNumOf(object summary)
+          {
+          return db_services.AffiliateNumOf(summary);
+          }
+
         public string AffiliateNumOfId(string id)
         {
             string result;
@@ -51,6 +57,11 @@ namespace Class_biz_services
             return result;
         }
 
+        public bool BeStrikeTeamParticipantOf(object summary)
+          {
+          return db_services.BeStrikeTeamParticipantOf(summary);
+          }
+
         public bool BeValidAndParticipating(string id)
         {
             bool result;
@@ -84,6 +95,11 @@ namespace Class_biz_services
         {
             BindListControl(county_user_id, target, be_unfiltered, false);
         }
+
+        public void BindPacratManagementBaseDataList(string sort_order, bool be_sort_order_ascending, object target)
+          {
+          db_services.BindPacratManagementBaseDataList(sort_order,be_sort_order_ascending,target);
+          }
 
     public void BindStrikeTeamAffiliationBaseDataList
       (
@@ -356,6 +372,11 @@ namespace Class_biz_services
             );
           }
 
+        public string IdOf(object summary)
+          {
+          return db_services.IdOf(summary);
+          }
+
         public string IdOfAffiliateNum(string affiliate_num)
           {
           return db_services.IdOfAffiliateNum(affiliate_num);
@@ -372,6 +393,11 @@ namespace Class_biz_services
             result = db_services.NameOf(service_id);
             return result;
         }
+
+        public string NameOfSummary(object summary)
+          {
+          return db_services.NameOfSummary(summary);
+          }
 
         public string RegionCodeOf(string service_id)
           {
@@ -612,6 +638,15 @@ namespace Class_biz_services
             );
           db_appropriations.ApplyToExisting(affiliate_num, be_distressed);
           }
+
+    public void SetStrikeTeamParticipation
+      (
+      string id,
+      bool value
+      )
+      {
+      db_services.SetStrikeTeamParticipation(id,value);
+      }
 
         public object Summary(string id)
           {
