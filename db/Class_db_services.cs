@@ -15,6 +15,9 @@ namespace Class_db_services
     private class service_summary
       {
       public string id;
+      public string name;
+      public string affiliate_num;
+      public bool be_strike_team_participant;
       }
 
         private TClass_biz_notifications biz_notifications = null;
@@ -25,6 +28,12 @@ namespace Class_db_services
             biz_notifications = new TClass_biz_notifications();
             db_trail = new TClass_db_trail();
         }
+
+        internal string AffiliateNumOf(object summary)
+          {
+          return (summary as service_summary).affiliate_num;
+          }
+
         public string AffiliateNumOfId(string id)
         {
             string result;
@@ -77,6 +86,11 @@ namespace Class_db_services
             this.Close();
             return result;
         }
+
+        internal bool BeStrikeTeamParticipantOf(object summary)
+          {
+          return (summary as service_summary).be_strike_team_participant;
+          }
 
         public bool BeValidAndParticipating(string id)
         {
@@ -176,6 +190,28 @@ namespace Class_db_services
         {
             BindListControl(county_user_id, target, be_unfiltered, false);
         }
+
+    internal void BindPacratManagementBaseDataList
+      (
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select id"
+        + " , name"
+        + " , IF(be_strike_team_participant,'YES','no') as be_strike_team_participant"
+        + " from service"
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
 
         internal void BindStrikeTeamAffiliationBaseDataList
           (
@@ -611,6 +647,11 @@ namespace Class_db_services
             return result;
           }
 
+        internal string IdOf(object summary)
+          {
+          return (summary as service_summary).id;
+          }
+
         internal string IdOfAffiliateNum(string affiliate_num)
           {
           Open();
@@ -643,6 +684,11 @@ namespace Class_db_services
             this.Close();
             return result;
         }
+
+        internal string NameOfSummary(object summary)
+          {
+          return (summary as service_summary).name;
+          }
 
         public uint NumAmbulancesOf(string service_id)
         {
@@ -913,26 +959,42 @@ namespace Class_db_services
             );
           }
 
+    internal void SetStrikeTeamParticipation
+      (
+      string id,
+      bool value
+      )
+      {
+      Open();
+      new MySqlCommand("update service set be_strike_team_participant = " + value.ToString() + " where id = '" + id + "'",connection).ExecuteNonQuery();
+      Close();
+      }
+
     internal object Summary(string id)
       {
-      //Open();
-      //var dr =
-      //  (
-      //  new MySqlCommand
-      //    (
-      //    "SELECT "
-      //    + " FROM service"
-      //    + " where id = '" + id + "'",
-      //    connection
-      //    )
-      //    .ExecuteReader()
-      //  );
-      //dr.Read();
+      Open();
+      var dr =
+        (
+        new MySqlCommand
+          (
+          "SELECT name"
+          + " , affiliate_num"
+          + " , be_strike_team_participant"
+          + " FROM service"
+          + " where id = '" + id + "'",
+          connection
+          )
+          .ExecuteReader()
+        );
+      dr.Read();
       var the_summary = new service_summary()
         {
-        id = id
+        id = id,
+        name = dr["name"].ToString(),
+        affiliate_num = dr["affiliate_num"].ToString(),
+        be_strike_team_participant = (dr["be_strike_team_participant"].ToString() == "1")
         };
-      //Close();
+      Close();
       return the_summary;
       }
 
