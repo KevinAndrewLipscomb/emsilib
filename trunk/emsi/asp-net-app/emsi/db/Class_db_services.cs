@@ -185,7 +185,25 @@ namespace Class_db_services
           object target
           )
           {
-          throw new NotImplementedException();
+          Open();
+          ((target) as BaseDataList).DataSource = new MySqlCommand
+            (
+            "select service.id as service_id"
+            + " , service.affiliate_num as service_affiliate_num"
+            + " , service.name as service_name"
+            + " from role_member_map"
+            +   " join service on (service.id=role_member_map.service_id)"
+            +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+            +   " join region_code_name_map on (region_code_name_map.code=county_region_map.region_code)"
+            + " where member_id = '" + member_id + "'"
+            +   " and role_id = (select id from role where name = 'Service Strike Team Manager')"
+            +   " and be_pacrat_subscriber"
+            + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+            connection
+            )
+            .ExecuteReader();
+          ((target) as BaseDataList).DataBind();
+          Close();
           }
 
         public bool Delete(string affiliate_num)
