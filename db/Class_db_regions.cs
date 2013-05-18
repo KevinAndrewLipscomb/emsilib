@@ -172,7 +172,23 @@ namespace Class_db_regions
       object target
       )
       {
-      throw new NotImplementedException();
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select region_code_name_map.code as region_code"
+        + " , region_code_name_map.emsrs_code as region_emsrs_code"
+        + " , region_code_name_map.name as region_name"
+        + " from role_member_map"
+        +   " join region_code_name_map on (region_code_name_map.code=role_member_map.region_code)"
+        + " where member_id = '" + member_id + "'"
+        +   " and role_id = (select id from role where name = 'Region Strike Team Manager')"
+        +   " and be_pacrat_subscriber"
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
       }
 
     internal string CodeOf(object summary)
