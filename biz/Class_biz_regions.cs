@@ -162,9 +162,9 @@ namespace Class_biz_regions
       db_regions.SetPacratSubscriber(code,value);
       }
 
-    public object Summary(string id)
+    public object Summary(string code)
       {
-      return db_regions.Summary(id);
+      return db_regions.Summary(code);
       }
 
     } // end TClass_biz_regions
