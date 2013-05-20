@@ -53,12 +53,13 @@ namespace Class_db_accounts
           ((target) as ListControl).Items.Add(new ListItem("-- Select --", "0"));
           var dr = new MySqlCommand
             (
-            "SELECT id"
+            "SELECT DISTINCT coned_sponsor_user.id"
             + " , teaching_entity.name as name"
             + " FROM coned_sponsor_user"
             +   " JOIN teaching_entity using (id)"
             +   " JOIN region_code_name_map on (region_code_name_map.emsrs_code=teaching_entity.region)"
-            + " WHERE code = '" + region_code + "' and be_active"
+            +   " left join coned_offering on (coned_offering.sponsor_id=teaching_entity.emsrs_id)"
+            + " WHERE (region_code_name_map.code = '" + region_code + "' and be_active) or (LEFT(coned_offering.class_number,2) = LPAD('" + region_code + "',2,'0'))"
             + " ORDER BY name",
             connection
             )
