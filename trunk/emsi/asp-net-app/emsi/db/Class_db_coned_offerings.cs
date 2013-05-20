@@ -98,9 +98,17 @@ namespace Class_db_coned_offerings
       )
       {
       var range_condition = k.EMPTY;
-      if (range == "InProcess")
+      if (range == "InProcessExtensive")
         {
-        range_condition = " and coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION'";
+        range_condition = " and (coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION') and (start_date_time <= CURDATE())";
+        }
+      else if (range == "InProcessCurrentOrDueOnly")
+        {
+        range_condition = " and (coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION') and (start_date_time <= CURDATE()) and (end_date_time > SUBDATE(CURDATE(),INTERVAL 10 DAY))";
+        }
+      else if (range == "Future")
+        {
+        range_condition = " and (coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION') and (start_date_time > CURDATE())";
         }
       else if (range == "ClosedLastThreeYears")
         {
