@@ -805,6 +805,13 @@ namespace Class_db_coned_offerings
       Close();
       }
 
+    public void MarkStaleAsCanceled()
+      {
+      Open();
+      new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where be_stale",connection).ExecuteNonQuery();
+      Close();
+      }
+
     internal string PhrnMedTraumaHoursOf(object summary)
       {
       return (summary as coned_offering_summary).phrn_med_trauma_hours;
