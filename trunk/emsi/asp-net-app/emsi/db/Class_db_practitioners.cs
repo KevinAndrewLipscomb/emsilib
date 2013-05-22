@@ -71,7 +71,8 @@ namespace Class_db_practitioners
       object target,
       string region_code,
       string starting_with,
-      k.int_positive limit
+      k.int_positive limit,
+      bool do_limit_to_21_yo_or_older
       )
       {
       Open();
@@ -87,6 +88,10 @@ namespace Class_db_practitioners
           {
           matching_clause = " and CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(birth_date,'-')) USING utf8) like '" + starting_with + "%'";
           }
+        }
+      if (do_limit_to_21_yo_or_older)
+        {
+        matching_clause += " and ADDDATE(birth_date,INTERVAL 21 YEAR) <= CURDATE()";
         }
       var dr = new MySqlCommand
         (
@@ -105,6 +110,10 @@ namespace Class_db_practitioners
         }
       dr.Close();
       Close();
+      }
+    public void BindDirectToListControlForRoster(object target,string region_code,string starting_with,k.int_positive limit)
+      {
+      BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yo_or_older:false);
       }
 
     public void ClearBeInstructorFlagsInSubscriberRegions()
