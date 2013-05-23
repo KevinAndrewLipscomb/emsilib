@@ -998,7 +998,7 @@ namespace Class_db_services
       return the_summary;
       }
 
-        internal System.Collections.Queue SusceptibleTo(milestone_type milestone)
+        internal Queue SusceptibleTo(milestone_type milestone)
           {
           var id_q = new Queue();
           if (milestone == milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE)
