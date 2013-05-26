@@ -726,8 +726,39 @@ namespace Class_db_coned_offerings
             {
             class_number = k.Safe((rec as ClassInfoClass).ClassNumber.ToString(),k.safe_hint_type.NUM).PadLeft(14,'0');
             //
-            public_contact_email = (be_production_instance ? ((rec as ClassInfoClass).PublicContactEmail == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).PublicContactEmail,k.safe_hint_type.EMAIL_ADDRESS)) : "CeOffering" + class_number + "Pce@frompaper2web.com");
-            location_email = (be_production_instance ? ((rec as ClassInfoClass).LocationEmail == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).LocationEmail,k.safe_hint_type.EMAIL_ADDRESS)) : "CeOffering" + class_number + "Le@frompaper2web.com");
+            public_contact_email = k.EMPTY;
+            if (be_production_instance)
+              {
+              if ((rec as ClassInfoClass).PublicContactEmail != null)
+                {
+                var safe_email = k.Safe((rec as ClassInfoClass).PublicContactEmail,k.safe_hint_type.EMAIL_ADDRESS);
+                if (k.BeValidFormatEmailAddress(safe_email))
+                  {
+                  public_contact_email = safe_email;
+                  }
+                }
+              }
+            else
+              {
+              public_contact_email = "CeOffering" + class_number + "Pce@frompaper2web.com";
+              }
+            //
+            location_email = k.EMPTY;
+            if (be_production_instance)
+              {
+              if ((rec as ClassInfoClass).LocationEmail != null)
+                {
+                var safe_email = k.Safe((rec as ClassInfoClass).LocationEmail,k.safe_hint_type.EMAIL_ADDRESS);
+                if (k.BeValidFormatEmailAddress(safe_email))
+                  {
+                  location_email = safe_email;
+                  }
+                }
+              }
+            else
+              {
+              location_email = "CeOffering" + class_number + "Le@frompaper2web.com";
+              }
             length = ((rec as ClassInfoClass).Length == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Length,k.safe_hint_type.NUM));
             //
             childless_field_assignments_clause = k.EMPTY
