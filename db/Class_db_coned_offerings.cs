@@ -759,7 +759,7 @@ namespace Class_db_coned_offerings
               {
               location_email = "CeOffering" + class_number + "Le@frompaper2web.com";
               }
-            length = ((rec as ClassInfoClass).Length == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Length,k.safe_hint_type.NUM));
+            length = ((rec as ClassInfoClass).Length == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Length.Replace("&nbsp;hrs.",k.EMPTY),k.safe_hint_type.REAL_NUM));
             //
             childless_field_assignments_clause = k.EMPTY
             + "class_id = NULLIF('" + (rec as ClassInfoClass).ClassID + "','')"
