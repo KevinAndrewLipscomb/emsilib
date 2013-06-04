@@ -92,6 +92,17 @@ namespace Class_biz_coned_offerings
       return db_coned_offerings.Bind(partial_spec, target);
       }
 
+    public void BindBaseDataListPractitionerConedDetail
+      (
+      string practitioner_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      db_coned_offerings.BindBaseDataListPractitionerConedDetail(practitioner_id,sort_order,be_sort_order_ascending,target);
+      }
+
     public void BindClassCatalog
       (
       string region_code,

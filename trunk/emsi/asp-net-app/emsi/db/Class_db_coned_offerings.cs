@@ -87,6 +87,43 @@ namespace Class_db_coned_offerings
       return ((target) as ListControl).Items.Count > 0;
       }
 
+    internal void BindBaseDataListPractitionerConedDetail
+      (
+      string practitioner_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select coned_offering.id as coned_offering_id"
+        + " , class_number"
+        + " , course_title"
+        + " , location"
+        + " , region_code_name_map.name as region"
+        + " , concat(start_date_time,' ',IFNULL(start_time,'')) as start"
+        + " , concat(end_date_time,' ',IFNULL(end_time,'')) as end"
+        + " , concat(sponsor_name,' #',sponsor_number) as sponsor"
+        + " , IF(short_description = 'EMR',fr_med_trauma_hours,IF(short_description in ('EMT','EMT-New'),emt_med_trauma_hours,IF(short_description = 'PHRN',phrn_med_trauma_hours,emtp_med_trauma_hours))) as med_trauma_hours"
+        + " , IF(short_description = 'EMR',fr_other_hours,IF(short_description in ('EMT','EMT-New'),emt_other_hours,IF(short_description = 'PHRN',phrn_other_hours,emtp_other_hours))) as other_hours"
+        + " , instructor_hours"
+        + " from coned_offering"
+        +   " join coned_offering_roster on (coned_offering_roster.coned_offering_id=coned_offering.id)"
+        +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
+        +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
+        +   " join practitioner on (practitioner.id=coned_offering_roster.practitioner_id)"
+        +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
+        + " where practitioner_id = '" + practitioner_id + "'"
+        +   " and coned_offering_status.description = 'ARCHIVED'",
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
     internal void BindClassCatalog
       (
       string region_code,
