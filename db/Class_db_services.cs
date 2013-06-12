@@ -201,10 +201,13 @@ namespace Class_db_services
       Open();
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
-        "select id"
+        "select service.id as id"
         + " , name"
         + " , IF(be_strike_team_participant,'YES','no') as be_strike_team_participant"
+        + " , count(practitioner_id) as num_members"
         + " from service"
+        +   " left join strike_team_roster on (strike_team_roster.service_id=service.id)"
+        + " group by service.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
