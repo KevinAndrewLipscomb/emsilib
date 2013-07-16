@@ -1,6 +1,7 @@
+using Class_db_members;
 using kix;
 using System;
-using Class_db_members;
+
 namespace Class_biz_members
 {
     // Class_biz_notifications,
@@ -39,6 +40,31 @@ namespace Class_biz_members
 
             return result;
         }
+
+        public bool BeRoleHolderBySharedSecret
+          (
+          string certification_number,
+          string level_id,
+          string regional_council_code,
+          DateTime birth_date,
+          out string claimed_role_name,
+          out string claimed_member_name,
+          out string claimed_member_id,
+          out string claimed_member_email_address
+          )
+          {
+          return db_members.BeRoleHolderBySharedSecret
+            (
+            certification_number,
+            level_id,
+            regional_council_code,
+            birth_date,
+            out claimed_role_name,
+            out claimed_member_name,
+            out claimed_member_id,
+            out claimed_member_email_address
+            );
+          }
 
         public bool BeValidProfile(string id)
         {

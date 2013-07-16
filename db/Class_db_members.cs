@@ -1,11 +1,10 @@
-using MySql.Data.MySqlClient;
-using kix;
-using System;
-
-
-using System.Web.UI.WebControls;
 using Class_db;
 using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Web.UI.WebControls;
+
 namespace Class_db_members
 {
     // const
@@ -40,6 +39,57 @@ namespace Class_db_members
         // attributes..
         // )
         // : boolean;
+
+        internal bool BeRoleHolderBySharedSecret
+          (
+          string certification_number,
+          string level_id,
+          string regional_council_code,
+          DateTime birth_date,
+          out string claimed_role_name,
+          out string claimed_member_name,
+          out string claimed_member_id,
+          out string claimed_member_email_address
+          )
+          {
+          var be_role_holder_by_shared_secret = false;
+          claimed_role_name = k.EMPTY;
+          claimed_member_name = k.EMPTY;
+          claimed_member_id = k.EMPTY;
+          claimed_member_email_address = k.EMPTY;
+          Open();
+          var dr = new MySqlCommand
+            (
+            "select role.name as role_name"
+            + " , concat(member.first_name,' ',member.last_name) as member_name"
+            + " , member.id as member_id"
+            + " , IFNULL(email_address,'') as email_address"
+            + " from member"
+            +   " join role_member_map on (role_member_map.member_id=member.id)"
+            +   " join role on (role.id=role_member_map.role_id)"
+            +   " join user_member_map on (user_member_map.member_id=member.id)"
+            + " where certification_number = '" + certification_number + "'"
+            +   " and level_id = '" + level_id + "'"
+            +   " and regional_council_code = '" + regional_council_code + "'"
+            +   " and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
+            + " order by role.pecking_order"
+            + " limit 1",
+            connection
+            )
+            .ExecuteReader();
+          if (dr.Read())
+            {
+            claimed_role_name = dr["role_name"].ToString();
+            claimed_member_name = dr["member_name"].ToString();
+            claimed_member_id = dr["member_id"].ToString();
+            claimed_member_email_address = dr["email_address"].ToString();
+            be_role_holder_by_shared_secret = true;
+            }
+          dr.Close();
+          Close();
+          return be_role_holder_by_shared_secret;
+          }
+
         public bool BeValidProfile(string id)
         {
             bool result;
