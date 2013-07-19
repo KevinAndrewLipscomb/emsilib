@@ -682,7 +682,7 @@ namespace Class_db_services
         {
             string result;
             this.Open();
-            result = new MySqlCommand("select name from service where id = " + service_id, this.connection).ExecuteScalar().ToString();
+            result = new MySqlCommand("select name from service where id = '" + service_id + "'", this.connection).ExecuteScalar().ToString();
             this.Close();
             return result;
         }
