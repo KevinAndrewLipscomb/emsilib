@@ -49,6 +49,11 @@ namespace Class_db_coned_offerings
       public string emtp_other_hours;
       public string phrn_med_trauma_hours;
       public string phrn_other_hours;
+      public string eval_summary_instructional_staff;
+      public string eval_summary_time_appropriately_used;
+      public string eval_summary_classroom_training_site;
+      public string eval_summary_equipment_av;
+      public string eval_summary_misc_remarks;
       }
 
     private TClass_db_trail db_trail = null;
@@ -385,6 +390,31 @@ namespace Class_db_coned_offerings
       return (summary as coned_offering_summary).end_other;
       }
 
+    internal string EvalSummaryInstructionalStaffOf(object summary)
+      {
+      return (summary as coned_offering_summary).eval_summary_instructional_staff;
+      }
+
+    internal string EvalSummaryTimeAppropriatelyUsedOf(object summary)
+      {
+      return (summary as coned_offering_summary).eval_summary_time_appropriately_used;
+      }
+
+    internal string EvalSummaryClassroomTrainingSiteOf(object summary)
+      {
+      return (summary as coned_offering_summary).eval_summary_classroom_training_site;
+      }
+
+    internal string EvalSummaryEquipmentAvOf(object summary)
+      {
+      return (summary as coned_offering_summary).eval_summary_equipment_av;
+      }
+
+    internal string EvalSummaryMiscRemarksOf(object summary)
+      {
+      return (summary as coned_offering_summary).eval_summary_misc_remarks;
+      }
+
     internal string FrMedTraumaHoursOf(object summary)
       {
       return (summary as coned_offering_summary).fr_med_trauma_hours;
@@ -462,7 +492,12 @@ namespace Class_db_coned_offerings
       out string sponsor_name,
       out string courses_course_number,
       out string course_title,
-      out string status_id
+      out string status_id,
+      out string eval_summary_instructional_staff,
+      out string eval_summary_time_appropriately_used,
+      out string eval_summary_classroom_training_site,
+      out string eval_summary_equipment_av,
+      out string eval_summary_misc_remarks
       )
       {
       class_id = k.EMPTY;
@@ -530,6 +565,11 @@ namespace Class_db_coned_offerings
       courses_course_number = k.EMPTY;
       course_title = k.EMPTY;
       status_id = k.EMPTY;
+      eval_summary_instructional_staff = k.EMPTY;
+      eval_summary_time_appropriately_used = k.EMPTY;
+      eval_summary_classroom_training_site = k.EMPTY;
+      eval_summary_equipment_av = k.EMPTY;
+      eval_summary_misc_remarks = k.EMPTY;
       var result = false;
       //
       Open();
@@ -601,6 +641,11 @@ namespace Class_db_coned_offerings
         courses_course_number = dr["courses_course_number"].ToString();
         course_title = dr["course_title"].ToString();
         status_id = dr["status_id"].ToString();
+        eval_summary_instructional_staff = dr["eval_summary_instructional_staff"].ToString();
+        eval_summary_time_appropriately_used = dr["eval_summary_time_appropriately_used"].ToString();
+        eval_summary_classroom_training_site = dr["eval_summary_classroom_training_site"].ToString();
+        eval_summary_equipment_av = dr["eval_summary_equipment_av"].ToString();
+        eval_summary_misc_remarks = dr["eval_summary_misc_remarks"].ToString();
         result = true;
         }
       dr.Close();
@@ -1052,7 +1097,12 @@ namespace Class_db_coned_offerings
       string sponsor_name,
       string courses_course_number,
       string course_title,
-      string status_id
+      string status_id,
+      string eval_summary_instructional_staff,
+      string eval_summary_time_appropriately_used,
+      string eval_summary_classroom_training_site,
+      string eval_summary_equipment_av,
+      string eval_summary_misc_remarks
       )
       {
       var childless_field_assignments_clause = k.EMPTY
@@ -1121,6 +1171,11 @@ namespace Class_db_coned_offerings
       + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
       + " , course_title = NULLIF('" + course_title + "','')"
       + " , status_id = NULLIF('" + status_id + "','')"
+      + " , eval_summary_instructional_staff = NULLIF('" + eval_summary_instructional_staff + "','')"
+      + " , eval_summary_time_appropriately_used = NULLIF('" + eval_summary_time_appropriately_used + "','')"
+      + " , eval_summary_classroom_training_site = NULLIF('" + eval_summary_classroom_training_site + "','')"
+      + " , eval_summary_equipment_av = NULLIF('" + eval_summary_equipment_av + "','')"
+      + " , eval_summary_misc_remarks = NULLIF('" + eval_summary_misc_remarks + "','')"
       + k.EMPTY;
       Open();
       new MySqlCommand
@@ -1134,6 +1189,34 @@ namespace Class_db_coned_offerings
           + childless_field_assignments_clause
           ),
           connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
+    internal void SetEvalSummary
+      (
+      string id,
+      string eval_summary_instructional_staff,
+      string eval_summary_time_appropriately_used,
+      string eval_summary_classroom_training_site,
+      string eval_summary_equipment_av,
+      string eval_summary_misc_remarks
+      )
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update coned_offering set eval_summary_instructional_staff = NULLIF('" + eval_summary_instructional_staff + "','')"
+          + " , eval_summary_time_appropriately_used = NULLIF('" + eval_summary_time_appropriately_used + "','')"
+          + " , eval_summary_classroom_training_site = NULLIF('" + eval_summary_classroom_training_site + "','')"
+          + " , eval_summary_equipment_av = NULLIF('" + eval_summary_equipment_av + "','')"
+          + " , eval_summary_misc_remarks = NULLIF('" + eval_summary_misc_remarks + "','')"
+          + " where id = '" + id + "'"
+          ),
+        connection
         )
         .ExecuteNonQuery();
       Close();
@@ -1229,6 +1312,11 @@ namespace Class_db_coned_offerings
           + " , emtp_other_hours"
           + " , phrn_med_trauma_hours"
           + " , phrn_other_hours"
+          + " , eval_summary_instructional_staff"
+          + " , eval_summary_time_appropriately_used"
+          + " , eval_summary_classroom_training_site"
+          + " , eval_summary_equipment_av"
+          + " , eval_summary_misc_remarks"
           + " FROM coned_offering"
           +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
           + " where coned_offering.id = '" + id + "'",
@@ -1266,7 +1354,12 @@ namespace Class_db_coned_offerings
         emtp_med_trauma_hours = dr["emtp_med_trauma_hours"].ToString(),
         emtp_other_hours = dr["emtp_other_hours"].ToString(),
         phrn_med_trauma_hours = dr["phrn_med_trauma_hours"].ToString(),
-        phrn_other_hours = dr["phrn_other_hours"].ToString()
+        phrn_other_hours = dr["phrn_other_hours"].ToString(),
+        eval_summary_instructional_staff = dr["eval_summary_instructional_staff"].ToString(),
+        eval_summary_time_appropriately_used = dr["eval_summary_time_appropriately_used"].ToString(),
+        eval_summary_classroom_training_site = dr["eval_summary_classroom_training_site"].ToString(),
+        eval_summary_equipment_av = dr["eval_summary_equipment_av"].ToString(),
+        eval_summary_misc_remarks = dr["eval_summary_misc_remarks"].ToString(),
         };
       Close();
       return the_summary;
