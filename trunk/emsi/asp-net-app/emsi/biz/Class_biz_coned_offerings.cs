@@ -165,12 +165,19 @@ namespace Class_biz_coned_offerings
     public void CloseAndSubmit
       (
       object summary,
-      k.int_nonnegative num_attendees
+      k.int_nonnegative num_attendees,
+      string eval_summary_instructional_staff,
+      string eval_summary_time_appropriately_used,
+      string eval_summary_classroom_training_site,
+      string eval_summary_equipment_av,
+      string eval_summary_misc_remarks
       )
       {
       if (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_CONED_SPONSOR_FINALIZATION)
         {
-        db_coned_offerings.SetStatus(db_coned_offerings.IdOf(summary),coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING);
+        var id = db_coned_offerings.IdOf(summary);
+        db_coned_offerings.SetEvalSummary(id,eval_summary_instructional_staff,eval_summary_time_appropriately_used,eval_summary_classroom_training_site,eval_summary_equipment_av,eval_summary_misc_remarks);
+        db_coned_offerings.SetStatus(id,coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING);
         biz_notifications.IssueForClassClosed
           (
           sponsor_id:db_coned_offerings.SponsorIdOf(summary),
@@ -235,6 +242,31 @@ namespace Class_biz_coned_offerings
     public string EndOtherOf(object summary)
       {
       return db_coned_offerings.EndOtherOf(summary);
+      }
+
+    public string EvalSummaryInstructionalStaffOf(object summary)
+      {
+      return db_coned_offerings.EvalSummaryInstructionalStaffOf(summary);
+      }
+
+    public string EvalSummaryTimeAppropriatelyUsedOf(object summary)
+      {
+      return db_coned_offerings.EvalSummaryTimeAppropriatelyUsedOf(summary);
+      }
+
+    public string EvalSummaryClassroomTrainingSiteOf(object summary)
+      {
+      return db_coned_offerings.EvalSummaryClassroomTrainingSiteOf(summary);
+      }
+
+    public string EvalSummaryEquipmentAvOf(object summary)
+      {
+      return db_coned_offerings.EvalSummaryEquipmentAvOf(summary);
+      }
+
+    public string EvalSummaryMiscRemarksOf(object summary)
+      {
+      return db_coned_offerings.EvalSummaryMiscRemarksOf(summary);
       }
 
     public string FrMedTraumaHoursOf(object summary)
@@ -333,7 +365,12 @@ namespace Class_biz_coned_offerings
       out string sponsor_name,
       out string courses_course_number,
       out string course_title,
-      out string status_id
+      out string status_id,
+      out string eval_summary_instructional_staff,
+      out string eval_summary_time_appropriately_used,
+      out string eval_summary_classroom_training_site,
+      out string eval_summary_equipment_av,
+      out string eval_summary_misc_remarks
       )
       {
       return db_coned_offerings.Get
@@ -403,7 +440,12 @@ namespace Class_biz_coned_offerings
         out sponsor_name,
         out courses_course_number,
         out course_title,
-        out status_id
+        out status_id,
+        out eval_summary_instructional_staff,
+        out eval_summary_time_appropriately_used,
+        out eval_summary_classroom_training_site,
+        out eval_summary_equipment_av,
+        out eval_summary_misc_remarks
         );
       }
 
@@ -640,7 +682,12 @@ namespace Class_biz_coned_offerings
       string sponsor_name,
       string courses_course_number,
       string course_title,
-      string status_id
+      string status_id,
+      string eval_summary_instructional_staff,
+      string eval_summary_time_appropriately_used,
+      string eval_summary_classroom_training_site,
+      string eval_summary_equipment_av,
+      string eval_summary_misc_remarks
       )
       {
       db_coned_offerings.Set
@@ -710,7 +757,12 @@ namespace Class_biz_coned_offerings
         sponsor_name,
         courses_course_number,
         course_title,
-        status_id
+        status_id,
+        eval_summary_instructional_staff,
+        eval_summary_time_appropriately_used,
+        eval_summary_classroom_training_site,
+        eval_summary_equipment_av,
+        eval_summary_misc_remarks
         );
       }
 
