@@ -204,6 +204,21 @@ namespace Class_db_regions
       return code_of_emsrs_code;
       }
 
+    internal string ConedlinkEvalSummaryModeDescriptionOf(string code)
+      {
+      Open();
+      var conedlink_eval_summary_mode_description_of = new MySqlCommand
+        (
+        "select eval_summary_mode.description"
+        + " from region_code_name_map join eval_summary_mode on (eval_summary_mode.id=region_code_name_map.conedlink_eval_summary_mode_id)"
+        + " where region_code_name_map.code = '" + code + "'",
+        connection
+        )
+        .ExecuteScalar().ToString();
+      Close();
+      return conedlink_eval_summary_mode_description_of;
+      }
+
     public bool Delete(string code)
       {
       var result = true;
