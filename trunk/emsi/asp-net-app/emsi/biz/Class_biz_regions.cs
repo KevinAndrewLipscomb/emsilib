@@ -105,6 +105,11 @@ namespace Class_biz_regions
       return db_regions.CodeOf(summary);
       }
 
+    public string ConedlinkEvalSummaryModeDescriptionOf(string code)
+      {
+      return db_regions.ConedlinkEvalSummaryModeDescriptionOf(code);
+      }
+
     public bool Delete(string code)
       {
       return db_regions.Delete(code);
