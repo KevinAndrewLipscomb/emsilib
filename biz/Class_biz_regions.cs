@@ -110,6 +110,11 @@ namespace Class_biz_regions
       return db_regions.ConedlinkEvalSummaryModeDescriptionOf(code);
       }
 
+    public string ConedlinkEvalSummaryModeIdOf(string code)
+      {
+      return db_regions.ConedlinkEvalSummaryModeIdOf(code);
+      }
+
     public bool Delete(string code)
       {
       return db_regions.Delete(code);
@@ -156,6 +161,15 @@ namespace Class_biz_regions
       )
       {
       db_regions.Set(code,description);
+      }
+
+    public void SetConedlinkEvalSummaryModeId
+      (
+      string code,
+      string id
+      )
+      {
+      db_regions.SetConedlinkEvalSummaryModeId(code,id);
       }
 
     public void SetPacratSubscriber
