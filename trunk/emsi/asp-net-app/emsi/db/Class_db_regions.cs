@@ -219,6 +219,21 @@ namespace Class_db_regions
       return conedlink_eval_summary_mode_description_of;
       }
 
+    internal string ConedlinkEvalSummaryModeIdOf(string code)
+      {
+      Open();
+      var conedlink_eval_summary_mode_id_of = new MySqlCommand
+        (
+        "select eval_summary_mode.id"
+        + " from region_code_name_map join eval_summary_mode on (eval_summary_mode.id=region_code_name_map.conedlink_eval_summary_mode_id)"
+        + " where region_code_name_map.code = '" + code + "'",
+        connection
+        )
+        .ExecuteScalar().ToString();
+      Close();
+      return conedlink_eval_summary_mode_id_of;
+      }
+
     public bool Delete(string code)
       {
       var result = true;
@@ -330,6 +345,17 @@ namespace Class_db_regions
         connection
         )
         .ExecuteNonQuery();
+      Close();
+      }
+
+    internal void SetConedlinkEvalSummaryModeId
+      (
+      string code,
+      string id
+      )
+      {
+      Open();
+      new MySqlCommand("update region_code_name_map set conedlink_eval_summary_mode_id = '" + id + "' where code = '" + code + "'",connection).ExecuteNonQuery();
       Close();
       }
 
