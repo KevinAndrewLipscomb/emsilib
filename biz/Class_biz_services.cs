@@ -404,6 +404,11 @@ namespace Class_biz_services
           return db_services.RegionCodeOf(service_id);
           }
 
+        public string ServiceStrikeTeamManagementFootprintOf(string member_id)
+          {
+          return db_services.ServiceStrikeTeamManagementFootprintOf(member_id);
+          }
+
         public void Set
           (
           string affiliate_num,

@@ -725,6 +725,31 @@ namespace Class_db_services
           return region_code_of;
           }
 
+        internal string ServiceStrikeTeamManagementFootprintOf(string member_id)
+          {
+          var service_strike_team_management_footprint_of = k.EMPTY;          
+          Open();
+          var service_strike_team_management_footprint_of_obj = new MySqlCommand
+            (
+            "select GROUP_CONCAT(service.id)"
+            + " from role_member_map"
+            +   " join service on (service.id=role_member_map.service_id)"
+            +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+            +   " join region_code_name_map on (region_code_name_map.code=county_region_map.region_code)"
+            + " where member_id = '" + member_id + "'"
+            +   " and role_id = (select id from role where name = 'Service Strike Team Manager')"
+            +   " and be_pacrat_subscriber",
+            connection
+            )
+            .ExecuteScalar();
+          if (service_strike_team_management_footprint_of_obj != null)
+            {
+            service_strike_team_management_footprint_of = service_strike_team_management_footprint_of_obj.ToString();
+            }
+          Close();
+          return service_strike_team_management_footprint_of;
+          }
+
         public void Set
           (
           string affiliate_num,
