@@ -497,7 +497,7 @@ namespace Class_biz_coned_offerings
       var empty_request_obj = new EmptyRequest();
       empty_request_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
       //
-      db_coned_offerings.MarkAllStale();
+      db_coned_offerings.MarkUntouchedAsStale();
       var empty_request = new StringWriter();
       new XmlSerializer(typeof(EmptyRequest)).Serialize(empty_request,empty_request_obj);
       var response = client.GetClassInfo(emptyRequest:empty_request.ToString());
