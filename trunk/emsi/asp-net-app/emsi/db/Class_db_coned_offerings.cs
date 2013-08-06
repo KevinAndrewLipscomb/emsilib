@@ -912,10 +912,18 @@ namespace Class_db_coned_offerings
       return (summary as coned_offering_summary).location;
       }
 
-    public void MarkAllStale()
+    public void MarkUntouchedAsStale()
       {
       Open();
-      new MySqlCommand("update coned_offering set be_stale = TRUE",connection).ExecuteNonQuery();
+      new MySqlCommand
+        (
+        "update coned_offering"
+        + " set be_stale = TRUE"
+        + " where status_id = (select id from coned_offering_status where description = 'NEEDS_CONED_SPONSOR_FINALIZATION')"
+        +   " and (select count(practitioner_id) from coned_offering_roster where coned_offering_roster.coned_offering_id = coned_offering.id) = 0",
+        connection
+        )
+        .ExecuteNonQuery();
       Close();
       }
 
