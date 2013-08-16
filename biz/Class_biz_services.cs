@@ -96,9 +96,15 @@ namespace Class_biz_services
             BindListControl(county_user_id, target, be_unfiltered, false);
         }
 
-        public void BindPacratManagementBaseDataList(string sort_order, bool be_sort_order_ascending, object target)
+        public void BindPacratManagementBaseDataList
+          (
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target,
+          bool do_include_all_services
+          )
           {
-          db_services.BindPacratManagementBaseDataList(sort_order,be_sort_order_ascending,target);
+          db_services.BindPacratManagementBaseDataList(sort_order,be_sort_order_ascending,target,do_include_all_services);
           }
 
     public void BindStrikeTeamAffiliationBaseDataList

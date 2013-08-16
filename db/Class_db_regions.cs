@@ -146,7 +146,8 @@ namespace Class_db_regions
       (
       string sort_order,
       bool be_sort_order_ascending,
-      object target
+      object target,
+      bool do_include_all_regions
       )
       {
       Open();
@@ -163,6 +164,7 @@ namespace Class_db_regions
         +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
         +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
         +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        + (do_include_all_regions ? k.EMPTY : " where be_pacrat_subscriber")
         + " group by region_code_name_map.code"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
