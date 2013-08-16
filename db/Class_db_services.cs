@@ -206,7 +206,15 @@ namespace Class_db_services
         + " , IF(be_strike_team_participant,'YES','no') as be_strike_team_participant"
         + " , (select count(practitioner_id) from strike_team_roster where service_id = service.id) as num_members"
         + " , (select count(id) from vehicle where service_id = service.id) as num_vehicles"
+        + " , GROUP_CONCAT(email_address) as email_target"
+        + " , concat(phone_number,'@',sms_gateway.hostname) as sms_target"
         + " from service"
+        +   " left join role_member_map on (role_member_map.service_id=service.id)"
+        +   " left join role on (role.id=role_member_map.role_id and role.name = 'Service Strike Team Manager')"
+        +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
+        +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
+        +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        + " group by service.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
