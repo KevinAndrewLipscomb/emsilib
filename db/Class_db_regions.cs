@@ -153,9 +153,17 @@ namespace Class_db_regions
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
         "select code"
-        + " , name"
+        + " , region_code_name_map.name"
         + " , IF(be_pacrat_subscriber,'YES','no') as be_pacrat_subscriber"
+        + " , GROUP_CONCAT(email_address) as email_target"
+        + " , concat(phone_number,'@',sms_gateway.hostname) as sms_target"
         + " from region_code_name_map"
+        +   " left join role_member_map on (role_member_map.region_code=region_code_name_map.code)"
+        +   " left join role on (role.id=role_member_map.role_id and role.name = 'Region Strike Team Manager')"
+        +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
+        +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
+        +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        + " group by region_code_name_map.code"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
