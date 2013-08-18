@@ -661,6 +661,71 @@ namespace Class_biz_notifications
             template_reader.Close();
         }
 
+        private delegate string IssueStrikeTeamMemberStatusStatement_Merge(string s);
+        public void IssueStrikeTeamMemberStatusStatement
+          (
+          string email_address,
+          string last_name,
+          string first_name,
+          string certification_number,
+          string phone_number,
+          string carrier_name,
+          string emergency_contact_1_name,
+          string emergency_contact_1_phone_number,
+          string emergency_contact_2_name,
+          string emergency_contact_2_phone_number,
+          bool be_immune_hepatitis_b,
+          bool be_immune_diptheria_tetanus,
+          string drivers_license_expiration,
+          string nims_is_100_date,
+          string nims_is_200_date,
+          string nims_is_700_date,
+          string act_1985_33_date,
+          string act_1985_34_date,
+          string act_1994_151_date,
+          string credentialed_clause,
+          string service_strike_team_affiliation
+          )
+          {
+          IssueStrikeTeamMemberStatusStatement_Merge Merge = delegate (string s)
+            {
+            return s
+              .Replace("<application_name/>",application_name)
+              .Replace("<host_domain_name/>",host_domain_name)
+              .Replace("<first_name/>",first_name)
+              .Replace("<last_name/>",last_name)
+              .Replace("<certification_number/>",certification_number)
+              .Replace("<phone_number/>",k.FormatAsNanpPhoneNum(phone_number))
+              .Replace("<carrier_name/>",carrier_name)
+              .Replace("<emergency_contact_1_name/>",emergency_contact_1_name)
+              .Replace("<emergency_contact_1_phone_number/>",k.FormatAsNanpPhoneNum(emergency_contact_1_phone_number))
+              .Replace("<emergency_contact_2_name/>",emergency_contact_2_name)
+              .Replace("<emergency_contact_2_phone_number/>",k.FormatAsNanpPhoneNum(emergency_contact_2_phone_number))
+              .Replace("<be_immune_hepatitis_b/>",k.YesNoOf(be_immune_hepatitis_b))
+              .Replace("<be_immune_diptheria_tetanus/>",k.YesNoOf(be_immune_diptheria_tetanus))
+              .Replace("<drivers_license_expiration/>",drivers_license_expiration)
+              .Replace("<nims_is_100_date/>",nims_is_100_date)
+              .Replace("<nims_is_200_date/>",nims_is_200_date)
+              .Replace("<nims_is_700_date/>",nims_is_700_date)
+              .Replace("<act_1985_33_date/>",act_1985_33_date)
+              .Replace("<act_1985_34_date/>",act_1985_34_date)
+              .Replace("<act_1994_151_date/>",act_1994_151_date)
+              .Replace("<credentialed_clause/>",credentialed_clause)
+              .Replace("<service_strike_team_affiliation/>",service_strike_team_affiliation)
+              ;
+            };
+
+          var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/strike_team_member_status_statement.txt"));
+          k.SmtpMailSend
+            (
+            from:ConfigurationManager.AppSettings["sender_email_address"],
+            to:email_address,
+            subject:Merge(template_reader.ReadLine()),
+            message_string:Merge(template_reader.ReadToEnd())
+            );
+          template_reader.Close();
+          }
+
     } // end TClass_biz_notifications
 
 }
