@@ -430,7 +430,10 @@ namespace Class_db_practitioners
         (
         "START TRANSACTION"
         + ";"
-        + " delete from practitioner where be_stale and (select count(*) from coned_offering_roster where practitioner_id = practitioner.id) = 0"
+        + " delete from practitioner"
+        + " where be_stale"
+        +   " and (select count(*) from coned_offering_roster where practitioner_id = practitioner.id) = 0"
+        +   " and (select count(*) from strike_team_roster where practitioner_id = practitioner.id) = 0"
         + ";"
         + " update practitioner set be_past = TRUE where be_stale"
         + ";"
