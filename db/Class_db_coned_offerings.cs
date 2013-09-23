@@ -799,7 +799,7 @@ namespace Class_db_coned_offerings
         var class_number = k.EMPTY;
         var public_contact_email = k.EMPTY;
         var location_email = k.EMPTY;
-        var length = k.EMPTY;
+        //var length = k.EMPTY;
         var childless_field_assignments_clause = k.EMPTY;
         Open();
         foreach (var rec in recs)
@@ -841,7 +841,7 @@ namespace Class_db_coned_offerings
               {
               location_email = "CeOffering" + class_number + "Le@frompaper2web.com";
               }
-            length = ((rec as ClassInfoClass).Length == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Length.Replace("&nbsp;hrs.",k.EMPTY),k.safe_hint_type.REAL_NUM));
+            //length = ((rec as ClassInfoClass).Length == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).Length.Replace("&nbsp;hrs.",k.EMPTY),k.safe_hint_type.REAL_NUM));  //no longer used
             //
             childless_field_assignments_clause = k.EMPTY
             + "class_id = NULLIF('" + (rec as ClassInfoClass).ClassID + "','')"
@@ -870,7 +870,7 @@ namespace Class_db_coned_offerings
             + " , emtp_other_hours = NULLIF('" + (rec as ClassInfoClass).EMTP_Other_Hrs + "','')"
             + " , phrn_med_trauma_hours = NULLIF('" + (rec as ClassInfoClass).PHRN_MedTrauma_Hrs + "','')"
             + " , phrn_other_hours = NULLIF('" + (rec as ClassInfoClass).PHRN_Other_Hrs + "','')"
-            + " , length = NULLIF('" + length + "','')"
+            //+ " , length = NULLIF('" + length + "','')"  //unreliable
             + " , be_stale = false"
             + k.EMPTY;
             transaction = connection.BeginTransaction();
