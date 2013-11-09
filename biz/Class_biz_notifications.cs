@@ -684,7 +684,8 @@ namespace Class_biz_notifications
           string act_1985_34_date,
           string act_1994_151_date,
           string credentialed_clause,
-          string service_strike_team_affiliation
+          string service_strike_team_affiliation,
+          string service_strike_team_primary_manager
           )
           {
           IssueStrikeTeamMemberStatusStatement_Merge Merge = delegate (string s)
@@ -721,7 +722,11 @@ namespace Class_biz_notifications
             from:ConfigurationManager.AppSettings["sender_email_address"],
             to:email_address,
             subject:Merge(template_reader.ReadLine()),
-            message_string:Merge(template_reader.ReadToEnd())
+            message_string:Merge(template_reader.ReadToEnd()),
+            be_html:false,
+            cc:k.EMPTY,
+            bcc:k.EMPTY,
+            reply_to:service_strike_team_primary_manager
             );
           template_reader.Close();
           }
