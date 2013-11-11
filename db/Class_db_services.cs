@@ -6,6 +6,7 @@ using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
 namespace Class_db_services
@@ -1005,6 +1006,19 @@ namespace Class_db_services
       Open();
       new MySqlCommand("update service set be_strike_team_participant = " + value.ToString() + " where id = '" + id + "'",connection).ExecuteNonQuery();
       Close();
+      }
+
+    public Queue<string> StrikeTeamParticipantIdQ()
+      {
+      var strike_team_participant_id_q = new Queue<string>();
+      Open();
+      var dr = new MySqlCommand("select id from service where be_strike_team_participant",connection).ExecuteReader();
+      while (dr.Read())
+        {
+        strike_team_participant_id_q.Enqueue(dr["id"].ToString());
+        }
+      Close();
+      return strike_team_participant_id_q;
       }
 
     internal object Summary(string id)
