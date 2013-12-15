@@ -468,12 +468,10 @@ namespace Class_db_emsof_requests
             Open();
             ((target) as DataGrid).DataSource = new MySqlCommand
               (
-              "select concat('W',master_id) as w_num"
-              + " , if(be_reopened_after_going_to_state,'*','') as be_reopened_after_going_to_state"
+              "select concat('W',master_id,if(be_reopened_after_going_to_state,'*','')) as note"
               + " , service.name as service_name"
               + " , if((be_als_amb or be_als_squad or be_air_amb),'ALS',if(be_bls_amb,'BLS',if(be_rescue,'RESCUE','QRS')))" + " as life_support_level"
-              + " , description as equipment_description"
-              + " , make_model"
+              + " , CONCAT(description,' - ',make_model) as equipment_description"
               + " , quantity"
               + " , unit_cost"
               + " , IF(emsof_request_master.status_code = 6,quantity*unit_cost,0) as total_cost"
@@ -481,6 +479,7 @@ namespace Class_db_emsof_requests
               + " , IF(emsof_request_master.status_code = 6,quantity*unit_cost - emsof_ante,0) as provider_match"
               + " , if(emsof_request_master.status_code = 6,'X','') as recommendation"
               + " , if(emsof_request_master.status_code is null,'e/5',if(emsof_request_master.status_code = 16,'c/3','')) as discouragement_code"
+              + " , match_level.name as match_level"
               + " from emsof_request_master"
               +   " left join emsof_request_detail on (emsof_request_detail.master_id=emsof_request_master.id)"
               +   " join county_dictated_appropriation on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)"
@@ -488,6 +487,7 @@ namespace Class_db_emsof_requests
               +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
               +   " left join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)"
               +   " right join service on (service.id=county_dictated_appropriation.service_id)"
+              +   " left join match_level on (match_level.id=county_dictated_appropriation.match_level_id)"
               + " where (emsof_request_master.status_code is null)"
               +     " or"
               +       " ("
