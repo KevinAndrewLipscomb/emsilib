@@ -75,7 +75,7 @@ namespace Class_db_emsof_requests
       public const int TCCI_FULL_REQUEST_DETAIL = 2;
       public const int TCCI_FULL_REQUEST_ACTUALS = 3;
       public const int TCCI_PROOF_OF_PAYMENT_ID = 0;
-      public const int TCCI_SRR_REPLACEMENT_ROW_INDICATOR = 1;
+      public const int TCCI_SRR_REPLACEMENT_ROW_INDICATOR = 12;
       }
 
     public class TClass_db_emsof_requests: TClass_db
