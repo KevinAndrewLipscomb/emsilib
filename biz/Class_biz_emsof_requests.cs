@@ -764,23 +764,23 @@ namespace Class_biz_emsof_requests
         public void SubmitToState(object Table_report, string request_physical_path, status_type status_of_interest, string regional_staffer_user_id, string amendment_num_string)
         {
             string body;
-            string qualifier = k.EMPTY;
+            //string qualifier = k.EMPTY;
             string region_name;
             body = "Dear PA DOH EMSO EMSOF Coordinator," + k.NEW_LINE + k.NEW_LINE + "The attached Excel spreadsheet contains ";
             switch(status_of_interest)
             {
                 case status_type.NEEDS_SENT_TO_PA_DOH_EMSO:
-                    qualifier = "fresh";
+                    //qualifier = "fresh";
                     body = body + "new";
                     break;
                 case status_type.NEEDS_PA_DOH_EMSO_APPROVAL:
-                    qualifier = "repeat";
+                    //qualifier = "repeat";
                     body = body + "a RE-TRANSMISSION of";
                     break;
             }
             region_name = biz_regional_staffers.RegionNameOf(regional_staffer_user_id);
             body = body + " EMSOF request items that have been approved by the Executive Director of " + region_name + ".  Please process " + "this report at your earliest convenience." + k.NEW_LINE + k.NEW_LINE + "Replies to this message will be addressed to the " + region_name + " EMSOF Coordinator." + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"];
-            k.SendControlAsAttachmentToEmailMessage(Table_report, Path.GetDirectoryName(request_physical_path) + "/" + ConfigurationManager.AppSettings["scratch_folder"] + "/" + "WebEmsofDohExport-" + qualifier + k.HYPHEN + DateTime.Now.ToString("yyyyMMddHHmmssf") + ".xls", biz_accounts.EmailTargetByRegionAndRole(biz_regional_staffers.RegionCodeOf(regional_staffer_user_id),"emsof-coordinator"), ConfigurationManager.AppSettings["state_report_to_target"], ConfigurationManager.AppSettings["state_report_cc_target"], "EMSOF requests from " + region_name + " region", body);
+            //k.SendControlAsAttachmentToEmailMessage(Table_report, Path.GetDirectoryName(request_physical_path) + "/" + ConfigurationManager.AppSettings["scratch_folder"] + "/" + "WebEmsofDohExport-" + qualifier + k.HYPHEN + DateTime.Now.ToString("yyyyMMddHHmmssf") + ".xls", biz_accounts.EmailTargetByRegionAndRole(biz_regional_staffers.RegionCodeOf(regional_staffer_user_id),"emsof-coordinator"), ConfigurationManager.AppSettings["state_report_to_target"], ConfigurationManager.AppSettings["state_report_cc_target"], "EMSOF requests from " + region_name + " region", body);
             if (status_of_interest == status_type.NEEDS_SENT_TO_PA_DOH_EMSO)
             {
                 db_emsof_requests.MarkSubmittedToState(biz_regional_staffers.RegionCodeOf(regional_staffer_user_id), amendment_num_string, (int)(status_type.NEEDS_SENT_TO_PA_DOH_EMSO), (int)(status_type.NEEDS_PA_DOH_EMSO_APPROVAL));
