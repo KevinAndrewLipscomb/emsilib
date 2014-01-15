@@ -12,7 +12,10 @@ namespace Class_db_coned_offering_statuses
     {
     NEEDS_CONED_SPONSOR_FINALIZATION = 1,
     NEEDS_REGIONAL_PROCESSING = 2,
-    ARCHIVED = 3
+    ARCHIVED = 3,
+    SPONSOR_SAYS_CLASS_CANCELED = 4,
+    SPONSOR_SAYS_RAN_NO_CE = 5,
+    SPONSOR_SAYS_ALREADY_SUBMITTED = 6
     }
 
   public class TClass_db_coned_offering_statuses: TClass_db

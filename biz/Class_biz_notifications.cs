@@ -103,7 +103,7 @@ namespace Class_biz_notifications
       var biz_accounts = new TClass_biz_accounts();
       var biz_coned_offerings = new TClass_biz_coned_offerings();
 
-      IssueForClassClosed_Merge Merge = delegate (string s)
+      IssueForClassCanceled_Merge Merge = delegate (string s)
         {
         return s
           .Replace("<application_name/>",application_name)
@@ -630,6 +630,225 @@ namespace Class_biz_notifications
         cc:k.EMPTY,
         bcc:k.EMPTY,
         reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForSponsorSaysAlreadySubmitted_Merge(string s);
+    internal void IssueForSponsorSaysAlreadySubmitted
+      (
+      string sponsor_id,
+      string sponsor_number,
+      string sponsor_name,
+      string sponsor_email,
+      string sponsor_contact_email,
+      string sponsor_public_contact_email,
+      string coned_offering_public_contact_email,
+      string class_number,
+      string course_title,
+      string start,
+      string end,
+      string length,
+      string location,
+      k.int_nonnegative num_attendees,
+      string status_description
+      )
+      {
+      var biz_accounts = new TClass_biz_accounts();
+      var biz_coned_offerings = new TClass_biz_coned_offerings();
+
+      IssueForSponsorSaysAlreadySubmitted_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<class_number/>",biz_coned_offerings.StandardSafeRenditionOf(class_number))
+          .Replace("<sponsor_number/>",sponsor_number)
+          .Replace("<sponsor_name/>",sponsor_name)
+          .Replace("<status_description/>",status_description)
+          .Replace("<course_title/>",course_title)
+          .Replace("<start/>",start)
+          .Replace("<end/>",end)
+          .Replace("<length/>",length)
+          .Replace("<num_attendees/>",num_attendees.val.ToString())
+          .Replace("<location/>",location)
+          .Replace("<coned_offering_public_contact_email/>",coned_offering_public_contact_email)
+          .Replace("<sponsor_email/>",sponsor_email)
+          .Replace("<sponsor_contact_email/>",sponsor_contact_email)
+          .Replace("<sponsor_public_contact_email/>",sponsor_public_contact_email)
+          ;
+        };
+
+      var region_code = biz_coned_offerings.RegionCodeOf(class_number);
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/sponsor_says_already_submitted.txt"));
+      var education_specialist_target = biz_accounts.EmailTargetByRegionAndRole(region_code,"education-specialist");
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:biz_accounts.EmailTargetByRegionAndRole(region_code,"education-coordinator") + (education_specialist_target.Length > 0 ? k.COMMA + education_specialist_target : k.EMPTY),
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:Regex.Replace
+          (
+            (
+              k.EmptyIfInvalidEmailAddress(coned_offering_public_contact_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_contact_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_public_contact_email)
+            )
+            .Trim(new char[] {Convert.ToChar(k.COMMA)}),
+            ",,+",
+            k.COMMA
+          ),
+        bcc:k.EMPTY,
+        reply_to:k.EmptyIfInvalidEmailAddress(sponsor_email)
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForSponsorSaysCanceled_Merge(string s);
+    internal void IssueForSponsorSaysCanceled
+      (
+      string sponsor_id,
+      string sponsor_number,
+      string sponsor_name,
+      string sponsor_email,
+      string sponsor_contact_email,
+      string sponsor_public_contact_email,
+      string coned_offering_public_contact_email,
+      string class_number,
+      string course_title,
+      string start,
+      string end,
+      string length,
+      string location,
+      k.int_nonnegative num_attendees,
+      string status_description
+      )
+      {
+      var biz_accounts = new TClass_biz_accounts();
+      var biz_coned_offerings = new TClass_biz_coned_offerings();
+
+      IssueForSponsorSaysCanceled_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<class_number/>",biz_coned_offerings.StandardSafeRenditionOf(class_number))
+          .Replace("<sponsor_number/>",sponsor_number)
+          .Replace("<sponsor_name/>",sponsor_name)
+          .Replace("<status_description/>",status_description)
+          .Replace("<course_title/>",course_title)
+          .Replace("<start/>",start)
+          .Replace("<end/>",end)
+          .Replace("<length/>",length)
+          .Replace("<num_attendees/>",num_attendees.val.ToString())
+          .Replace("<location/>",location)
+          .Replace("<coned_offering_public_contact_email/>",coned_offering_public_contact_email)
+          .Replace("<sponsor_email/>",sponsor_email)
+          .Replace("<sponsor_contact_email/>",sponsor_contact_email)
+          .Replace("<sponsor_public_contact_email/>",sponsor_public_contact_email)
+          ;
+        };
+
+      var region_code = biz_coned_offerings.RegionCodeOf(class_number);
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/sponsor_says_canceled.txt"));
+      var education_specialist_target = biz_accounts.EmailTargetByRegionAndRole(region_code,"education-specialist");
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:biz_accounts.EmailTargetByRegionAndRole(region_code,"education-coordinator") + (education_specialist_target.Length > 0 ? k.COMMA + education_specialist_target : k.EMPTY),
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:Regex.Replace
+          (
+            (
+              k.EmptyIfInvalidEmailAddress(coned_offering_public_contact_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_contact_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_public_contact_email)
+            )
+            .Trim(new char[] {Convert.ToChar(k.COMMA)}),
+            ",,+",
+            k.COMMA
+          ),
+        bcc:k.EMPTY,
+        reply_to:k.EmptyIfInvalidEmailAddress(sponsor_email)
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForSponsorSaysRanNoCe_Merge(string s);
+    internal void IssueForSponsorSaysRanNoCe
+      (
+      string sponsor_id,
+      string sponsor_number,
+      string sponsor_name,
+      string sponsor_email,
+      string sponsor_contact_email,
+      string sponsor_public_contact_email,
+      string coned_offering_public_contact_email,
+      string class_number,
+      string course_title,
+      string start,
+      string end,
+      string length,
+      string location,
+      k.int_nonnegative num_attendees,
+      string status_description
+      )
+      {
+      var biz_accounts = new TClass_biz_accounts();
+      var biz_coned_offerings = new TClass_biz_coned_offerings();
+
+      IssueForSponsorSaysRanNoCe_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<class_number/>",biz_coned_offerings.StandardSafeRenditionOf(class_number))
+          .Replace("<sponsor_number/>",sponsor_number)
+          .Replace("<sponsor_name/>",sponsor_name)
+          .Replace("<status_description/>",status_description)
+          .Replace("<course_title/>",course_title)
+          .Replace("<start/>",start)
+          .Replace("<end/>",end)
+          .Replace("<length/>",length)
+          .Replace("<num_attendees/>",num_attendees.val.ToString())
+          .Replace("<location/>",location)
+          .Replace("<coned_offering_public_contact_email/>",coned_offering_public_contact_email)
+          .Replace("<sponsor_email/>",sponsor_email)
+          .Replace("<sponsor_contact_email/>",sponsor_contact_email)
+          .Replace("<sponsor_public_contact_email/>",sponsor_public_contact_email)
+          ;
+        };
+
+      var region_code = biz_coned_offerings.RegionCodeOf(class_number);
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/sponsor_says_ran_no_ce.txt"));
+      var education_specialist_target = biz_accounts.EmailTargetByRegionAndRole(region_code,"education-specialist");
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:biz_accounts.EmailTargetByRegionAndRole(region_code,"education-coordinator") + (education_specialist_target.Length > 0 ? k.COMMA + education_specialist_target : k.EMPTY),
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:Regex.Replace
+          (
+            (
+              k.EmptyIfInvalidEmailAddress(coned_offering_public_contact_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_contact_email) + k.COMMA
+              + k.EmptyIfInvalidEmailAddress(sponsor_public_contact_email)
+            )
+            .Trim(new char[] {Convert.ToChar(k.COMMA)}),
+            ",,+",
+            k.COMMA
+          ),
+        bcc:k.EMPTY,
+        reply_to:k.EmptyIfInvalidEmailAddress(sponsor_email)
         );
       template_reader.Close();
       }

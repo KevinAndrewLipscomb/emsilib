@@ -140,13 +140,9 @@ namespace Class_db_coned_offerings
       )
       {
       var range_condition = k.EMPTY;
-      if (range == "InProcessExtensive")
+      if (range == "InProcess")
         {
         range_condition = " and (coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION') and (start_date_time <= CURDATE())";
-        }
-      else if (range == "InProcessCurrentOrDueOnly")
-        {
-        range_condition = " and (coned_offering_status.description = 'NEEDS_CONED_SPONSOR_FINALIZATION') and (start_date_time <= CURDATE()) and (end_date_time > SUBDATE(CURDATE(),INTERVAL 10 DAY))";
         }
       else if (range == "Future")
         {
@@ -183,6 +179,7 @@ namespace Class_db_coned_offerings
         +     range_condition
         +     (coned_sponsor_user_id.Length > 0 ? " and teaching_entity.id = '" + coned_sponsor_user_id + "'" : k.EMPTY)
         +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
+        +   " and coned_offering_status.description not like 'SPONSOR_SAYS_%'"
         + " group by coned_offering.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
@@ -931,6 +928,27 @@ namespace Class_db_coned_offerings
       {
       Open();
       new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where id = '" + id + "'",connection).ExecuteNonQuery();
+      Close();
+      }
+
+    internal void MarkSponsorSaysAlreadySubmitted(string id)
+      {
+      Open();
+      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_ALREADY_SUBMITTED') where id = '" + id + "'",connection).ExecuteNonQuery();
+      Close();
+      }
+
+    internal void MarkSponsorSaysCanceled(string id)
+      {
+      Open();
+      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_CANCELED') where id = '" + id + "'",connection).ExecuteNonQuery();
+      Close();
+      }
+
+    internal void MarkSponsorSaysRanNoCe(string id)
+      {
+      Open();
+      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_RAN_NO_CE') where id = '" + id + "'",connection).ExecuteNonQuery();
       Close();
       }
 
