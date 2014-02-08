@@ -902,7 +902,8 @@ namespace Class_biz_notifications
           string act_1985_33_date,
           string act_1985_34_date,
           string act_1994_151_date,
-          string credentialed_clause,
+          string credentialed_as_member_clause,
+          string credentialed_as_leader_clause,
           string service_strike_team_affiliation,
           string service_strike_team_primary_manager
           )
@@ -930,7 +931,8 @@ namespace Class_biz_notifications
               .Replace("<act_1985_33_date/>",act_1985_33_date)
               .Replace("<act_1985_34_date/>",act_1985_34_date)
               .Replace("<act_1994_151_date/>",act_1994_151_date)
-              .Replace("<credentialed_clause/>",credentialed_clause)
+              .Replace("<credentialed_as_member_clause/>",credentialed_as_member_clause)
+              .Replace("<credentialed_as_leader_clause/>",credentialed_as_leader_clause)
               .Replace("<service_strike_team_affiliation/>",service_strike_team_affiliation)
               ;
             };
