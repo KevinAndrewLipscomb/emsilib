@@ -197,6 +197,7 @@ namespace Class_db_services
       string sort_order,
       bool be_sort_order_ascending,
       object target,
+      string region_code,
       bool do_include_all_services
       )
       {
@@ -211,18 +212,54 @@ namespace Class_db_services
         + " , GROUP_CONCAT(email_address) as email_target"
         + " , concat(phone_number,'@',sms_gateway.hostname) as sms_target"
         + " from service"
+        +   " join county_region_map on (county_region_map.county_code=service.county_code)"
         +   " left join role_member_map on (role_member_map.service_id=service.id)"
         +   " left join role on (role.id=role_member_map.role_id and role.name = 'Service Strike Team Manager')"
         +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
         +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
         +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
-        + (do_include_all_services ? k.EMPTY : " where be_strike_team_participant")
+        + " where county_region_map.region_code = '" + region_code + "'"
+        +     (do_include_all_services ? k.EMPTY : " and be_strike_team_participant")
         + " group by service.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
         .ExecuteReader();
       ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
+    internal void BindStrikeTeamMobilizationAnnouncementListControl
+      (
+      string region_code,
+      object target
+      )
+      {
+      Open();
+      ((target) as ListControl).Items.Clear();
+      var dr = new MySqlCommand
+        (
+        "select service.id as id"
+        + " , service.name as name"
+        + " from service"
+        +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+        +   " left join role_member_map on (role_member_map.service_id=service.id)"
+        +   " left join role on (role.id=role_member_map.role_id and role.name = 'Service Strike Team Manager')"
+        +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
+        +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
+        +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        + " where county_region_map.region_code = '" + region_code + "'"
+        +     " and be_strike_team_participant"
+        + " group by service.id"
+        + " order by service.name",
+        connection
+        )
+        .ExecuteReader();
+      while (dr.Read())
+        {
+        ((target) as ListControl).Items.Add(new ListItem(dr["name"].ToString(), dr["id"].ToString()));
+        }
+      dr.Close();
       Close();
       }
 
