@@ -16,7 +16,8 @@ using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Class_biz_notifications
-{
+  {
+
   public class Class_biz_notifications_Static
     {
     public static char[] BreakChars = new char[3 + 1];
@@ -28,21 +29,22 @@ namespace Class_biz_notifications
       }
     }
 
-    public class TClass_biz_notifications
+  public class TClass_biz_notifications
     {
+
         private string application_name = k.EMPTY;
         private string host_domain_name = k.EMPTY;
         private TClass_db_notifications db_notifications = null;
         private string runtime_root_fullspec = String.Empty;
-        //Constructor  Create()
+
         public TClass_biz_notifications() : base()
         {
-            // TODO: Add any constructor code here
             application_name = ConfigurationManager.AppSettings["application_name"];
             db_notifications = new TClass_db_notifications();
             host_domain_name = ConfigurationManager.AppSettings["host_domain_name"];
             runtime_root_fullspec = ConfigurationManager.AppSettings["runtime_root_fullspec"];
         }
+
         public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
         {
             db_notifications.BindDirectToListControl(target, unselected_literal, selected_value);
@@ -880,6 +882,82 @@ namespace Class_biz_notifications
             template_reader.Close();
         }
 
+    private delegate string IssueMobilizationAnnouncementEmail_Merge(string s);
+    public void IssueMobilizationAnnouncementEmail
+      (
+      string target,
+      string deployment_name,
+      string service_name,
+      string region_name,
+      string actual_vs_drill_indicator,
+      string supplemental_message,
+      string region_strike_team_manager_target
+      )
+      {
+      IssueMobilizationAnnouncementEmail_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<deployment_name/>",deployment_name)
+          .Replace("<service_name/>",service_name)
+          .Replace("<region_name/>",region_name)
+          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
+          .Replace("<supplemental_message/>",k.WrapText(supplemental_message,k.NEW_LINE + new string(Convert.ToChar(k.SPACE),6),Class_biz_notifications_Static.BreakChars,short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+          .Replace("<region_strike_team_manager_target/>",region_strike_team_manager_target)
+          ;
+        };
+
+      var biz_user = new TClass_biz_user();
+      var biz_users = new TClass_biz_users();
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/mobilization-announcement-email.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:region_strike_team_manager_target,
+        bcc:k.EMPTY,
+        reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueMobilizationAnnouncementSms_Merge(string s);
+    public void IssueMobilizationAnnouncementSms
+      (
+      string target,
+      string actual_vs_drill_indicator
+      )
+      {
+      IssueMobilizationAnnouncementSms_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
+          ;
+        };
+
+      var biz_user = new TClass_biz_user();
+      var biz_users = new TClass_biz_users();
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/mobilization-announcement-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
+        );
+      template_reader.Close();
+      }
+
         private delegate string IssueStrikeTeamMemberStatusStatement_Merge(string s);
         public void IssueStrikeTeamMemberStatusStatement
           (
@@ -954,4 +1032,4 @@ namespace Class_biz_notifications
 
     } // end TClass_biz_notifications
 
-}
+  }
