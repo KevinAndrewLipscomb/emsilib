@@ -101,10 +101,11 @@ namespace Class_biz_services
           string sort_order,
           bool be_sort_order_ascending,
           object target,
+          string region_code,
           bool do_include_all_services
           )
           {
-          db_services.BindPacratManagementBaseDataList(sort_order,be_sort_order_ascending,target,do_include_all_services);
+          db_services.BindPacratManagementBaseDataList(sort_order,be_sort_order_ascending,target,region_code,do_include_all_services);
           }
 
     public void BindStrikeTeamAffiliationBaseDataList
@@ -116,6 +117,15 @@ namespace Class_biz_services
       )
       {
       db_services.BindStrikeTeamAffiliationBaseDataList(member_id,sort_order,be_sort_order_ascending,target);
+      }
+
+    public void BindStrikeTeamMobilizationAnnouncementListControl
+      (
+      string region_code,
+      object target
+      )
+      {
+      db_services.BindStrikeTeamMobilizationAnnouncementListControl(region_code,target);
       }
 
         public bool Delete(string affiliate_num)
