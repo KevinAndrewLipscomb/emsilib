@@ -21,9 +21,26 @@ namespace Class_db_practitioners
       db_trail = new TClass_db_trail();
       }
 
-    public bool Bind(string partial_spec, object target)
+    public bool Bind
+      (
+      string partial_spec,
+      object target,
+      string sponsor_id_filter
+      )
       {
-      var concat_clause = "concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(certification_number,'-'),'|',IFNULL(level_id,'-'),'|',IFNULL(regional_council_code,'-'),'|',IFNULL(birth_date,'-'))";
+      var concat_clause = "concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(certification_number,'-'),'|',IFNULL(birth_date,'-'))";
+      var sponsor_filter_clause = k.EMPTY;
+      if (sponsor_id_filter.Length > 0)
+        {
+        sponsor_filter_clause = " and id in"
+        + " ("
+        + " select practitioner_id"
+        + " from coned_offering_roster"
+        +   " join coned_offering on (coned_offering.id=coned_offering_roster.coned_offering_id)"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
+        + " where teaching_entity.id = '" + sponsor_id_filter + "'"
+        + " )";
+        }
       Open();
       ((target) as ListControl).Items.Clear();
       var dr = new MySqlCommand
@@ -32,6 +49,7 @@ namespace Class_db_practitioners
         + " , CONVERT(" + concat_clause + " USING utf8) as spec"
         + " from practitioner"
         + " where " + concat_clause + " like '%" + partial_spec.ToUpper() + "%'"
+        +     sponsor_filter_clause
         + " order by spec",
         connection
         )
@@ -43,6 +61,10 @@ namespace Class_db_practitioners
       dr.Close();
       Close();
       return ((target) as ListControl).Items.Count > 0;
+      }
+    public bool Bind(string partial_spec,object target)
+      {
+      return Bind(partial_spec,target,sponsor_id_filter:k.EMPTY);
       }
 
     public void BindDirectToListControl(object target)

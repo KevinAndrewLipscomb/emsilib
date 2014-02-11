@@ -28,9 +28,18 @@ namespace Class_biz_practitioners
       ss_emsams = new Class_ss_emsams();
       }
 
-    public bool Bind(string partial_spec, object target)
+    public bool Bind
+      (
+      string partial_spec,
+      object target,
+      string sponsor_id_filter
+      )
       {
-      return db_practitioners.Bind(partial_spec, target);
+      return db_practitioners.Bind(partial_spec, target, sponsor_id_filter);
+      }
+    public bool Bind(string partial_spec,object target)
+      {
+      return Bind(partial_spec,target,sponsor_id_filter:k.EMPTY);
       }
 
     public void BindDirectToListControl(object target)
