@@ -68,6 +68,11 @@ namespace Class_biz_practitioners
       return db_practitioners.Delete(id);
       }
 
+    public string EmailAddressOfId(string id)
+      {
+      return db_practitioners.EmailAddressOfId(id);
+      }
+
     public bool Get
       (
       string id,
@@ -141,6 +146,35 @@ namespace Class_biz_practitioners
       )
       {
       return db_practitioners.MaxSpecLength(region_code,starting_with);
+      }
+
+    public void SendClassCompletionCertificateLegacy
+      (
+      string working_directory,
+      string shielded_query_string_of_hashtable,
+      string sender_email_address,
+      string target_email_address
+      )
+      {
+      var stdout = k.EMPTY;
+      var stderr = k.EMPTY;
+      k.RunCommandIteratedOverArguments
+        (
+        "c:\\cygwin\\bin\\wget",
+        new ArrayList()
+          {
+          "--output-document=/dev/null --no-check-certificate"
+          + " --post-data"
+          +   "=" + shielded_query_string_of_hashtable
+          +   "&practitioner_email_address=" + target_email_address
+          +   "&sender_email_address=" + sender_email_address
+          + k.SPACE
+          + "\"" + ConfigurationManager.AppSettings["runtime_root_fullspec"] + "noninteractive/report_commanded_training_certificate_legacy.aspx\""
+          },
+        working_directory,
+        out stdout,
+        out stderr
+        );
       }
 
     public void Set

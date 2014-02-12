@@ -177,6 +177,15 @@ namespace Class_db_practitioners
       return result;
       }
 
+    internal string EmailAddressOfId(string id)
+      {
+      var email_address_of_id = k.EMPTY;
+      Open();
+      email_address_of_id = new MySqlCommand("select email_address from practitioner where id = '" + id + "'",connection).ExecuteScalar().ToString();
+      Close();
+      return email_address_of_id;
+      }
+
     public bool Get
       (
       string id,
