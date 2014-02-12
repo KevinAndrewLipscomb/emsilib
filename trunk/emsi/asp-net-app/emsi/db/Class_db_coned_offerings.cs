@@ -114,6 +114,7 @@ namespace Class_db_coned_offerings
         + " , IF(short_description = 'EMR',fr_med_trauma_hours,IF(short_description in ('EMT','EMT-New'),emt_med_trauma_hours,IF(short_description = 'PHRN',phrn_med_trauma_hours,emtp_med_trauma_hours))) as med_trauma_hours"
         + " , IF(short_description = 'EMR',fr_other_hours,IF(short_description in ('EMT','EMT-New'),emt_other_hours,IF(short_description = 'PHRN',phrn_other_hours,emtp_other_hours))) as other_hours"
         + " , instructor_hours"
+        + " , coned_offering_roster.id as roster_id"
         + " from coned_offering"
         +   " join coned_offering_roster on (coned_offering_roster.coned_offering_id=coned_offering.id)"
         +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
