@@ -97,10 +97,11 @@ namespace Class_biz_coned_offerings
       string practitioner_id,
       string sort_order,
       bool be_sort_order_ascending,
-      object target
+      object target,
+      string range
       )
       {
-      db_coned_offerings.BindBaseDataListPractitionerConedDetail(practitioner_id,sort_order,be_sort_order_ascending,target);
+      db_coned_offerings.BindBaseDataListPractitionerConedDetail(practitioner_id,sort_order,be_sort_order_ascending,target,range);
       }
 
     public void BindClassCatalog
