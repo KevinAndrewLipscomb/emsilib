@@ -97,9 +97,23 @@ namespace Class_db_coned_offerings
       string practitioner_id,
       string sort_order,
       bool be_sort_order_ascending,
-      object target
+      object target,
+      string range
       )
       {
+      var range_condition = k.EMPTY;
+      if (range == "LastThreeYears")
+        {
+        range_condition = " and (end_date_time >= SUBDATE(CURDATE(),INTERVAL 3 YEAR))";
+        }
+      else if (range == "SinceJan1")
+        {
+        range_condition = " and (YEAR(end_date_time) = YEAR(CURDATE()))";
+        }
+      else if (range != "All") // range is a particular year
+        {
+        range_condition = " and YEAR(end_date_time) = '" + range + "'";
+        }
       Open();
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
@@ -122,7 +136,9 @@ namespace Class_db_coned_offerings
         +   " join practitioner on (practitioner.id=coned_offering_roster.practitioner_id)"
         +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
         + " where practitioner_id = '" + practitioner_id + "'"
-        +   " and coned_offering_status.description = 'ARCHIVED'",
+        +     range_condition
+        +   " and coned_offering_status.description = 'ARCHIVED'"
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
         .ExecuteReader();
