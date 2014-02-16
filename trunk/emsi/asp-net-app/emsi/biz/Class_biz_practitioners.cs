@@ -63,14 +63,34 @@ namespace Class_biz_practitioners
       BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yoa_or_older:false);
       }
 
+    public string BirthDateOf(object summary)
+      {
+      return db_practitioners.BirthDateOf(summary);
+      }
+
+    public string CertificationNumberOf(object summary)
+      {
+      return db_practitioners.CertificationNumberOf(summary);
+      }
+
     public bool Delete(string id)
       {
       return db_practitioners.Delete(id);
       }
 
+    public string EmailAddressOf(object summary)
+      {
+      return db_practitioners.EmailAddressOfId(summary);
+      }
+
     public string EmailAddressOfId(string id)
       {
       return db_practitioners.EmailAddressOfId(id);
+      }
+
+    public string FirstNameOf(object summary)
+      {
+      return db_practitioners.FirstNameOf(summary);
       }
 
     public bool Get
@@ -116,6 +136,11 @@ namespace Class_biz_practitioners
         );
       }
 
+    public string IdOf(object summary)
+      {
+      return db_practitioners.IdOf(summary);
+      }
+
     public void ImportLatestFromEmsrs()
       {
       var client = new PractitionerClient();
@@ -139,6 +164,16 @@ namespace Class_biz_practitioners
       client.Close();
       }
 
+    public string LastNameOf(object summary)
+      {
+      return db_practitioners.LastNameOf(summary);
+      }
+
+    public string LevelOf(object summary)
+      {
+      return db_practitioners.LevelOf(summary);
+      }
+
     public k.int_nonnegative MaxSpecLength
       (
       string region_code,
@@ -146,6 +181,11 @@ namespace Class_biz_practitioners
       )
       {
       return db_practitioners.MaxSpecLength(region_code,starting_with);
+      }
+
+    public string MiddleInitialOf(object summary)
+      {
+      return db_practitioners.MiddleInitialOf(summary);
       }
 
     public void SendClassCompletionCertificateLegacy
@@ -220,6 +260,15 @@ namespace Class_biz_practitioners
         );
       }
 
+    public void SetEmailAddress
+      (
+      string id,
+      string email_address
+      )
+      {
+      db_practitioners.SetEmailAddress(id,email_address);
+      }
+
     public void SetFieldsNotImportedFromState
       (
       string id,
@@ -250,6 +299,11 @@ namespace Class_biz_practitioners
         birth_date,
         email_address
         );
+      }
+
+    public object Summary(string id)
+      {
+      return db_practitioners.Summary(id);
       }
 
     } // end TClass_biz_practitioners

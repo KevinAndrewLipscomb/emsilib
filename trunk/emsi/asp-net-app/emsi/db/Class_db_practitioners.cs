@@ -12,8 +12,22 @@ using System.Web.UI.WebControls;
 
 namespace Class_db_practitioners
   {
+
   public class TClass_db_practitioners: TClass_db
     {
+
+    private class practitioner_summary
+      {
+      public string id;
+      public string last_name;
+      public string first_name;
+      public string middle_initial;
+      public string level_description;
+      public string certification_number;
+      public string birth_date;
+      public string email_address;
+      }
+
     private TClass_db_trail db_trail = null;
 
     public TClass_db_practitioners() : base()
@@ -138,6 +152,16 @@ namespace Class_db_practitioners
       BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yo_or_older:false);
       }
 
+    internal string BirthDateOf(object summary)
+      {
+      return (summary as practitioner_summary).birth_date;
+      }
+
+    internal string CertificationNumberOf(object summary)
+      {
+      return (summary as practitioner_summary).certification_number;
+      }
+
     public void ClearBeInstructorFlagsInSubscriberRegions()
       {
       Open();
@@ -177,6 +201,11 @@ namespace Class_db_practitioners
       return result;
       }
 
+    internal string EmailAddressOfId(object summary)
+      {
+      return (summary as practitioner_summary).email_address;
+      }
+
     internal string EmailAddressOfId(string id)
       {
       var email_address_of_id = k.EMPTY;
@@ -184,6 +213,11 @@ namespace Class_db_practitioners
       email_address_of_id = new MySqlCommand("select email_address from practitioner where id = '" + id + "'",connection).ExecuteScalar().ToString();
       Close();
       return email_address_of_id;
+      }
+
+    internal string FirstNameOf(object summary)
+      {
+      return (summary as practitioner_summary).first_name;
       }
 
     public bool Get
@@ -293,6 +327,11 @@ namespace Class_db_practitioners
       middle_initial = dr["middle_initial"].ToString();
       dr.Close();
       Close();
+      }
+
+    internal string IdOf(object summary)
+      {
+      return (summary as practitioner_summary).id;
       }
 
     public void ImportLatestFromEmsrs(ArrayList recs)
@@ -406,6 +445,16 @@ namespace Class_db_practitioners
         }
       }
 
+    internal string LastNameOf(object summary)
+      {
+      return (summary as practitioner_summary).last_name;
+      }
+
+    internal string LevelOf(object summary)
+      {
+      return (summary as practitioner_summary).level_description;
+      }
+
     public void MarkAllStale()
       {
       Open();
@@ -452,6 +501,11 @@ namespace Class_db_practitioners
         );
       Close();
       return max_spec_length;
+      }
+
+    internal string MiddleInitialOf(object summary)
+      {
+      return (summary as practitioner_summary).middle_initial;
       }
 
     public void RemoveStale()
@@ -531,6 +585,26 @@ namespace Class_db_practitioners
       Close();
       }
 
+    internal void SetEmailAddress
+      (
+      string id,
+      string email_address
+      )
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update practitioner set email_address = NULLIF('" + email_address + "','')"
+          + " where id = '" + id + "'"
+          ),
+          connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
     public void SetFieldsNotImportedFromState
       (
       string id,
@@ -575,6 +649,43 @@ namespace Class_db_practitioners
         )
         .ExecuteNonQuery();
       Close();
+      }
+
+    internal object Summary(string id)
+      {
+      Open();
+      var dr =
+        (
+        new MySqlCommand
+          (
+          "SELECT email_address"
+          + " , last_name"
+          + " , first_name"
+          + " , middle_initial"
+          + " , practitioner_level.short_description as level_description"
+          + " , certification_number"
+          + " , DATE_FORMAT(birth_date,'%Y-%m-%d') as birth_date"
+          + " FROM practitioner"
+          +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
+          + " where practitioner.id = '" + id + "'",
+          connection
+          )
+          .ExecuteReader()
+        );
+      dr.Read();
+      var the_summary = new practitioner_summary()
+        {
+        id = id,
+        email_address = dr["email_address"].ToString(),
+        last_name = dr["last_name"].ToString(),
+        first_name = dr["first_name"].ToString(),
+        middle_initial = dr["middle_initial"].ToString(),
+        level_description = dr["level_description"].ToString(),
+        certification_number = dr["certification_number"].ToString(),
+        birth_date = dr["birth_date"].ToString()
+        };
+      Close();
+      return the_summary;
       }
 
     } // end TClass_db_practitioners
