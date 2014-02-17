@@ -98,6 +98,7 @@ namespace Class_db_coned_offerings
       string sort_order,
       bool be_sort_order_ascending,
       object target,
+      string sponsor_id_filter,
       string range
       )
       {
@@ -124,7 +125,7 @@ namespace Class_db_coned_offerings
         + " , region_code_name_map.name as region"
         + " , concat(start_date_time,' ',IFNULL(start_time,'')) as start"
         + " , concat(end_date_time,' ',IFNULL(end_time,'')) as end"
-        + " , concat(sponsor_name,' #',sponsor_number) as sponsor"
+        + " , concat(sponsor_name,' #',coned_offering.sponsor_number) as sponsor"
         + " , IF(short_description = 'EMR',fr_med_trauma_hours,IF(short_description in ('EMT','EMT-New'),emt_med_trauma_hours,IF(short_description = 'PHRN',phrn_med_trauma_hours,emtp_med_trauma_hours))) as med_trauma_hours"
         + " , IF(short_description = 'EMR',fr_other_hours,IF(short_description in ('EMT','EMT-New'),emt_other_hours,IF(short_description = 'PHRN',phrn_other_hours,emtp_other_hours))) as other_hours"
         + " , instructor_hours"
@@ -135,9 +136,11 @@ namespace Class_db_coned_offerings
         +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
         +   " join practitioner on (practitioner.id=coned_offering_roster.practitioner_id)"
         +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
         + " where practitioner_id = '" + practitioner_id + "'"
         +     range_condition
         +   " and coned_offering_status.description = 'ARCHIVED'"
+        +     (sponsor_id_filter.Length > 0 ? " and teaching_entity.id = '" + sponsor_id_filter + "'" : k.EMPTY)
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
