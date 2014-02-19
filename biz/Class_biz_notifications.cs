@@ -228,6 +228,121 @@ namespace Class_biz_notifications
       template_reader.Close();
       }
 
+    private delegate string IssueForDeploymentMemberDemobilization_Merge(string s);
+    public void IssueForDeploymentMemberDemobilization
+      (
+      string target,
+      string deployment_name
+      )
+      {
+      IssueForDeploymentMemberDemobilization_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<deployment_name/>",deployment_name)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member-demobilization-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForDeploymentMemberMobilization_Merge(string s);
+    public void IssueForDeploymentMemberMobilization
+      (
+      string target,
+      string deployment_name
+      )
+      {
+      IssueForDeploymentMemberMobilization_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<deployment_name/>",deployment_name)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member-mobilization-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForDeploymentMemberTagAssignment_Merge(string s);
+    public void IssueForDeploymentMemberTagAssignment
+      (
+      string target,
+      string tag_num
+      )
+      {
+      IssueForDeploymentMemberTagAssignment_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<tag_num/>",tag_num)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member-tag-assignment-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForDeploymentMemberTagDeassignment_Merge(string s);
+    public void IssueForDeploymentMemberTagDeassignment(string target)
+      {
+      IssueForDeploymentMemberTagDeassignment_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member-tag-deassignment-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
         private delegate string IssueForExplicitRegionRoleChange_Merge(string s);
         public void IssueForExplicitRegionRoleChange
           (
