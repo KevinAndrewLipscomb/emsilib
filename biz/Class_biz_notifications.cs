@@ -597,6 +597,76 @@ namespace Class_biz_notifications
             template_reader.Close();
         }
 
+    private delegate string IssueForOperationalPeriodAssignment_Merge(string s);
+    public void IssueForOperationalPeriodAssignment
+      (
+      string target,
+      string vehicle_designator,
+      string nature,
+      string start,
+      string end
+      )
+      {
+      IssueForOperationalPeriodAssignment_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<vehicle_designator/>",vehicle_designator)
+          .Replace("<nature/>",nature)
+          .Replace("<start/>",start)
+          .Replace("<end/>",end)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member-op-period-assignment-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueForOperationalPeriodDeassignment_Merge(string s);
+    public void IssueForOperationalPeriodDeassignment
+      (
+      string target,
+      string nature,
+      string start,
+      string end
+      )
+      {
+      IssueForOperationalPeriodDeassignment_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<nature/>",nature)
+          .Replace("<start/>",start)
+          .Replace("<end/>",end)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member-op-period-deassignment-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:ConfigurationManager.AppSettings["bouncer_email_address"]
+        );
+      template_reader.Close();
+      }
+
         private delegate string IssueForRoleChange_Merge(string s);
         public void IssueForRoleChange(string member_id, string role_id, bool be_granted)
         {
