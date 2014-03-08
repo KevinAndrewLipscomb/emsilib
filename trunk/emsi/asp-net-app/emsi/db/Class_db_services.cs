@@ -17,6 +17,7 @@ namespace Class_db_services
       {
       public string id;
       public string name;
+      public string short_name;
       public string affiliate_num;
       public bool be_strike_team_participant;
       }
@@ -205,7 +206,7 @@ namespace Class_db_services
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
         "select service.id as id"
-        + " , service.name as name"
+        + " , service.short_name as name"
         + " , IF(be_strike_team_participant,'YES','no') as be_strike_team_participant"
         + " , (select count(practitioner_id) from strike_team_roster where service_id = service.id) as num_members"
         + " , (select count(id) from vehicle where service_id = service.id) as num_vehicles"
@@ -240,7 +241,7 @@ namespace Class_db_services
       var dr = new MySqlCommand
         (
         "select service.id as id"
-        + " , service.name as name"
+        + " , service.short_name as name"
         + " from service"
         +   " join county_region_map on (county_region_map.county_code=service.county_code)"
         +   " left join role_member_map on (role_member_map.service_id=service.id)"
@@ -276,7 +277,7 @@ namespace Class_db_services
             (
             "select service.id as service_id"
             + " , service.affiliate_num as service_affiliate_num"
-            + " , service.name as service_name"
+            + " , service.short_name as service_name"
             + " from role_member_map"
             +   " join service on (service.id=role_member_map.service_id)"
             +   " join county_region_map on (county_region_map.county_code=service.county_code)"
@@ -1045,6 +1046,19 @@ namespace Class_db_services
       Close();
       }
 
+    public string ShortNameOf(string service_id)
+      {
+      Open();
+      var short_name_of = new MySqlCommand("select short_name from service where id = '" + service_id + "'",connection).ExecuteScalar().ToString();
+      Close();
+      return short_name_of;
+      }
+
+    internal string ShortNameOfSummary(object summary)
+      {
+      return (summary as service_summary).short_name;
+      }
+
     public Queue<string> StrikeTeamParticipantIdQ()
       {
       var strike_team_participant_id_q = new Queue<string>();
@@ -1066,6 +1080,7 @@ namespace Class_db_services
         new MySqlCommand
           (
           "SELECT name"
+          + " , short_name"
           + " , affiliate_num"
           + " , be_strike_team_participant"
           + " FROM service"
@@ -1079,6 +1094,7 @@ namespace Class_db_services
         {
         id = id,
         name = dr["name"].ToString(),
+        short_name = dr["short_name"].ToString(),
         affiliate_num = dr["affiliate_num"].ToString(),
         be_strike_team_participant = (dr["be_strike_team_participant"].ToString() == "1")
         };
