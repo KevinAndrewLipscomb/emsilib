@@ -135,6 +135,15 @@ namespace Class_biz_services
             return result;
         }
 
+    public string DesignatorCompetingShortName
+      (
+      string affiliate_num,
+      string short_name
+      )
+      {
+      return db_services.DesignatorWithCompetingShortName(affiliate_num,short_name);
+      }
+
         public string EmailTargetForCounty(string county_id, bool be_filtered_by_valid_profile, bool be_valid_profile, bool be_filtered_by_emsof_participation, bool be_emsof_participant)
           {
           return db_services.EmailTargetForCounty(county_id, be_filtered_by_valid_profile, be_valid_profile, be_filtered_by_emsof_participation, be_emsof_participant);
