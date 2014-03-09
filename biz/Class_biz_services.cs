@@ -267,7 +267,8 @@ namespace Class_biz_services
           out string radio_channel_4,
           out string radio_channel_5,
           out string radio_channel_6,
-          out string primary_response_area
+          out string primary_response_area,
+          out string short_name
           )
           {
           return db_services.Get
@@ -384,7 +385,8 @@ namespace Class_biz_services
             out radio_channel_4,
             out radio_channel_5,
             out radio_channel_6,
-            out primary_response_area
+            out primary_response_area,
+            out short_name
             );
           }
 
@@ -539,7 +541,8 @@ namespace Class_biz_services
           string radio_channel_4,
           string radio_channel_5,
           string radio_channel_6,
-          string primary_response_area
+          string primary_response_area,
+          string short_name
           )
           {
           db_services.Set
@@ -655,7 +658,8 @@ namespace Class_biz_services
             radio_channel_4,
             radio_channel_5,
             radio_channel_6,
-            primary_response_area
+            primary_response_area,
+            short_name
             );
           db_appropriations.ApplyToExisting(affiliate_num, be_distressed);
           }
@@ -667,6 +671,16 @@ namespace Class_biz_services
       )
       {
       db_services.SetStrikeTeamParticipation(id,value);
+      }
+
+    public string ShortNameOf(string service_id)
+      {
+      return db_services.ShortNameOf(service_id);
+      }
+
+    internal string ShortNameOfSummary(object summary)
+      {
+      return db_services.ShortNameOfSummary(summary);
       }
 
         public object Summary(string id)
