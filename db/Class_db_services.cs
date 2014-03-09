@@ -315,6 +315,23 @@ namespace Class_db_services
             return result;
         }
 
+    internal string DesignatorWithCompetingShortName
+      (
+      string affiliate_num,
+      string short_name
+      )
+      {
+      Open();
+      var designator_with_competing_short_name_obj = new MySqlCommand
+        (
+        "select concat(name,' (affiliate #',affiliate_num,')') from service where short_name = '" + short_name + "' and affiliate_num <> '" + affiliate_num + "'",
+        connection
+        )
+        .ExecuteScalar();
+      Close();
+      return (designator_with_competing_short_name_obj == null ? k.EMPTY : designator_with_competing_short_name_obj.ToString());
+      }
+
         public string EmailTargetForCounty(string county_id, bool be_filtered_by_valid_profile, bool be_valid_profile, bool be_filtered_by_emsof_participation, bool be_emsof_participant)
           {
           var email_target = k.EMPTY;
