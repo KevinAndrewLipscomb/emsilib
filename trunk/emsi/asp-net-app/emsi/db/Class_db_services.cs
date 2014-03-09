@@ -459,7 +459,8 @@ namespace Class_db_services
           out string radio_channel_4,
           out string radio_channel_5,
           out string radio_channel_6,
-          out string primary_response_area
+          out string primary_response_area,
+          out string short_name
           )
           {
             id = k.EMPTY;
@@ -574,6 +575,7 @@ namespace Class_db_services
             radio_channel_5 = k.EMPTY;
             radio_channel_6 = k.EMPTY;
             primary_response_area = k.EMPTY;
+            short_name = k.EMPTY;
             var result = false;
             Open();
             MySqlDataReader dr = new MySqlCommand("select * from service where CAST(affiliate_num AS CHAR) = '" + affiliate_num + "'", this.connection).ExecuteReader();
@@ -691,6 +693,7 @@ namespace Class_db_services
                 radio_channel_5 = dr["radio_channel_5"].ToString();
                 radio_channel_6 = dr["radio_channel_6"].ToString();
                 primary_response_area = dr["primary_response_area"].ToString();
+                short_name = dr["short_name"].ToString();
                 result = true;
               }
             dr.Close();
@@ -912,7 +915,8 @@ namespace Class_db_services
           string radio_channel_4,
           string radio_channel_5,
           string radio_channel_6,
-          string primary_response_area
+          string primary_response_area,
+          string short_name
           )
           {
           var childless_field_assignments_clause = " name = NULLIF('" + name + "','')"
@@ -1025,7 +1029,9 @@ namespace Class_db_services
           + " , radio_channel_4 = NULLIF('" + radio_channel_4 +  "', '')"
           + " , radio_channel_5 = NULLIF('" + radio_channel_5 +  "', '')"
           + " , radio_channel_6 = NULLIF('" + radio_channel_6 +  "', '')"
-          + " , primary_response_area = NULLIF('" + primary_response_area + "','')";
+          + " , primary_response_area = NULLIF('" + primary_response_area + "','')"
+          + " , short_name = NULLIF('" + short_name + "','')"
+          ;
           db_trail.MimicTraditionalInsertOnDuplicateKeyUpdate
             (
             target_table_name:"service",
