@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="biz\Class_biz_accounts.cs" />
     <Compile Include="biz\Class_biz_appropriations.cs" />
+    <Compile Include="biz\Class_biz_associates.cs" />
     <Compile Include="biz\Class_biz_coned_offerings.cs" />
     <Compile Include="biz\Class_biz_counties.cs" />
     <Compile Include="biz\Class_biz_emsof_requests.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="db\Class_db.cs" />
     <Compile Include="db\Class_db_accounts.cs" />
     <Compile Include="db\Class_db_appropriations.cs" />
+    <Compile Include="db\Class_db_associates.cs" />
     <Compile Include="db\Class_db_coned_offerings.cs" />
     <Compile Include="db\Class_db_coned_offering_statuses.cs" />
     <Compile Include="db\Class_db_counties.cs" />
