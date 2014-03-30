@@ -60,6 +60,15 @@ namespace Class_biz_notifications
             BindDirectToListControl(target, unselected_literal, k.EMPTY);
         }
 
+    public void BindDirectToListControlForMember
+      (
+      string member_id,
+      object target
+      )
+      {
+      db_notifications.BindDirectToListControlForMember(member_id,target);
+      }
+
     private delegate string IssueCorruptionNotification_Merge(string s);
     internal void IssueCorruptionNotification(string user_kind, string detection_phase)
       {

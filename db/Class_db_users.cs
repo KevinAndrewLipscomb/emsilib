@@ -228,7 +228,8 @@ namespace Class_db_users
         +   " join role_member_map using (member_id)"
         +   " join role_privilege_map using (role_id)"
         +   " join privilege on (privilege.id=role_privilege_map.privilege_id)"
-        + " where user_id = '" + id + "'",
+        + " where user_id = '" + id + "'"
+        + " order by name",
         connection
         )
         .ExecuteReader();
@@ -237,7 +238,7 @@ namespace Class_db_users
         privilege_spec = dr["name"].ToString();
         region_code = dr["region_code"].ToString();
         service_id = dr["service_id"].ToString();
-        if (region_code.Length  + service_id.Length > 0)
+        if (region_code.Length + service_id.Length == 0)
           {
           privilege_spec += "/GENERALLY";
           }
