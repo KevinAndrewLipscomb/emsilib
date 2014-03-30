@@ -72,6 +72,11 @@ namespace Class_biz_user
       return result;
       }
 
+    public string[] RolesForDisplay()
+      {
+      return db_user.RolesForDisplayOf(IdNum());
+      }
+
     }
 
   }
