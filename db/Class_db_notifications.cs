@@ -1,28 +1,26 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-
-
-using System.Web.UI.WebControls;
 using Class_db;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.Web.UI.WebControls;
+
 namespace Class_db_notifications
 {
+
     public class TClass_db_notifications: TClass_db
     {
+
         private string tier_2_match_field = String.Empty;
         private string tier_3_match_field = String.Empty;
+
         //Constructor  Create()
         public TClass_db_notifications() : base()
         {
-            // TODO: Add any constructor code here
             tier_2_match_field = ConfigurationManager.AppSettings["tier_2_match_field"];
             tier_3_match_field = ConfigurationManager.AppSettings["tier_3_match_field"];
         }
+
         public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
         {
             MySqlDataReader dr;
@@ -55,34 +53,6 @@ namespace Class_db_notifications
         {
             BindDirectToListControl(target, unselected_literal, k.EMPTY);
         }
-
-    public void BindDirectToListControlForMember
-      (
-      string member_id,
-      object target
-      )
-      {
-      ((target) as ListControl).Items.Clear();
-      Open();
-      var dr = new MySqlCommand
-        (
-        "select DISTINCT notification.id as notification_id"
-        + " , name as notification_name"
-        + " from notification"
-        +   " join role_notification_map on (role_notification_map.notification_id=notification.id)"
-        +   " join role_member_map using (role_id)"
-        + " where member_id = '" + member_id + "'"
-        + " order by notification_name",
-        connection
-        )
-        .ExecuteReader();
-      while (dr.Read())
-        {
-        ((target) as ListControl).Items.Add(new ListItem(dr["notification_name"].ToString(), dr["notification_id"].ToString()));
-        }
-      dr.Close();
-      Close();
-      }
 
         public string TargetOf(string name, string member_id)
         {

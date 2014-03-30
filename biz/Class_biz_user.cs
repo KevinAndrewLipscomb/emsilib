@@ -24,6 +24,21 @@ namespace Class_biz_user
       db_users = new TClass_db_users();
       }
 
+    public void BindNotificationsToBaseDataList(object target)
+      {
+      db_user.BindNotificationsToBaseDataList(IdNum(),target);
+      }
+
+    public void BindPrivilegesToBaseDataList(object target)
+      {
+      db_user.BindPrivilegesToBaseDataList(IdNum(),target);
+      }
+
+    public void BindRolesToBaseDataList(object target)
+      {
+      db_user.BindRolesToBaseDataList(IdNum(),target);
+      }
+
     public string EmailAddress()
       {
       return db_users.PasswordResetEmailAddressOfId(IdNum());
@@ -70,11 +85,6 @@ namespace Class_biz_user
           }
         }
       return result;
-      }
-
-    public string[] RolesForDisplay()
-      {
-      return db_user.RolesForDisplayOf(IdNum());
       }
 
     }
