@@ -50,7 +50,7 @@ namespace Class_db_user
       Open();
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
-        "select privilege.name as privilege"
+        "select distinct privilege.name as privilege"
         + " , IF(service_id is not null,4,IF(region_code is not null,2,1)) as tier"
         + " , IF(service_id is not null,concat('service `',service.name,'`'),IF(region_code is not null,concat('region `',region_code_name_map.name,'`'),'')) as scope"
         + " from user"
@@ -78,7 +78,7 @@ namespace Class_db_user
       Open();
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
-        "select notification.name as notification"
+        "select distinct notification.name as notification"
         + " , IF(service_id is not null,4,IF(region_code is not null,2,1)) as tier"
         + " , IF(service_id is not null,concat('service `',service.name,'`'),IF(region_code is not null,concat('region `',region_code_name_map.name,'`'),'')) as scope"
         + " from user"
