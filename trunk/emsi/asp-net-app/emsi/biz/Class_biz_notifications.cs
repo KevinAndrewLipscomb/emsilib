@@ -232,6 +232,7 @@ namespace Class_biz_notifications
     public void IssueForDeploymentMemberDemobilization
       (
       string target,
+      string actual_vs_drill_indicator,
       string deployment_name
       )
       {
@@ -239,6 +240,7 @@ namespace Class_biz_notifications
         {
         return s
           .Replace("<application_name/>",application_name)
+          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
           .Replace("<deployment_name/>",deployment_name)
           ;
         };
@@ -262,6 +264,7 @@ namespace Class_biz_notifications
     public void IssueForDeploymentMemberMobilization
       (
       string target,
+      string actual_vs_drill_indicator,
       string deployment_name
       )
       {
@@ -269,6 +272,7 @@ namespace Class_biz_notifications
         {
         return s
           .Replace("<application_name/>",application_name)
+          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
           .Replace("<deployment_name/>",deployment_name)
           ;
         };
