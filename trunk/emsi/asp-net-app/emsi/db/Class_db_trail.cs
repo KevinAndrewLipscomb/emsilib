@@ -67,7 +67,7 @@ namespace Class_db_trail
       + DELIMITER
       + " call " + procedure_name + "()"
       + DELIMITER
-      + " drop procedure " + procedure_name + "";
+      + " drop procedure if exists " + procedure_name;
       var my_sql_script = new MySqlScript();
       my_sql_script.Connection = connection;
       my_sql_script.Delimiter = DELIMITER;
