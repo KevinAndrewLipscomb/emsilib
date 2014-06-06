@@ -49,7 +49,7 @@ namespace Class_db_trail
       //
       {
       const string DELIMITER = "~";
-      var procedure_name = "MTIODKU_" + DateTime.Now.Ticks.ToString("D19");
+      var procedure_name = "MTIODKU_" + ConfigurationManager.AppSettings["application_name"] + "_" + DateTime.Now.Ticks.ToString("D19");
       var code = "/* DELIMITER '" + DELIMITER + "' */"
       + " drop procedure if exists " + procedure_name
       + DELIMITER
