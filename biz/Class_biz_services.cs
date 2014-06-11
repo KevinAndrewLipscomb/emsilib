@@ -76,10 +76,16 @@ namespace Class_biz_services
             return result;
         }
 
-        public void BindAnnualRespondents(string sort_order, bool be_order_ascending, object target)
-        {
-            db_services.BindAnnualRespondents(sort_order, be_order_ascending, target);
-        }
+        public void BindAnnualRespondents
+          (
+          string sort_order,
+          bool be_order_ascending,
+          object target,
+          string region_code
+          )
+          {
+          db_services.BindAnnualRespondents(sort_order, be_order_ascending, target, region_code);
+          }
 
         public void BindListControl(string county_user_id, object target, bool be_unfiltered, bool be_inclusive_of_invalids_and_nonparticipants)
         {
