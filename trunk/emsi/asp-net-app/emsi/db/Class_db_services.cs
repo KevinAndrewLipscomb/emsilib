@@ -120,8 +120,14 @@ namespace Class_db_services
             return result;
         }
 
-        public void BindAnnualRespondents(string sort_order, bool be_order_ascending, object target)
-        {
+        public void BindAnnualRespondents
+          (
+          string sort_order,
+          bool be_order_ascending,
+          object target,
+          string region_code
+          )
+          {
             if (be_order_ascending)
             {
                 sort_order = sort_order.Replace("%", " asc");
@@ -144,13 +150,15 @@ namespace Class_db_services
               + " from service"
               +   " join service_user using (id)"
               +   " join county_code_name_map on (county_code_name_map.code=service.county_code)"
+              +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+              + " WHERE region_code = '" + region_code + "'"
               + " order by " + sort_order,
               connection
               )
               .ExecuteReader();
             ((target) as BaseDataList).DataBind();
             Close();
-        }
+          }
 
         public void BindListControl(string county_user_id, object target, bool be_unfiltered, bool be_inclusive_of_invalids_and_nonparticipants)
         {
