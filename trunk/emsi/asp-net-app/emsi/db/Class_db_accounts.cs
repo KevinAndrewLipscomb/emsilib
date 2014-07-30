@@ -199,14 +199,13 @@ namespace Class_db_accounts
           return (email_target.Length > 0 ? email_target.Substring(0, email_target.Length - 1) : email_target);
           }
 
-        public bool Exists(string user_kind, string user_id, string encoded_password)
-        {
-            bool result;
-            this.Open();
-            result = null != new MySqlCommand("SELECT 1 FROM " + user_kind + "_user" + " where id = " + user_id + " and encoded_password_hash = SHA1('" + encoded_password + "')", this.connection).ExecuteScalar();
-            this.Close();
-            return result;
-        }
+    public bool Exists(string user_kind, string user_id, string encoded_password)
+      {
+      Open();
+      var exists = (null != new MySqlCommand("SELECT 1 FROM " + user_kind + "_user" + " where id = '" + user_id + "' and encoded_password_hash = SHA1('" + encoded_password + "')",connection).ExecuteScalar());
+      Close();
+      return exists;
+      }
 
         internal void SetPasswordResetEmailAddress
           (
