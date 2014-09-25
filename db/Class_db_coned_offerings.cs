@@ -822,11 +822,11 @@ namespace Class_db_coned_offerings
         Open();
         foreach (var rec in recs)
           {
-          if ((rec as ClassInfoClass).SponsorID > 0)
+          if (((rec as ClassInfoClass).CourseNumber > 0) && ((rec as ClassInfoClass).ClassNumber > 0) && ((rec as ClassInfoClass).SponsorID > 0))
             {
             if (((rec as ClassInfoClass).CourseTitle == null) || ((rec as ClassInfoClass).CourseTitle.Length == 0))
               {
-              course_title = "[Course " + k.Safe((rec as ClassInfoClass).CourseNumber.ToString(),k.safe_hint_type.NUM).PadLeft(6,'0') + " title unavailable possibly due to punctuation]";
+              course_title = "[Course " + k.Safe((rec as ClassInfoClass).CourseNumber.ToString(),k.safe_hint_type.NUM).PadLeft(6,'0') + " TITLE unavailable possibly due to punctuation]";
               }
             else
               {
