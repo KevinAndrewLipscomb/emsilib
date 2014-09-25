@@ -826,7 +826,7 @@ namespace Class_db_coned_offerings
             {
             if (((rec as ClassInfoClass).CourseTitle == null) || ((rec as ClassInfoClass).CourseTitle.Length == 0))
               {
-              course_title = "[Course " + k.Safe((rec as ClassInfoClass).CourseNumber.ToString(),k.safe_hint_type.NUM).PadLeft(6,'0') + " TITLE unavailable possibly due to punctuation]";
+              course_title = "Course " + k.Safe((rec as ClassInfoClass).CourseNumber.ToString(),k.safe_hint_type.NUM).PadLeft(6,'0') + " [Title unavailable possibly due to punctuation]";
               }
             else
               {
