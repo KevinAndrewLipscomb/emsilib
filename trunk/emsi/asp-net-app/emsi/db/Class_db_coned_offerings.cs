@@ -813,6 +813,7 @@ namespace Class_db_coned_offerings
         var be_production_instance = !(application_name.ToLower().EndsWith("_d") || application_name.ToLower().EndsWith("_x"));
         //
         MySqlTransaction transaction;
+        var course_title = k.EMPTY;
         var class_number = k.EMPTY;
         var public_contact_email = k.EMPTY;
         var location_email = k.EMPTY;
@@ -821,8 +822,16 @@ namespace Class_db_coned_offerings
         Open();
         foreach (var rec in recs)
           {
-          if (((rec as ClassInfoClass).CourseTitle != null) && ((rec as ClassInfoClass).SponsorID > 0))
+          if ((rec as ClassInfoClass).SponsorID > 0)
             {
+            if (((rec as ClassInfoClass).CourseTitle == null) || ((rec as ClassInfoClass).CourseTitle.Length == 0))
+              {
+              course_title = "[Course " + k.Safe((rec as ClassInfoClass).CourseNumber.ToString(),k.safe_hint_type.NUM).PadLeft(6,'0') + " title unavailable possibly due to punctuation]";
+              }
+            else
+              {
+              course_title = k.Safe((rec as ClassInfoClass).CourseTitle,k.safe_hint_type.PUNCTUATED).Trim();
+              }
             class_number = k.Safe((rec as ClassInfoClass).ClassNumber.ToString(),k.safe_hint_type.NUM).PadLeft(14,'0');
             //
             public_contact_email = k.EMPTY;
@@ -878,7 +887,7 @@ namespace Class_db_coned_offerings
             + " , location_email = NULLIF('" + location_email + "','')"
             + " , sponsor_name = NULLIF('" + ((rec as ClassInfoClass).SponsorName == null ? k.EMPTY : k.Safe((rec as ClassInfoClass).SponsorName,k.safe_hint_type.ORG_NAME).Trim()) + "','')"
             + " , courses_course_number = NULLIF('" + (rec as ClassInfoClass).CourseNumber + "','')"
-            + " , course_title = NULLIF('" + k.Safe((rec as ClassInfoClass).CourseTitle,k.safe_hint_type.PUNCTUATED).Trim() + "','')"
+            + " , course_title = '" + course_title + "'"
             + " , fr_med_trauma_hours = NULLIF('" + (rec as ClassInfoClass).FR_MedTrauma_Hrs + "','')"
             + " , fr_other_hours = NULLIF('" + (rec as ClassInfoClass).FR_Other_Hrs + "','')"
             + " , emt_med_trauma_hours = NULLIF('" + (rec as ClassInfoClass).EMT_MedTrauma_Hrs + "','')"
