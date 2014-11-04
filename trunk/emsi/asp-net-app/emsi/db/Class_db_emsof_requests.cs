@@ -513,14 +513,6 @@ namespace Class_db_emsof_requests
         public void BindValuesToRegion(string sort_order, bool be_order_ascending, object target)
         {
             Open();
-            if (be_order_ascending)
-            {
-                sort_order = sort_order.Replace("%", " asc");
-            }
-            else
-            {
-                sort_order = sort_order.Replace("%", " desc");
-            }
             ((target) as GridView).DataSource = new MySqlCommand
               (
               "SELECT designator as fiscal_year"
@@ -534,7 +526,7 @@ namespace Class_db_emsof_requests
               +   " JOIN request_status_code_description_map ON (request_status_code_description_map.code=emsof_request_master.status_code)"
               + " WHERE request_status_code_description_map.description in ('Reimbursement being prepared','Reimbursement issued','Deployed','Archived')"
               + " GROUP BY fiscal_year.designator"
-              + " order by " + sort_order,
+              + " order by " + sort_order.Replace("%",(be_order_ascending ? " asc" : " desc")),
               connection
               )
               .ExecuteReader();
@@ -544,18 +536,28 @@ namespace Class_db_emsof_requests
 
         public void BindValuesToServices(string sort_order, bool be_order_ascending, object target)
         {
-            this.Open();
-            if (be_order_ascending)
-            {
-                sort_order = sort_order.Replace("%", " asc");
-            }
-            else
-            {
-                sort_order = sort_order.Replace("%", " desc");
-            }
-            ((target) as GridView).DataSource = new MySqlCommand("SELECT" + " designator as fiscal_year" + " ,sum(actual_subtotal_cost) as costs" + " ,sum(actual_emsof_ante) as emsof" + " ,sum(actual_subtotal_cost - actual_emsof_ante)" + "   as service_contributions" + " FROM emsof_request_detail" + " JOIN emsof_request_master on" + " (emsof_request_master.id=emsof_request_detail.master_id)" + " JOIN county_dictated_appropriation ON" + " (county_dictated_appropriation.id=emsof_request_detail.master_id)" + " JOIN region_dictated_appropriation ON" + " (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " JOIN state_dictated_appropriation ON" + " (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)" + " JOIN fiscal_year ON" + " (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)" + " WHERE emsof_request_master.status_code in" + " (10,13,14)" + " GROUP BY fiscal_year.designator" + " order by " + sort_order, this.connection).ExecuteReader();
+            Open();
+            ((target) as GridView).DataSource = new MySqlCommand
+              (
+              "SELECT designator as fiscal_year"
+              + " , sum(actual_subtotal_cost) as costs"
+              + " , sum(actual_emsof_ante) as emsof"
+              + " , sum(actual_subtotal_cost - actual_emsof_ante) as service_contributions"
+              + " FROM emsof_request_detail"
+              +   " JOIN emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)"
+              +   " JOIN county_dictated_appropriation ON (county_dictated_appropriation.id=emsof_request_detail.master_id)"
+              +   " JOIN region_dictated_appropriation ON (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)"
+              +   " JOIN state_dictated_appropriation ON (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+              +   " JOIN fiscal_year ON (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
+              +   " JOIN request_status_code_description_map ON (request_status_code_description_map.code=emsof_request_master.status_code)"
+              + " WHERE request_status_code_description_map.description in ('Reimbursement being prepared','Reimbursement issued','Deployed','Archived')"
+              + " GROUP BY fiscal_year.designator"
+              + " order by " + sort_order.Replace("%",(be_order_ascending ? " asc" : " desc")),
+              connection
+              )
+              .ExecuteReader();
             ((target) as GridView).DataBind();
-            this.Close();
+            Close();
         }
 
         public DateTime CountyApprovalTimestampOf(string master_id)
