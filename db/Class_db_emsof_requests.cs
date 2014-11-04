@@ -531,7 +531,8 @@ namespace Class_db_emsof_requests
               +   " JOIN region_dictated_appropriation ON (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)"
               +   " JOIN state_dictated_appropriation ON (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
               +   " JOIN fiscal_year ON (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
-              + " WHERE emsof_request_master.status_code in (10,13,14)"
+              +   " JOIN request_status_code_description_map ON (request_status_code_description_map.code=emsof_request_master.status_code)"
+              + " WHERE request_status_code_description_map.description in ('Reimbursement being prepared','Reimbursement issued','Deployed','Archived')"
               + " GROUP BY fiscal_year.designator"
               + " order by " + sort_order,
               connection
