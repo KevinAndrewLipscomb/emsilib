@@ -1,6 +1,7 @@
 using Class_biz_milestones;
 using Class_db_appropriations;
 using Class_db_services;
+using kix;
 using System.Collections;
 using System.Web;
 
@@ -81,10 +82,15 @@ namespace Class_biz_services
           string sort_order,
           bool be_order_ascending,
           object target,
-          string region_code
+          string region_code,
+          string county_code
           )
           {
-          db_services.BindAnnualRespondents(sort_order, be_order_ascending, target, region_code);
+          db_services.BindAnnualRespondents(sort_order, be_order_ascending, target, region_code, county_code);
+          }
+        public void BindAnnualRespondents(string sort_order, bool be_order_ascending, object target, string region_code)
+          {
+          BindAnnualRespondents(sort_order,be_order_ascending,target,region_code,county_code:k.EMPTY);
           }
 
         public void BindListControl(string county_user_id, object target, bool be_unfiltered, bool be_inclusive_of_invalids_and_nonparticipants)
