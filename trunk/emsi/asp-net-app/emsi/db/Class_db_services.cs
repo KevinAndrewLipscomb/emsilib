@@ -125,17 +125,10 @@ namespace Class_db_services
           string sort_order,
           bool be_order_ascending,
           object target,
-          string region_code
+          string region_code,
+          string county_code
           )
           {
-            if (be_order_ascending)
-            {
-                sort_order = sort_order.Replace("%", " asc");
-            }
-            else
-            {
-                sort_order = sort_order.Replace("%", " desc");
-            }
             Open();
             ((target) as BaseDataList).DataSource = new MySqlCommand
               (
@@ -151,13 +144,19 @@ namespace Class_db_services
               +   " join service_user using (id)"
               +   " join county_code_name_map on (county_code_name_map.code=service.county_code)"
               +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+              +   (county_code.Length > 0 ? " left join emsof_extra_service_county_dependency on (emsof_extra_service_county_dependency.service_id=service.id)" : k.EMPTY)
               + " WHERE region_code = '" + region_code + "'"
-              + " order by " + sort_order,
+              +     (county_code.Length > 0 ? " and '" + county_code + "' in (service.county_code,emsof_extra_service_county_dependency.county_code)" : k.EMPTY)
+              + " order by " + sort_order.Replace("%",(be_order_ascending ? " asc" : " desc")),
               connection
               )
               .ExecuteReader();
             ((target) as BaseDataList).DataBind();
             Close();
+          }
+        public void BindAnnualRespondents(string sort_order, bool be_order_ascending, object target, string region_code)
+          {
+          BindAnnualRespondents(sort_order,be_order_ascending,target,region_code,county_code:k.EMPTY);
           }
 
         public void BindListControl(string county_user_id, object target, bool be_unfiltered, bool be_inclusive_of_invalids_and_nonparticipants)
