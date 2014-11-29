@@ -154,6 +154,18 @@ namespace Class_biz_coned_offerings
       db_coned_offerings.BindDirectToListControl(target);
       }
 
+    public void BindDiscardedRosters
+      (
+      string region_code,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target,
+      string filter
+      )
+      {
+      db_coned_offerings.BindDiscardedRosters(region_code,sort_order,be_sort_order_ascending,target,filter);
+      }
+
     public string ClassIdOf(object summary)
       {
       return db_coned_offerings.ClassIdOf(summary);

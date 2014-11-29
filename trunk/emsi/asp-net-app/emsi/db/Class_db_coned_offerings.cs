@@ -334,6 +334,44 @@ namespace Class_db_coned_offerings
       Close();
       }
 
+    internal void BindDiscardedRosters
+      (
+      string region_code,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target,
+      string filter
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select coned_offering.id as id"
+        + " , class_number"
+        + " , IFNULL(teaching_entity.short_name,teaching_entity.name) as sponsor"
+        + " , course_title"
+        + " , location"
+        + " , CONCAT(start_date_time,' ',IFNULL(start_time,'')) as start"
+        + " , CONCAT(end_date_time,' ',IFNULL(end_time,'')) as end"
+        + " , REPLACE(REPLACE(coned_offering_status.description,'SPONSOR_SAYS_',''),'_',' ') as disposition"
+        + " from coned_offering"
+        +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
+        +   " join county_code_name_map on (county_code_name_map.emsrs_code=coned_offering.class_county_code)"
+        +   " join county_region_map on (county_region_map.county_code=county_code_name_map.code)"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
+        +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
+        + " where region_code_name_map.code = '" + region_code + "'"
+        +   " and county_region_map.region_code = '" + region_code + "'"
+        +   " and coned_offering_status.description like 'SPONSOR_SAYS_%'"
+        +   (filter == k.EMPTY ? k.EMPTY : " and YEAR(datetime_discarded) = YEAR(CURDATE())")
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
     internal string ClassIdOf(object summary)
       {
       return (summary as coned_offering_summary).class_id;
@@ -963,21 +1001,21 @@ namespace Class_db_coned_offerings
     internal void MarkSponsorSaysAlreadySubmitted(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_ALREADY_SUBMITTED') where id = '" + id + "'",connection).ExecuteNonQuery();
+      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_ALREADY_SUBMITTED'), datetime_discarded = NOW() where id = '" + id + "'",connection).ExecuteNonQuery();
       Close();
       }
 
     internal void MarkSponsorSaysCanceled(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_CANCELED') where id = '" + id + "'",connection).ExecuteNonQuery();
+      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_CANCELED'), datetime_discarded = NOW() where id = '" + id + "'",connection).ExecuteNonQuery();
       Close();
       }
 
     internal void MarkSponsorSaysRanNoCe(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_RAN_NO_CE') where id = '" + id + "'",connection).ExecuteNonQuery();
+      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_RAN_NO_CE'), datetime_discarded = NOW() where id = '" + id + "'",connection).ExecuteNonQuery();
       Close();
       }
 
