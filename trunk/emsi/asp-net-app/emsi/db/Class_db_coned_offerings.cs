@@ -363,7 +363,7 @@ namespace Class_db_coned_offerings
         + " where region_code_name_map.code = '" + region_code + "'"
         +   " and county_region_map.region_code = '" + region_code + "'"
         +   " and coned_offering_status.description like 'SPONSOR_SAYS_%'"
-        +   (filter == k.EMPTY ? k.EMPTY : " and YEAR(datetime_discarded) = YEAR(CURDATE())")
+        +   (filter == k.EMPTY ? k.EMPTY : " and YEAR(CURDATE()) in (YEAR(datetime_discarded),YEAR(start_date_time),YEAR(end_date_time))")
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
         )
