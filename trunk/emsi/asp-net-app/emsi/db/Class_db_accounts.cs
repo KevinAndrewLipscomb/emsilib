@@ -1,15 +1,15 @@
-using MySql.Data.MySqlClient;
-using kix;
-using System;
-
-using System.Web.UI.WebControls;
 using Class_db;
 using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System.Web.UI.WebControls;
+
 namespace Class_db_accounts
 {
     public class TClass_db_accounts: TClass_db
     {
         private TClass_db_trail db_trail = null;
+
         //Constructor  Create()
         public TClass_db_accounts() : base()
         {
@@ -186,7 +186,8 @@ namespace Class_db_accounts
             +   " join regional_staffer_group on (regional_staffer_group.id=regional_staffer_role.group_id)"
             +   " join regional_staffer on (regional_staffer.id=regional_staffer_user.id)"
             + " where regional_staffer.region_code = '" + region_code + "'"
-            +   " and regional_staffer_group.name = '" + role + "'",
+            +   " and regional_staffer_group.name = '" + role + "'"
+            +   " and be_active",
             connection
             )
             .ExecuteReader();
