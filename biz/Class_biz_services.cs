@@ -685,6 +685,15 @@ namespace Class_biz_services
           db_appropriations.ApplyToExisting(affiliate_num, be_distressed);
           }
 
+    public void SetShortName
+      (
+      string id,
+      string value
+      )
+      {
+      db_services.SetShortName(id,value);
+      }
+
     public void SetStrikeTeamParticipation
       (
       string id,
