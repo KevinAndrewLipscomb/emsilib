@@ -213,7 +213,9 @@ namespace Class_db_services
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
         "select service.id as id"
-        + " , service.short_name as name"
+        + " , affiliate_num"
+        + " , service.short_name as short_name"
+        + " , service.name as name"
         + " , IF(be_strike_team_participant,'YES','no') as be_strike_team_participant"
         + " , (select count(practitioner_id) from strike_team_roster where service_id = service.id) as num_members"
         + " , (select count(id) from vehicle where service_id = service.id) as num_vehicles"
@@ -1064,6 +1066,17 @@ namespace Class_db_services
             childless_field_assignments_clause:childless_field_assignments_clause
             );
           }
+
+    internal void SetShortName
+      (
+      string id,
+      string value
+      )
+      {
+      Open();
+      new MySqlCommand("update service set short_name = '" + value + "' where id = '" + id + "'",connection).ExecuteNonQuery();
+      Close();
+      }
 
     internal void SetStrikeTeamParticipation
       (
