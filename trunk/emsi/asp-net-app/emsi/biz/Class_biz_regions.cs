@@ -111,6 +111,11 @@ namespace Class_biz_regions
       return db_regions.CodeOf(summary);
       }
 
+    public string CodeOfEmsrsCode(string emsrs_code)
+      {
+      return db_regions.CodeOfEmsrsCode(emsrs_code);
+      }
+
     public string ConedlinkEvalSummaryModeDescriptionOf(string code)
       {
       return db_regions.ConedlinkEvalSummaryModeDescriptionOf(code);
