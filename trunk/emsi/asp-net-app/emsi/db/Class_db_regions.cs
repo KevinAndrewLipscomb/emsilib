@@ -380,6 +380,19 @@ namespace Class_db_regions
       Close();
       }
 
+    public Queue<string> PacratSubscriberEmsrsCodeQ()
+      {
+      var pacrat_subscriber_emsrs_code_q = new Queue<string>();
+      Open();
+      var dr = new MySqlCommand("select emsrs_code from region_code_name_map where be_pacrat_subscriber",connection).ExecuteReader();
+      while (dr.Read())
+        {
+        pacrat_subscriber_emsrs_code_q.Enqueue(dr["emsrs_code"].ToString());
+        }
+      Close();
+      return pacrat_subscriber_emsrs_code_q;
+      }
+
     public Queue<string> SubscriberQ()
       {
       var subscriber_q = new Queue<string>();
