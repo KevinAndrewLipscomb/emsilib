@@ -1077,10 +1077,9 @@ namespace Class_biz_notifications
       string target,
       string deployment_name,
       string service_name,
-      string region_name,
       string actual_vs_drill_indicator,
       string supplemental_message,
-      string region_strike_team_manager_target
+      string deployment_coordinator_target
       )
       {
       IssueMobilizationAnnouncementEmail_Merge Merge = delegate (string s)
@@ -1090,10 +1089,9 @@ namespace Class_biz_notifications
           .Replace("<host_domain_name/>",host_domain_name)
           .Replace("<deployment_name/>",deployment_name)
           .Replace("<service_name/>",service_name)
-          .Replace("<region_name/>",region_name)
           .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
           .Replace("<supplemental_message/>",k.WrapText(supplemental_message,k.NEW_LINE + new string(Convert.ToChar(k.SPACE),6),Class_biz_notifications_Static.BreakChars,short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
-          .Replace("<region_strike_team_manager_target/>",region_strike_team_manager_target)
+          .Replace("<deployment_coordinator_target/>",deployment_coordinator_target)
           ;
         };
 
@@ -1107,7 +1105,7 @@ namespace Class_biz_notifications
         subject:Merge(template_reader.ReadLine()),
         message_string:Merge(template_reader.ReadToEnd()),
         be_html:false,
-        cc:region_strike_team_manager_target,
+        cc:deployment_coordinator_target,
         bcc:k.EMPTY,
         reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
         );
