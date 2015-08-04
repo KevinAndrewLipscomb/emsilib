@@ -386,12 +386,16 @@ namespace Class_db_members
       return max_spec_length;
       }
 
-        public void SetEmailAddress(string id, string email_address)
-        {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("UPDATE member" + " SET email_address = \"" + email_address + "\"" + " WHERE id = " + id), this.connection).ExecuteNonQuery();
-            this.Close();
-        }
+    public void SetEmailAddress
+      (
+      string id,
+      string email_address
+      )
+      {
+      Open();
+      new MySqlCommand(db_trail.Saved("UPDATE member SET email_address = '" + email_address + "' WHERE id = '" + id + "'"), connection).ExecuteNonQuery();
+      Close();
+      }
 
     public void SetFieldsNotImportedFromState
       (
