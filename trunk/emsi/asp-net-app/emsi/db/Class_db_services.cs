@@ -10,21 +10,22 @@ using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
 namespace Class_db_services
-{
-    public class TClass_db_services: TClass_db
+  {
+  public class TClass_db_services: TClass_db
     {
+
     private class service_summary
       {
       public string id;
       public string name;
       public string short_name;
       public string affiliate_num;
-      public bool be_strike_team_participant;
+      public string strike_team_participation_level_id;
       }
 
         private TClass_biz_notifications biz_notifications = null;
         private TClass_db_trail db_trail = null;
-        //Constructor  Create()
+
         public TClass_db_services() : base()
         {
             biz_notifications = new TClass_biz_notifications();
@@ -89,11 +90,6 @@ namespace Class_db_services
             return result;
         }
 
-        internal bool BeStrikeTeamParticipantOf(object summary)
-          {
-          return (summary as service_summary).be_strike_team_participant;
-          }
-
         public bool BeValidAndParticipating(string id)
         {
             bool result;
@@ -120,7 +116,7 @@ namespace Class_db_services
             return result;
         }
 
-        public void BindAnnualRespondents
+    public void BindAnnualRespondents
           (
           string sort_order,
           bool be_order_ascending,
@@ -216,7 +212,7 @@ namespace Class_db_services
         + " , affiliate_num"
         + " , service.short_name as short_name"
         + " , service.name as name"
-        + " , IF(be_strike_team_participant,'YES','no') as be_strike_team_participant"
+        + " , strike_team_participation_level.description as strike_team_participation"
         + " , (select count(practitioner_id) from strike_team_roster where service_id = service.id) as num_members"
         + " , (select count(id) from vehicle where service_id = service.id) as num_vehicles"
         + " , GROUP_CONCAT(email_address) as email_target"
@@ -228,8 +224,9 @@ namespace Class_db_services
         +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
         +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
         +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        +   " join strike_team_participation_level on (strike_team_participation_level.id=service.strike_team_participation_level_id)"
         + " where county_region_map.region_code = '" + region_code + "'"
-        +     (do_include_all_services ? k.EMPTY : " and be_strike_team_participant")
+        +     (do_include_all_services ? k.EMPTY : " and strike_team_participation_level.pecking_order > 0")
         + " group by service.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
@@ -258,8 +255,9 @@ namespace Class_db_services
         +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
         +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
         +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        +   " join strike_team_participation_level on (strike_team_participation_level.id=service.strike_team_participation_level_id)"
         + " where county_region_map.region_code = '" + region_code + "'"
-        +     " and be_strike_team_participant"
+        +     " and strike_team_participation_level.pecking_order > 0"
         + " group by service.id"
         + " order by service.name",
         connection
@@ -301,6 +299,22 @@ namespace Class_db_services
           ((target) as BaseDataList).DataBind();
           Close();
           }
+
+    internal void DeactivateAdHocServices(string region_code)
+      {
+      Open();
+      new MySqlCommand
+        (
+        "update service"
+        + " join county_region_map on (county_region_map.county_code=service.county_code)"
+        + " set strike_team_participation_level_id = (select id from strike_team_participation_level where description = 'None')"
+        + " where strike_team_participation_level_id = (select id from strike_team_participation_level where description = 'Ad-hoc')"
+        +   " and county_region_map.region_code = '" + region_code + "'",
+        connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
 
         public bool Delete(string affiliate_num)
         {
@@ -1081,11 +1095,11 @@ namespace Class_db_services
     internal void SetStrikeTeamParticipation
       (
       string id,
-      bool value
+      string level_id
       )
       {
       Open();
-      new MySqlCommand("update service set be_strike_team_participant = " + value.ToString() + " where id = '" + id + "'",connection).ExecuteNonQuery();
+      new MySqlCommand("update service set strike_team_participation_level_id = '" + level_id + "' where id = '" + id + "'",connection).ExecuteNonQuery();
       Close();
       }
 
@@ -1106,13 +1120,20 @@ namespace Class_db_services
       {
       var strike_team_participant_id_q = new Queue<string>();
       Open();
-      var dr = new MySqlCommand("select id from service where be_strike_team_participant",connection).ExecuteReader();
+      var dr = new MySqlCommand
+        ("select id from service join strike_team_participation_level on (strike_team_participation_level.id=service.strike_team_participation_level_id) where strike_team_participation_levelpecking_order > 0",connection)
+        .ExecuteReader();
       while (dr.Read())
         {
         strike_team_participant_id_q.Enqueue(dr["id"].ToString());
         }
       Close();
       return strike_team_participant_id_q;
+      }
+
+    internal string StrikeTeamParticipationLevelIdOf(object summary)
+      {
+      return (summary as service_summary).strike_team_participation_level_id;
       }
 
     internal object Summary(string id)
@@ -1125,7 +1146,7 @@ namespace Class_db_services
           "SELECT name"
           + " , short_name"
           + " , affiliate_num"
-          + " , be_strike_team_participant"
+          + " , strike_team_participation_level_id"
           + " FROM service"
           + " where id = '" + id + "'",
           connection
@@ -1139,7 +1160,7 @@ namespace Class_db_services
         name = dr["name"].ToString(),
         short_name = dr["short_name"].ToString(),
         affiliate_num = dr["affiliate_num"].ToString(),
-        be_strike_team_participant = (dr["be_strike_team_participant"].ToString() == "1")
+        strike_team_participation_level_id = dr["strike_team_participation_level_id"].ToString()
         };
       Close();
       return the_summary;
@@ -1163,4 +1184,4 @@ namespace Class_db_services
 
     } // end TClass_db_services
 
-}
+  }
