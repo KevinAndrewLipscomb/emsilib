@@ -1116,12 +1116,12 @@ namespace Class_db_services
       return (summary as service_summary).short_name;
       }
 
-    public Queue<string> StrikeTeamParticipantIdQ()
+    public Queue<string> StrikeTeamParticipantIdQ(string included_descriptions_csv_clause = "Standing")
       {
       var strike_team_participant_id_q = new Queue<string>();
       Open();
       var dr = new MySqlCommand
-        ("select id from service join strike_team_participation_level on (strike_team_participation_level.id=service.strike_team_participation_level_id) where strike_team_participation_levelpecking_order > 0",connection)
+        ("select id from service where strike_team_participation_level_id in (select id from strike_team_participation_level where description in ('" + included_descriptions_csv_clause + "'))",connection)
         .ExecuteReader();
       while (dr.Read())
         {
