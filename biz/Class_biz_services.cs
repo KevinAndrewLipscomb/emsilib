@@ -6,8 +6,8 @@ using System.Collections;
 using System.Web;
 
 namespace Class_biz_services
-{
-    public class TClass_biz_services
+  {
+  public class TClass_biz_services
     {
         private TClass_db_appropriations db_appropriations = null;
         private TClass_db_services db_services = null;
@@ -57,11 +57,6 @@ namespace Class_biz_services
             result = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator") || HttpContext.Current.User.IsInRole("emsof-planner");
             return result;
         }
-
-        public bool BeStrikeTeamParticipantOf(object summary)
-          {
-          return db_services.BeStrikeTeamParticipantOf(summary);
-          }
 
         public bool BeValidAndParticipating(string id)
         {
@@ -138,6 +133,11 @@ namespace Class_biz_services
       )
       {
       db_services.BindStrikeTeamMobilizationAnnouncementListControl(region_code,target);
+      }
+
+    public void DeactivateAdHocParticipants(string region_code)
+      {
+      db_services.DeactivateAdHocServices(region_code);
       }
 
         public bool Delete(string affiliate_num)
@@ -697,10 +697,10 @@ namespace Class_biz_services
     public void SetStrikeTeamParticipation
       (
       string id,
-      bool value
+      string level_id
       )
       {
-      db_services.SetStrikeTeamParticipation(id,value);
+      db_services.SetStrikeTeamParticipation(id,level_id);
       }
 
     public string ShortNameOf(string service_id)
@@ -711,6 +711,11 @@ namespace Class_biz_services
     internal string ShortNameOfSummary(object summary)
       {
       return db_services.ShortNameOfSummary(summary);
+      }
+
+    public string StrikeTeamParticipationLevelIdOf(object summary)
+      {
+      return db_services.StrikeTeamParticipationLevelIdOf(summary);
       }
 
         public object Summary(string id)
