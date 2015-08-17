@@ -36,24 +36,12 @@ namespace Class_biz_regions
     public void BindDirectToListControl
       (
       object target,
-      string unselected_literal,
-      string selected_value,
-      string application_filter
+      string unselected_literal = "-- region --",
+      string selected_value = k.EMPTY,
+      string application_filter = "conedlink"
       )
       {
       db_regions.BindDirectToListControl(target, unselected_literal, selected_value, application_filter);
-      }
-    public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
-      {
-      BindDirectToListControl(target, unselected_literal, selected_value, application_filter:"conedlink");
-      }
-    public void BindDirectToListControl(object target, string unselected_literal)
-      {
-      BindDirectToListControl(target, unselected_literal, k.EMPTY);
-      }
-    public void BindDirectToListControl(object target)
-      {
-      BindDirectToListControl(target, "-- region --");
       }
 
     public void BindEmsrsToListControl
