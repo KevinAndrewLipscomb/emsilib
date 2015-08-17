@@ -50,7 +50,7 @@ namespace Class_biz_notifications
             db_notifications.BindDirectToListControl(target, unselected_literal, selected_value);
         }
 
-        public void BindDirectToListControl(object target)
+    public void BindDirectToListControl(object target)
         {
             BindDirectToListControl(target, "-- Notification --");
         }
@@ -530,6 +530,68 @@ namespace Class_biz_notifications
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], email_address, Merge(template_reader.ReadLine()), Merge(template_reader.ReadToEnd()));
             template_reader.Close();
         }
+
+    private delegate string IssueForMemberAdded_Merge(string s);
+    internal void IssueForMemberAdded
+      (
+      string member_id,
+      string last_name,
+      string first_name,
+      string middle_initial,
+      string practitioner_level_short_description,
+      string regional_council_name,
+      DateTime birth_date,
+      string email_address,
+      string residence_county_name,
+      string street_address_1,
+      string street_address_2,
+      string city_state_zip
+      )
+      {
+      var actor = k.EMPTY;
+      var actor_email_address = k.EMPTY;
+      var actor_member_id = k.EMPTY;
+
+      IssueForMemberAdded_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>", application_name)
+          .Replace("<host_domain_name/>", host_domain_name)
+          .Replace("<actor/>", actor)
+          .Replace("<actor_email_address/>", actor_email_address)
+          .Replace("<first_name/>", first_name)
+          .Replace("<last_name/>", last_name)
+          .Replace("<practitioner_level/>", practitioner_level_short_description)
+          .Replace("<region_name/>", regional_council_name)
+          .Replace("<birth_date/>", birth_date.ToString("yyyy-MM-dd"))
+          .Replace("<email_address/>", email_address)
+          .Replace("<residence_county_name/>", residence_county_name)
+          .Replace("<street_address_1/>", street_address_1)
+          .Replace("<street_address_2/>", street_address_2)
+          .Replace("<city_state_zip/>", city_state_zip)
+          ;
+        };
+
+      var biz_members = new TClass_biz_members();
+      var biz_user = new TClass_biz_user();
+      var biz_users = new TClass_biz_users();
+      actor_member_id = biz_members.IdOfUserId(biz_user.IdNum());
+      actor = biz_user.Roles()[0] + k.SPACE + biz_members.FirstNameOfMemberId(actor_member_id) + k.SPACE + biz_members.LastNameOfMemberId(actor_member_id);
+      actor_email_address = biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum());
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/member_added.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:email_address + k.COMMA + actor_email_address + k.COMMA + db_notifications.TargetOf("member-added",member_id),
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:actor_email_address
+        );
+      template_reader.Close();
+      }
 
         private delegate string IssueForMembershipEstablishmentBlocked_Merge(string s);
         public void IssueForMembershipEstablishmentBlocked

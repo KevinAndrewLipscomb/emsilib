@@ -1,3 +1,4 @@
+using Class_biz_notifications;
 using Class_db_members;
 using kix;
 using System;
@@ -8,31 +9,68 @@ namespace Class_biz_members
   public class TClass_biz_members
     {
 
+    private TClass_biz_notifications biz_notifications = null;
     private TClass_db_members db_members = null;
 
     public TClass_biz_members() : base()
       {
+      biz_notifications = new TClass_biz_notifications();
       db_members = new TClass_db_members();
       }
 
-        public bool Add()
+    public bool Add
+      (
+      string last_name,
+      string first_name,
+      string middle_initial,
+      string practitioner_level_id,
+      string practitioner_level_short_description,
+      string regional_council_code,
+      string regional_council_name,
+      DateTime birth_date,
+      string email_address,
+      string residence_county_code,
+      string residence_county_name,
+      string street_address_1,
+      string street_address_2,
+      string city_state_zip
+      )
+      {
+      var add = false;
+      if (!db_members.BeKnown(first_name, last_name, birth_date))
         {
-            bool result;
-            result = false;
-            // if not db_members.BeKnown(first_name,last_name,cad_num) then begin
-            // db_members.Add
-            // (
-            // attributes..
-            // );
-            // biz_notifications.IssueForMemberAdded
-            // (
-            // attributes..
-            // );
-            // Add := TRUE;
-            // end;
-
-            return result;
+        biz_notifications.IssueForMemberAdded
+          (
+          member_id:db_members.IdOfMemberAdded
+            (
+            last_name:last_name,
+            first_name:first_name,
+            middle_initial:middle_initial,
+            level_id:practitioner_level_id,
+            regional_council_code:regional_council_code,
+            birth_date:birth_date,
+            email_address:email_address,
+            residence_county_code:residence_county_code,
+            street_address_1:street_address_1,
+            street_address_2:street_address_2,
+            city_state_zip:city_state_zip
+            ),
+          last_name:last_name,
+          first_name:first_name,
+          middle_initial:middle_initial,
+          practitioner_level_short_description:practitioner_level_short_description,
+          regional_council_name:regional_council_name,
+          birth_date:birth_date,
+          email_address:email_address,
+          residence_county_name:residence_county_name,
+          street_address_1:street_address_1,
+          street_address_2:street_address_2,
+          city_state_zip:city_state_zip
+          );
+        add = true;
         }
+      return add;
+      }
 
         public bool BeRoleHolderBySharedSecret
           (
@@ -178,7 +216,7 @@ namespace Class_biz_members
         );
       }
 
-        public string IdOfUserId(string user_id)
+    public string IdOfUserId(string user_id)
         {
             string result;
             result = db_members.IdOfUserId(user_id);

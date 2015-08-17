@@ -30,7 +30,21 @@ namespace Class_db_members
       db_trail = new TClass_db_trail();
       }
 
-        internal bool BeRoleHolderBySharedSecret
+    internal bool BeKnown
+      (
+      string first_name,
+      string last_name,
+      DateTime birth_date
+      )
+      {
+      Open();
+      var be_known_obj = new MySqlCommand("select 1 from member where last_name = '" + last_name + "' and first_name = '" + first_name + "' and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'",connection)
+        .ExecuteScalar();
+      Close();
+      return be_known_obj != null;
+      }
+
+    internal bool BeRoleHolderBySharedSecret
           (
           string certification_number,
           string level_id,
@@ -384,6 +398,50 @@ namespace Class_db_members
         );
       Close();
       return max_spec_length;
+      }
+
+    internal string IdOfMemberAdded
+      (
+      string last_name,
+      string first_name,
+      string middle_initial,
+      string level_id,
+      string regional_council_code,
+      DateTime birth_date,
+      string email_address,
+      string residence_county_code,
+      string street_address_1,
+      string street_address_2,
+      string city_state_zip
+      )
+      {
+      Open();
+      var transaction = connection.BeginTransaction();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "insert member"
+          + " set last_name = NULLIF('" + last_name.Trim().ToUpper() + "','')"
+          + " , first_name = NULLIF('" + first_name.Trim().ToUpper() + "','')"
+          + " , middle_initial = '" + middle_initial.ToUpper() + "'"
+          + " , level_id = NULLIF('" + level_id + "','')"
+          + " , regional_council_code = NULLIF('" + regional_council_code + "','')"
+          + " , birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
+          + " , email_address = NULLIF('" + email_address + "','')"
+          + " , residence_county_code = NULLIF('" + residence_county_code + "','')"
+          + " , street_address_1 = NULLIF('" + street_address_1.Trim().ToUpper() + "','')"
+          + " , street_address_2 = NULLIF('" + street_address_2.Trim().ToUpper() + "','')"
+          + " , city_state_zip = NULLIF('" + city_state_zip.Trim().ToUpper() + "','')"
+          ),
+        connection,
+        transaction
+        )
+        .ExecuteNonQuery();
+      var id_of_member_added = new MySqlCommand("select max(id) from member",connection,transaction).ExecuteScalar().ToString();
+      transaction.Commit();
+      Close();
+      return id_of_member_added;
       }
 
     public void SetEmailAddress
