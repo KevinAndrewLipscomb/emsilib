@@ -438,7 +438,7 @@ namespace Class_db_members
         transaction
         )
         .ExecuteNonQuery();
-      var id_of_member_added = new MySqlCommand("select max(id) from member",connection,transaction).ExecuteScalar().ToString();
+      var id_of_member_added = new MySqlCommand("select LAST_INSERT_ID()",connection,transaction).ExecuteScalar().ToString();
       transaction.Commit();
       Close();
       return id_of_member_added;
