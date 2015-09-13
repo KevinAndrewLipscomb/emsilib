@@ -708,7 +708,7 @@ namespace Class_biz_services
       return db_services.ShortNameOf(service_id);
       }
 
-    internal string ShortNameOfSummary(object summary)
+    public string ShortNameOfSummary(object summary)
       {
       return db_services.ShortNameOfSummary(summary);
       }

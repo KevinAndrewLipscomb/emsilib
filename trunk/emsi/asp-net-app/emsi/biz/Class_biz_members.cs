@@ -18,60 +18,6 @@ namespace Class_biz_members
       db_members = new TClass_db_members();
       }
 
-    public bool Add
-      (
-      string last_name,
-      string first_name,
-      string middle_initial,
-      string practitioner_level_id,
-      string practitioner_level_short_description,
-      string regional_council_code,
-      string regional_council_name,
-      DateTime birth_date,
-      string email_address,
-      string residence_county_code,
-      string residence_county_name,
-      string street_address_1,
-      string street_address_2,
-      string city_state_zip
-      )
-      {
-      var add = false;
-      if (!db_members.BeKnown(first_name, last_name, birth_date))
-        {
-        biz_notifications.IssueForMemberAdded
-          (
-          member_id:db_members.IdOfMemberAdded
-            (
-            last_name:last_name,
-            first_name:first_name,
-            middle_initial:middle_initial,
-            level_id:practitioner_level_id,
-            regional_council_code:regional_council_code,
-            birth_date:birth_date,
-            email_address:email_address,
-            residence_county_code:residence_county_code,
-            street_address_1:street_address_1,
-            street_address_2:street_address_2,
-            city_state_zip:city_state_zip
-            ),
-          last_name:last_name,
-          first_name:first_name,
-          middle_initial:middle_initial,
-          practitioner_level_short_description:practitioner_level_short_description,
-          regional_council_name:regional_council_name,
-          birth_date:birth_date,
-          email_address:email_address,
-          residence_county_name:residence_county_name,
-          street_address_1:street_address_1,
-          street_address_2:street_address_2,
-          city_state_zip:city_state_zip
-          );
-        add = true;
-        }
-      return add;
-      }
-
         public bool BeRoleHolderBySharedSecret
           (
           string certification_number,
@@ -214,6 +160,60 @@ namespace Class_biz_members
         out be_instructor,
         out be_past
         );
+      }
+
+    public string IdOfMemberAdded
+      (
+      string last_name,
+      string first_name,
+      string middle_initial,
+      string practitioner_level_id,
+      string practitioner_level_short_description,
+      string regional_council_code,
+      string regional_council_name,
+      DateTime birth_date,
+      string email_address,
+      string residence_county_code,
+      string residence_county_name,
+      string street_address_1,
+      string street_address_2,
+      string city_state_zip
+      )
+      {
+      var id_of_member_added = k.EMPTY;
+      if (!db_members.BeKnown(first_name, last_name, birth_date))
+        {
+        id_of_member_added = db_members.IdOfMemberAdded
+          (
+          last_name:last_name,
+          first_name:first_name,
+          middle_initial:middle_initial,
+          level_id:practitioner_level_id,
+          regional_council_code:regional_council_code,
+          birth_date:birth_date,
+          email_address:email_address,
+          residence_county_code:residence_county_code,
+          street_address_1:street_address_1,
+          street_address_2:street_address_2,
+          city_state_zip:city_state_zip
+          );
+        biz_notifications.IssueForMemberAdded
+          (
+          member_id:id_of_member_added,
+          last_name:last_name,
+          first_name:first_name,
+          middle_initial:middle_initial,
+          practitioner_level_short_description:practitioner_level_short_description,
+          regional_council_name:regional_council_name,
+          birth_date:birth_date,
+          email_address:email_address,
+          residence_county_name:residence_county_name,
+          street_address_1:street_address_1,
+          street_address_2:street_address_2,
+          city_state_zip:city_state_zip
+          );
+        }
+      return id_of_member_added;
       }
 
     public string IdOfUserId(string user_id)
