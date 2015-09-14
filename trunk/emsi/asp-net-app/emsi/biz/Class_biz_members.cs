@@ -276,6 +276,16 @@ namespace Class_biz_members
             return result;
         }
 
+    public void SetForNonPaPractitionerOnly
+      (
+      string id,
+      string last_name,
+      string first_name,
+      string middle_initial
+      )
+      {
+      db_members.SetForNonPaPractitionerOnly(id,last_name,first_name,middle_initial);
+      }
     } // end TClass_biz_members
 
   }
