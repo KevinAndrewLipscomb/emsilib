@@ -281,10 +281,11 @@ namespace Class_biz_members
       string id,
       string last_name,
       string first_name,
-      string middle_initial
+      string middle_initial,
+      string level_id
       )
       {
-      db_members.SetForNonPaPractitionerOnly(id,last_name,first_name,middle_initial);
+      db_members.SetForNonPaPractitionerOnly(id,last_name,first_name,middle_initial,level_id);
       }
     } // end TClass_biz_members
 

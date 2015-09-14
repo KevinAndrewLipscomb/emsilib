@@ -5,16 +5,17 @@ using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
 
 namespace Class_db_practitioner_levels
-{
-    public class TClass_db_practitioner_levels: TClass_db
+  {
+
+  public class TClass_db_practitioner_levels: TClass_db
     {
         private TClass_db_trail db_trail = null;
-        //Constructor  Create()
+
         public TClass_db_practitioner_levels() : base()
         {
-            // TODO: Add any constructor code here
             db_trail = new TClass_db_trail();
         }
+
         public bool Bind(string partial_spec, object target)
         {
             bool result;
@@ -32,38 +33,33 @@ namespace Class_db_practitioner_levels
             return result;
         }
 
-        public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
+    public void BindDirectToListControl
+      (
+      object target,
+      string unselected_literal = "-- practitioner level --",
+      string selected_value = k.EMPTY,
+      bool be_short_description_desired = false
+      )
+      {
+      ((target) as ListControl).Items.Clear();
+      if (unselected_literal.Length > 0)
         {
-            MySqlDataReader dr;
-            ((target) as ListControl).Items.Clear();
-            if (unselected_literal != k.EMPTY)
-            {
-                ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
-            }
-            this.Open();
-            dr = new MySqlCommand("SELECT id,emsrs_practitioner_level_description FROM practitioner_level where emsrs_practitioner_level_description <> \"(none specified)\" order by id", this.connection).ExecuteReader();
-            while (dr.Read())
-            {
-                ((target) as ListControl).Items.Add(new ListItem(dr["emsrs_practitioner_level_description"].ToString(), dr["id"].ToString()));
-            }
-            dr.Close();
-            this.Close();
-            if (selected_value != k.EMPTY)
-            {
-                ((target) as ListControl).SelectedValue = selected_value;
-            }
-
+        ((target) as ListControl).Items.Add(new ListItem(unselected_literal,k.EMPTY));
         }
-
-        public void BindDirectToListControl(object target)
+      var description_field = (be_short_description_desired ? "short_description" : "emsrs_practitioner_level_description");
+      Open();
+      var dr = new MySqlCommand("SELECT id," + description_field + " FROM practitioner_level where emsrs_practitioner_level_description <> \"(none specified)\" order by id",connection).ExecuteReader();
+      while (dr.Read())
         {
-            BindDirectToListControl(target, "-- practitioner level --");
+        ((target) as ListControl).Items.Add(new ListItem(dr[description_field].ToString(),dr["id"].ToString()));
         }
-
-        public void BindDirectToListControl(object target, string unselected_literal)
+      dr.Close();
+      Close();
+      if (selected_value.Length > 0)
         {
-            BindDirectToListControl(target, unselected_literal, k.EMPTY);
+        ((target) as ListControl).SelectedValue = selected_value;
         }
+      }
 
         public bool Delete(string id)
         {
@@ -118,4 +114,4 @@ namespace Class_db_practitioner_levels
 
     } // end TClass_db_practitioner_levels
 
-}
+  }
