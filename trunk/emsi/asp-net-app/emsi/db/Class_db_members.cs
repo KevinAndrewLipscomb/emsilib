@@ -247,7 +247,8 @@ namespace Class_db_members
       string id,
       string last_name,
       string first_name,
-      string middle_initial
+      string middle_initial,
+      string level_id
       )
       {
       Open();
@@ -259,6 +260,7 @@ namespace Class_db_members
           + " set last_name = '" + last_name + "'"
           + " , first_name = '" + first_name + "'"
           + " , middle_initial = '" + middle_initial + "'"
+          + " , level_id = NULLIF('" + level_id + "','')"
           + " where not be_practitioner" // Modification of PA practitioner names *MUST* be done via EMSRS -- *NEVER DIRECTLY*.
           +   " and id = '" + id + "'"
           ),
