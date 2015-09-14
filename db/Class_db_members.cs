@@ -242,7 +242,33 @@ namespace Class_db_members
       return result;
       }
 
-        public string EmailAddressOf(string member_id)
+    internal void SetForNonPaPractitionerOnly
+      (
+      string id,
+      string last_name,
+      string first_name,
+      string middle_initial
+      )
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update member"
+          + " set last_name = '" + last_name + "'"
+          + " , first_name = '" + first_name + "'"
+          + " , middle_initial = '" + middle_initial + "'"
+          + " where not be_practitioner" // Modification of PA practitioner names *MUST* be done via EMSRS -- *NEVER DIRECTLY*.
+          +   " and id = '" + id + "'"
+          ),
+        connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
+    public string EmailAddressOf(string member_id)
         {
             string result;
             object email_address_obj;
@@ -422,7 +448,8 @@ namespace Class_db_members
         db_trail.Saved
           (
           "insert member"
-          + " set last_name = NULLIF('" + last_name.Trim().ToUpper() + "','')"
+          + " set be_practitioner = FALSE"
+          + " , last_name = NULLIF('" + last_name.Trim().ToUpper() + "','')"
           + " , first_name = NULLIF('" + first_name.Trim().ToUpper() + "','')"
           + " , middle_initial = '" + middle_initial.ToUpper() + "'"
           + " , level_id = NULLIF('" + level_id + "','')"
