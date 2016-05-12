@@ -548,6 +548,14 @@ namespace Class_db_coned_offerings
       out string courses_course_number,
       out string course_title,
       out string status_id,
+      out string fr_med_trauma_hours,
+      out string fr_other_hours,
+      out string emt_med_trauma_hours,
+      out string emt_other_hours,
+      out string emtp_med_trauma_hours,
+      out string emtp_other_hours,
+      out string phrn_med_trauma_hours,
+      out string phrn_other_hours,
       out string eval_summary_instructional_staff,
       out string eval_summary_time_appropriately_used,
       out string eval_summary_classroom_training_site,
@@ -620,6 +628,14 @@ namespace Class_db_coned_offerings
       courses_course_number = k.EMPTY;
       course_title = k.EMPTY;
       status_id = k.EMPTY;
+      fr_med_trauma_hours = k.EMPTY;
+      fr_other_hours = k.EMPTY;
+      emt_med_trauma_hours = k.EMPTY;
+      emt_other_hours = k.EMPTY;
+      emtp_med_trauma_hours = k.EMPTY;
+      emtp_other_hours = k.EMPTY;
+      phrn_med_trauma_hours = k.EMPTY;
+      phrn_other_hours = k.EMPTY;
       eval_summary_instructional_staff = k.EMPTY;
       eval_summary_time_appropriately_used = k.EMPTY;
       eval_summary_classroom_training_site = k.EMPTY;
@@ -696,6 +712,14 @@ namespace Class_db_coned_offerings
         courses_course_number = dr["courses_course_number"].ToString();
         course_title = dr["course_title"].ToString();
         status_id = dr["status_id"].ToString();
+        fr_med_trauma_hours = dr["fr_med_trauma_hours"].ToString();
+        fr_other_hours = dr["fr_other_hours"].ToString();
+        emt_med_trauma_hours = dr["emt_med_trauma_hours"].ToString();
+        emt_other_hours = dr["emt_other_hours"].ToString();
+        emtp_med_trauma_hours = dr["emtp_med_trauma_hours"].ToString();
+        emtp_other_hours = dr["emtp_other_hours"].ToString();
+        phrn_med_trauma_hours = dr["phrn_med_trauma_hours"].ToString();
+        phrn_other_hours = dr["phrn_other_hours"].ToString();
         eval_summary_instructional_staff = dr["eval_summary_instructional_staff"].ToString();
         eval_summary_time_appropriately_used = dr["eval_summary_time_appropriately_used"].ToString();
         eval_summary_classroom_training_site = dr["eval_summary_classroom_training_site"].ToString();
@@ -1191,6 +1215,14 @@ namespace Class_db_coned_offerings
       string courses_course_number,
       string course_title,
       string status_id,
+      string fr_med_trauma_hours,
+      string fr_other_hours,
+      string emt_med_trauma_hours,
+      string emt_other_hours,
+      string emtp_med_trauma_hours,
+      string emtp_other_hours,
+      string phrn_med_trauma_hours,
+      string phrn_other_hours,
       string eval_summary_instructional_staff,
       string eval_summary_time_appropriately_used,
       string eval_summary_classroom_training_site,
@@ -1264,6 +1296,14 @@ namespace Class_db_coned_offerings
       + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
       + " , course_title = NULLIF('" + course_title + "','')"
       + " , status_id = NULLIF('" + status_id + "','')"
+      + " , fr_med_trauma_hours = NULLIF(" + fr_med_trauma_hours + "','')"
+      + " , fr_other_hours = NULLIF(" + fr_other_hours + "','')"
+      + " , emt_med_trauma_hours = NULLIF(" + emt_med_trauma_hours + "','')"
+      + " , emt_other_hours = NULLIF(" + emt_other_hours + "','')"
+      + " , emtp_med_trauma_hours = NULLIF(" + emtp_med_trauma_hours + "','')"
+      + " , emtp_other_hours = NULLIF(" + emtp_other_hours + "','')"
+      + " , phrn_med_trauma_hours = NULLIF(" + phrn_med_trauma_hours + "','')"
+      + " , phrn_other_hours = NULLIF(" + phrn_other_hours + "','')"
       + " , eval_summary_instructional_staff = NULLIF('" + eval_summary_instructional_staff + "','')"
       + " , eval_summary_time_appropriately_used = NULLIF('" + eval_summary_time_appropriately_used + "','')"
       + " , eval_summary_classroom_training_site = NULLIF('" + eval_summary_classroom_training_site + "','')"
