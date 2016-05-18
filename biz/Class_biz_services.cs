@@ -88,6 +88,17 @@ namespace Class_biz_services
           BindAnnualRespondents(sort_order,be_order_ascending,target,region_code,county_code:k.EMPTY);
           }
 
+    public void BindBaseDataListOfAdHocStrikeTeams
+      (
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target,
+      string service_strike_team_management_footprint
+      )
+      {
+      db_services.BindBaseDataListOfAdHocStrikeTeams(sort_order,be_sort_order_ascending,target,service_strike_team_management_footprint);
+      }
+
         public void BindListControl(string county_user_id, object target, bool be_unfiltered, bool be_inclusive_of_invalids_and_nonparticipants)
         {
             db_services.BindListControl(county_user_id, target, be_unfiltered, be_inclusive_of_invalids_and_nonparticipants);
