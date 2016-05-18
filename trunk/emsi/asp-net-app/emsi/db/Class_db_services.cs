@@ -186,6 +186,44 @@ namespace Class_db_services
             this.Close();
         }
 
+    internal void BindBaseDataListOfAdHocStrikeTeams
+      (
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target,
+      string service_strike_team_management_footprint
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select service.id as id"
+        + " , region_code_name_map.name as region"
+        + " , affiliate_num"
+        + " , service.short_name as short_name"
+        + " , service.name as name"
+        + " , GROUP_CONCAT(email_address) as email_target"
+        + " , concat(phone_number,'@',sms_gateway.hostname) as sms_target"
+        + " from service"
+        +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+        +   " join region_code_name_map on (region_code_name_map.code=county_region_map.region_code)"
+        +   " left join role_member_map on (role_member_map.service_id=service.id)"
+        +   " left join role on (role.id=role_member_map.role_id and role.name = 'Service Strike Team Manager')"
+        +   " left join practitioner on (practitioner.id=role_member_map.member_id)"
+        +   " left join practitioner_strike_team_detail on (practitioner_strike_team_detail.practitioner_id=practitioner.id)"
+        +   " left join sms_gateway on (sms_gateway.id=practitioner_strike_team_detail.phone_service_id)"
+        +   " join strike_team_participation_level on (strike_team_participation_level.id=service.strike_team_participation_level_id)"
+        + " where strike_team_participation_level.description = 'Ad-hoc'"
+        +     (service_strike_team_management_footprint.Length > 0 ? " and service.id in (" + service_strike_team_management_footprint + ")" : k.EMPTY) 
+        + " group by service.id"
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
         public void BindListControl(string county_user_id, object target)
         {
             BindListControl(county_user_id, target, false);
