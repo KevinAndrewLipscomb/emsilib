@@ -198,7 +198,8 @@ namespace Class_db_services
       ((target) as BaseDataList).DataSource = new MySqlCommand
         (
         "select service.id as id"
-        + " , region_code_name_map.name as region"
+        + " , region_code_name_map.code as region_code"
+        + " , region_code_name_map.name as region_name"
         + " , affiliate_num"
         + " , service.short_name as short_name"
         + " , service.name as name"
