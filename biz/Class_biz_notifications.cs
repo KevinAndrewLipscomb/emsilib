@@ -347,6 +347,29 @@ namespace Class_biz_notifications
       template_reader.Close();
       }
 
+    public void IssueForExpiringDriversLicense
+      (
+      string email_address,
+      string last_name,
+      string first_name,
+      string certification_number,
+      string service_strike_team_primary_manager,
+      k.int_nonnegative days_left
+      )
+      {
+      IssueForUpcomingDecredentialing
+        (
+        email_address:email_address,
+        last_name:last_name,
+        first_name:first_name,
+        certification_number:certification_number,
+        service_strike_team_primary_manager:service_strike_team_primary_manager,
+        days_left:days_left,
+        template_spec:"expiring_drivers_license",
+        clearance_description:k.EMPTY
+        );
+      }
+
         private delegate string IssueForExplicitRegionRoleChange_Merge(string s);
         public void IssueForExplicitRegionRoleChange
           (
@@ -662,6 +685,104 @@ namespace Class_biz_notifications
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], ConfigurationManager.AppSettings["membership_establishment_liaison"] + k.COMMA + ConfigurationManager.AppSettings["application_name"] + "-appadmin@" + host_domain_name, Merge(template_reader.ReadLine()), Merge(template_reader.ReadToEnd()));
             template_reader.Close();
         }
+
+    private delegate string IssueMobilizationAnnouncementEmail_Merge(string s);
+    public void IssueMobilizationAnnouncementEmail
+      (
+      string target,
+      string deployment_name,
+      string service_name,
+      string actual_vs_drill_indicator,
+      string supplemental_message,
+      string deployment_coordinator_target
+      )
+      {
+      IssueMobilizationAnnouncementEmail_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<deployment_name/>",deployment_name)
+          .Replace("<service_name/>",service_name)
+          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
+          .Replace("<supplemental_message/>",k.WrapText(supplemental_message,k.NEW_LINE + new string(Convert.ToChar(k.SPACE),6),Class_biz_notifications_Static.BreakChars,short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+          .Replace("<deployment_coordinator_target/>",deployment_coordinator_target)
+          ;
+        };
+
+      var biz_user = new TClass_biz_user();
+      var biz_users = new TClass_biz_users();
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/mobilization-announcement-email.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:deployment_coordinator_target,
+        bcc:k.EMPTY,
+        reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
+        );
+      template_reader.Close();
+      }
+
+    private delegate string IssueMobilizationAnnouncementSms_Merge(string s);
+    public void IssueMobilizationAnnouncementSms
+      (
+      string target,
+      string actual_vs_drill_indicator
+      )
+      {
+      IssueMobilizationAnnouncementSms_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
+          ;
+        };
+
+      var biz_user = new TClass_biz_user();
+      var biz_users = new TClass_biz_users();
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/mobilization-announcement-sms.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:target,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
+        );
+      template_reader.Close();
+      }
+
+    public void IssueForNearlyStaleClearance
+      (
+      string email_address,
+      string last_name,
+      string first_name,
+      string certification_number,
+      string service_strike_team_primary_manager,
+      k.int_nonnegative days_left,
+      string clearance_description
+      )
+      {
+      IssueForUpcomingDecredentialing
+        (
+        email_address:email_address,
+        last_name:last_name,
+        first_name:first_name,
+        certification_number:certification_number,
+        service_strike_team_primary_manager:service_strike_team_primary_manager,
+        days_left:days_left,
+        template_spec:"stale_clearance",
+        clearance_description:clearance_description
+        );
+      }
 
     private delegate string IssueForOperationalPeriodAssignment_Merge(string s);
     public void IssueForOperationalPeriodAssignment
@@ -1106,6 +1227,78 @@ namespace Class_biz_notifications
       template_reader.Close();
       }
 
+    private delegate string IssueStrikeTeamMemberStatusStatement_Merge(string s);
+    public void IssueStrikeTeamMemberStatusStatement
+      (
+      string email_address,
+      string last_name,
+      string first_name,
+      string certification_number,
+      string phone_number,
+      string carrier_name,
+      string emergency_contact_1_name,
+      string emergency_contact_1_phone_number,
+      string emergency_contact_2_name,
+      string emergency_contact_2_phone_number,
+      bool be_immune_hepatitis_b,
+      bool be_immune_diptheria_tetanus,
+      string drivers_license_expiration,
+      string nims_is_100_date,
+      string nims_is_200_date,
+      string nims_is_700_date,
+      string act_1985_33_date,
+      string act_1985_34_date,
+      string act_1994_151_date,
+      string credentialed_as_member_clause,
+      string credentialed_as_leader_clause,
+      string service_strike_team_affiliation,
+      string service_strike_team_primary_manager
+      )
+      {
+      IssueStrikeTeamMemberStatusStatement_Merge Merge = delegate (string s)
+        {
+        return s
+          .Replace("<application_name/>",application_name)
+          .Replace("<host_domain_name/>",host_domain_name)
+          .Replace("<first_name/>",first_name)
+          .Replace("<last_name/>",last_name)
+          .Replace("<certification_number/>",certification_number)
+          .Replace("<phone_number/>",k.FormatAsNanpPhoneNum(phone_number))
+          .Replace("<carrier_name/>",carrier_name)
+          .Replace("<emergency_contact_1_name/>",emergency_contact_1_name)
+          .Replace("<emergency_contact_1_phone_number/>",k.FormatAsNanpPhoneNum(emergency_contact_1_phone_number))
+          .Replace("<emergency_contact_2_name/>",emergency_contact_2_name)
+          .Replace("<emergency_contact_2_phone_number/>",k.FormatAsNanpPhoneNum(emergency_contact_2_phone_number))
+          .Replace("<be_immune_hepatitis_b/>",k.YesNoOf(be_immune_hepatitis_b))
+          .Replace("<be_immune_diptheria_tetanus/>",k.YesNoOf(be_immune_diptheria_tetanus))
+          .Replace("<drivers_license_expiration/>",drivers_license_expiration)
+          .Replace("<nims_is_100_date/>",nims_is_100_date)
+          .Replace("<nims_is_200_date/>",nims_is_200_date)
+          .Replace("<nims_is_700_date/>",nims_is_700_date)
+          .Replace("<act_1985_33_date/>",act_1985_33_date)
+          .Replace("<act_1985_34_date/>",act_1985_34_date)
+          .Replace("<act_1994_151_date/>",act_1994_151_date)
+          .Replace("<credentialed_as_member_clause/>",credentialed_as_member_clause)
+          .Replace("<credentialed_as_leader_clause/>",credentialed_as_leader_clause)
+          .Replace("<service_strike_team_affiliation/>",service_strike_team_affiliation)
+          ;
+        };
+
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/strike_team_member_status_statement.txt"));
+      k.SmtpMailSend
+        (
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:email_address,
+        subject:Merge(template_reader.ReadLine()),
+        message_string:Merge(template_reader.ReadToEnd()),
+        be_html:false,
+        cc:k.EMPTY,
+        bcc:k.EMPTY,
+        reply_to:service_strike_team_primary_manager
+        );
+      template_reader.Close();
+      }
+
         private delegate string IssueForTemporaryPassword_Merge(string s);
         public void IssueForTemporaryPassword(string username, string client_host_name, string temporary_password)
         {
@@ -1133,151 +1326,46 @@ namespace Class_biz_notifications
             template_reader.Close();
         }
 
-    private delegate string IssueMobilizationAnnouncementEmail_Merge(string s);
-    public void IssueMobilizationAnnouncementEmail
+    private delegate string IssueForUpcomingDecredentialing_Merge(string s);
+    public void IssueForUpcomingDecredentialing
       (
-      string target,
-      string deployment_name,
-      string service_name,
-      string actual_vs_drill_indicator,
-      string supplemental_message,
-      string deployment_coordinator_target
+      string email_address,
+      string last_name,
+      string first_name,
+      string certification_number,
+      string service_strike_team_primary_manager,
+      k.int_nonnegative days_left,
+      string template_spec,
+      string clearance_description
       )
       {
-      IssueMobilizationAnnouncementEmail_Merge Merge = delegate (string s)
+      IssueForUpcomingDecredentialing_Merge Merge = delegate (string s)
         {
         return s
           .Replace("<application_name/>",application_name)
           .Replace("<host_domain_name/>",host_domain_name)
-          .Replace("<deployment_name/>",deployment_name)
-          .Replace("<service_name/>",service_name)
-          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
-          .Replace("<supplemental_message/>",k.WrapText(supplemental_message,k.NEW_LINE + new string(Convert.ToChar(k.SPACE),6),Class_biz_notifications_Static.BreakChars,short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
-          .Replace("<deployment_coordinator_target/>",deployment_coordinator_target)
+          .Replace("<first_name/>",first_name)
+          .Replace("<last_name/>",last_name)
+          .Replace("<certification_number/>",certification_number)
+          .Replace("<num_days_left/>",days_left.val.ToString())
+          .Replace("<nearly_stale_clearance_list/>",clearance_description)
           ;
         };
 
-      var biz_user = new TClass_biz_user();
-      var biz_users = new TClass_biz_users();
-      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/mobilization-announcement-email.txt"));
+      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/" + template_spec + "_warning.txt"));
       k.SmtpMailSend
         (
         from:ConfigurationManager.AppSettings["sender_email_address"],
-        to:target,
-        subject:Merge(template_reader.ReadLine()),
-        message_string:Merge(template_reader.ReadToEnd()),
-        be_html:false,
-        cc:deployment_coordinator_target,
-        bcc:k.EMPTY,
-        reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
-        );
-      template_reader.Close();
-      }
-
-    private delegate string IssueMobilizationAnnouncementSms_Merge(string s);
-    public void IssueMobilizationAnnouncementSms
-      (
-      string target,
-      string actual_vs_drill_indicator
-      )
-      {
-      IssueMobilizationAnnouncementSms_Merge Merge = delegate (string s)
-        {
-        return s
-          .Replace("<application_name/>",application_name)
-          .Replace("<host_domain_name/>",host_domain_name)
-          .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
-          ;
-        };
-
-      var biz_user = new TClass_biz_user();
-      var biz_users = new TClass_biz_users();
-      var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/mobilization-announcement-sms.txt"));
-      k.SmtpMailSend
-        (
-        from:ConfigurationManager.AppSettings["sender_email_address"],
-        to:target,
+        to:email_address,
         subject:Merge(template_reader.ReadLine()),
         message_string:Merge(template_reader.ReadToEnd()),
         be_html:false,
         cc:k.EMPTY,
         bcc:k.EMPTY,
-        reply_to:biz_users.PasswordResetEmailAddressOfId(biz_user.IdNum())
+        reply_to:service_strike_team_primary_manager
         );
       template_reader.Close();
       }
-
-        private delegate string IssueStrikeTeamMemberStatusStatement_Merge(string s);
-        public void IssueStrikeTeamMemberStatusStatement
-          (
-          string email_address,
-          string last_name,
-          string first_name,
-          string certification_number,
-          string phone_number,
-          string carrier_name,
-          string emergency_contact_1_name,
-          string emergency_contact_1_phone_number,
-          string emergency_contact_2_name,
-          string emergency_contact_2_phone_number,
-          bool be_immune_hepatitis_b,
-          bool be_immune_diptheria_tetanus,
-          string drivers_license_expiration,
-          string nims_is_100_date,
-          string nims_is_200_date,
-          string nims_is_700_date,
-          string act_1985_33_date,
-          string act_1985_34_date,
-          string act_1994_151_date,
-          string credentialed_as_member_clause,
-          string credentialed_as_leader_clause,
-          string service_strike_team_affiliation,
-          string service_strike_team_primary_manager
-          )
-          {
-          IssueStrikeTeamMemberStatusStatement_Merge Merge = delegate (string s)
-            {
-            return s
-              .Replace("<application_name/>",application_name)
-              .Replace("<host_domain_name/>",host_domain_name)
-              .Replace("<first_name/>",first_name)
-              .Replace("<last_name/>",last_name)
-              .Replace("<certification_number/>",certification_number)
-              .Replace("<phone_number/>",k.FormatAsNanpPhoneNum(phone_number))
-              .Replace("<carrier_name/>",carrier_name)
-              .Replace("<emergency_contact_1_name/>",emergency_contact_1_name)
-              .Replace("<emergency_contact_1_phone_number/>",k.FormatAsNanpPhoneNum(emergency_contact_1_phone_number))
-              .Replace("<emergency_contact_2_name/>",emergency_contact_2_name)
-              .Replace("<emergency_contact_2_phone_number/>",k.FormatAsNanpPhoneNum(emergency_contact_2_phone_number))
-              .Replace("<be_immune_hepatitis_b/>",k.YesNoOf(be_immune_hepatitis_b))
-              .Replace("<be_immune_diptheria_tetanus/>",k.YesNoOf(be_immune_diptheria_tetanus))
-              .Replace("<drivers_license_expiration/>",drivers_license_expiration)
-              .Replace("<nims_is_100_date/>",nims_is_100_date)
-              .Replace("<nims_is_200_date/>",nims_is_200_date)
-              .Replace("<nims_is_700_date/>",nims_is_700_date)
-              .Replace("<act_1985_33_date/>",act_1985_33_date)
-              .Replace("<act_1985_34_date/>",act_1985_34_date)
-              .Replace("<act_1994_151_date/>",act_1994_151_date)
-              .Replace("<credentialed_as_member_clause/>",credentialed_as_member_clause)
-              .Replace("<credentialed_as_leader_clause/>",credentialed_as_leader_clause)
-              .Replace("<service_strike_team_affiliation/>",service_strike_team_affiliation)
-              ;
-            };
-
-          var template_reader = File.OpenText(HttpContext.Current.Server.MapPath("template/notification/strike_team_member_status_statement.txt"));
-          k.SmtpMailSend
-            (
-            from:ConfigurationManager.AppSettings["sender_email_address"],
-            to:email_address,
-            subject:Merge(template_reader.ReadLine()),
-            message_string:Merge(template_reader.ReadToEnd()),
-            be_html:false,
-            cc:k.EMPTY,
-            bcc:k.EMPTY,
-            reply_to:service_strike_team_primary_manager
-            );
-          template_reader.Close();
-          }
 
     } // end TClass_biz_notifications
 
