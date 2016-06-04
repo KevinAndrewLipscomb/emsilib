@@ -365,8 +365,7 @@ namespace Class_biz_notifications
         certification_number:certification_number,
         service_strike_team_primary_manager:service_strike_team_primary_manager,
         days_left:days_left,
-        template_spec:"expiring_drivers_license",
-        clearance_description:k.EMPTY
+        template_spec:"expiring_drivers_license"
         );
       }
 
@@ -768,6 +767,8 @@ namespace Class_biz_notifications
       string certification_number,
       string service_strike_team_primary_manager,
       k.int_nonnegative days_left,
+      k.int_positive num_years_clearances_considered_valid,
+      string clearance_forms_web_address,
       string clearance_description
       )
       {
@@ -780,6 +781,8 @@ namespace Class_biz_notifications
         service_strike_team_primary_manager:service_strike_team_primary_manager,
         days_left:days_left,
         template_spec:"stale_clearance",
+        num_years_clearances_considered_valid:num_years_clearances_considered_valid,
+        clearance_forms_web_address:clearance_forms_web_address,
         clearance_description:clearance_description
         );
       }
@@ -1336,7 +1339,9 @@ namespace Class_biz_notifications
       string service_strike_team_primary_manager,
       k.int_nonnegative days_left,
       string template_spec,
-      string clearance_description
+      k.int_positive num_years_clearances_considered_valid = null,
+      string clearance_forms_web_address = k.EMPTY,
+      string clearance_description = k.EMPTY
       )
       {
       IssueForUpcomingDecredentialing_Merge Merge = delegate (string s)
@@ -1348,7 +1353,9 @@ namespace Class_biz_notifications
           .Replace("<last_name/>",last_name)
           .Replace("<certification_number/>",certification_number)
           .Replace("<num_days_left/>",days_left.val.ToString())
-          .Replace("<nearly_stale_clearance_list/>",clearance_description)
+          .Replace("<num_years_clearances_considered_valid/>",(num_years_clearances_considered_valid == null ? "???" : num_years_clearances_considered_valid.val.ToString()))
+          .Replace("<nearly_stale_clearance_list/>",(clearance_description.Length > 0 ? clearance_description : "???"))
+          .Replace("<clearance_forms_web_address/>",(clearance_forms_web_address.Length > 0 ? clearance_forms_web_address : "???"))
           ;
         };
 
