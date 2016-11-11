@@ -40,13 +40,22 @@ namespace Class_biz_coned_offerings
       ss_emsams = new Class_ss_emsams();
       }
 
-    public void Archive(object summary)
+    public void Archive
+      (
+      object summary,
+      bool be_submitted_to_emsrs_directly
+      )
       {
       if (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING)
         {
         var id = db_coned_offerings.IdOf(summary);
         db_practitioners.MarkDobsConfirmed(id);
-        db_coned_offerings.SetStatus(id,coned_offering_status_enumeration.ARCHIVED);
+        db_coned_offerings.SetStatus
+          (
+          id:id,
+          status:coned_offering_status_enumeration.ARCHIVED,
+          be_submitted_to_emsrs_directly:be_submitted_to_emsrs_directly
+          );
         }
       }
 
