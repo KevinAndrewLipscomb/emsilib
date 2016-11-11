@@ -1358,11 +1358,23 @@ namespace Class_db_coned_offerings
     internal void SetStatus
       (
       string id,
-      coned_offering_status_enumeration status
+      coned_offering_status_enumeration status,
+      bool be_submitted_to_emsrs_directly = false
       )
       {
       Open();
-      new MySqlCommand(db_trail.Saved("update coned_offering set status_id = NULLIF('" + status.ToString("D") + "','') where id = '" + id + "'"),connection).ExecuteNonQuery();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update coned_offering"
+          + " set status_id = NULLIF('" + status.ToString("D") + "','')"
+          + (status == coned_offering_status_enumeration.ARCHIVED ? " , region_comments = CONCAT(IFNULL(region_comments,''),' ## Roster submission to EMSRS handled " + (be_submitted_to_emsrs_directly ? "directly by " + ConfigurationManager.AppSettings["application_name"] : "indirectly by regional staff") + "')" : k.EMPTY)
+          + " where id = '" + id + "'"
+          ),
+        connection
+        )
+        .ExecuteNonQuery();
       Close();
       }
 
