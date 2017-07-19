@@ -515,7 +515,7 @@ namespace Class_db_practitioners
         (
         "START TRANSACTION"
         + ";"
-        + " delete from practitioner"
+        + " delete ignore from practitioner"
         + " where be_stale"
         +   " and (select count(*) from coned_offering_roster where practitioner_id = practitioner.id) = 0"
         +   " and (select count(*) from strike_team_roster where practitioner_id = practitioner.id) = 0"
