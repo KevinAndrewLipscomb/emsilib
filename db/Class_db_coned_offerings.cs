@@ -979,7 +979,12 @@ namespace Class_db_coned_offerings
             catch (Exception e)
               {
               transaction.Rollback();
-              if (!ConfigurationManager.AppSettings["class_number_skip_list"].Contains(class_number))
+              if(
+                  !ConfigurationManager.AppSettings["class_number_skip_list"].Contains(class_number)
+                &&
+                  !ConfigurationManager.AppSettings["sponsor_number_skip_list"].Contains((rec as ClassInfoClass).SponsorNumber)
+                )
+              //then
                 {
                 k.EscalatedException(e,"#noninteractive#" + k.NEW_LINE + "class_number = [" + class_number + "]" + k.NEW_LINE + "childless_field_assignments_clause = [" + childless_field_assignments_clause + "]");
                 }
