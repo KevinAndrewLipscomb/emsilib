@@ -374,6 +374,7 @@ namespace Class_db_practitioners
           {
           var name_section_array = (rec as Practitioner).name.Split(new char[] {Convert.ToChar(k.COMMA)});
           last_name = k.Safe(name_section_array[0],k.safe_hint_type.HUMAN_NAME).Replace(k.SPACE + k.SPACE,k.SPACE).Trim();
+          region_name = k.Safe((rec as Practitioner).region,k.safe_hint_type.ORG_NAME);
           if ((last_name.Length > 0) && (region_name.Length > 0))
             {
             first_name = name_section_array[1];
@@ -387,7 +388,6 @@ namespace Class_db_practitioners
             level_description = k.Safe((rec as Practitioner).level,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
             status = k.Safe((rec as Practitioner).status,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
             county_name = k.Safe((rec as Practitioner).county,k.safe_hint_type.POSTAL_CITY);
-            region_name = k.Safe((rec as Practitioner).region,k.safe_hint_type.ORG_NAME);
             //
             // The following logic will prevent this app from detecting when EMSRS reassigns a certification_number to a different person.  The latest person to hold the certification number will therefore be associated, in
             // this ecosystem, with the prior assignee's attributes.  In ConEdLink, that doesn't seem to be a concern since EMSRS, not ConEdLink, is the authoritative source for a practitioner's historical class attendance.
