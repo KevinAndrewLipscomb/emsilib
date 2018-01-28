@@ -2,13 +2,12 @@
 
 using Class_db;
 using Class_db_trail;
-using external_data_binding.emsams.PractitionerInfo;
 using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
-using System.Text;
 using System.Web.UI.WebControls;
+using static ConEdLink.component.ss.Class_ss_emsams;
 
 namespace Class_db_practitioners
   {
@@ -361,42 +360,37 @@ namespace Class_db_practitioners
         //new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection).ExecuteNonQuery();
         //Close();
         //
-        var combined_name = k.EMPTY;
         var first_name = k.EMPTY;
         var id_obj = new object();
         var last_name = k.EMPTY;
         var middle_initial = k.EMPTY;
         var certification_number = k.EMPTY;
         var level_description = k.EMPTY;
-        var region_name = k.EMPTY;
-        var birth_date = k.EMPTY;
-        var county_name = k.EMPTY;
         var status = k.EMPTY;
-        var be_instructor = false;
+        var county_name = k.EMPTY;
+        var region_name = k.EMPTY;
         Open();
         foreach (var rec in recs)
           {
-          last_name = k.Safe((rec as PractitionersPractitioner).LastName,k.safe_hint_type.HUMAN_NAME).Replace(k.SPACE + k.SPACE,k.SPACE).Trim();
-          region_name = ((rec as PractitionersPractitioner).RegionalCouncilName == null ? k.EMPTY : k.Safe((rec as PractitionersPractitioner).RegionalCouncilName,k.safe_hint_type.ORG_NAME));
+          var name_section_array = (rec as Practitioner).name.Split(new char[] {Convert.ToChar(k.COMMA)});
+          last_name = k.Safe(name_section_array[0],k.safe_hint_type.HUMAN_NAME).Replace(k.SPACE + k.SPACE,k.SPACE).Trim();
           if ((last_name.Length > 0) && (region_name.Length > 0))
             {
-            combined_name = (k.Safe((rec as PractitionersPractitioner).FirstName,k.safe_hint_type.HUMAN_NAME) + k.SPACE + k.Safe((rec as PractitionersPractitioner).MI,k.safe_hint_type.HUMAN_NAME)).Trim();
-            first_name = combined_name;
+            first_name = name_section_array[1];
             middle_initial = k.EMPTY;
-            if ((combined_name.Contains(k.SPACE)) && (combined_name.LastIndexOf(k.SPACE) == combined_name.Length - 2))
+            if ((name_section_array[1].Contains(k.SPACE)) && (name_section_array[1].LastIndexOf(k.SPACE) == name_section_array[1].Length - 2))
               {
-              middle_initial = combined_name.Substring(combined_name.Length - 1);
-              first_name = combined_name.Substring(0,combined_name.Length - 2);
+              middle_initial = name_section_array[1].Substring(name_section_array[1].Length - 1);
+              first_name = name_section_array[1].Substring(0,name_section_array[1].Length - 2);
               }
-            certification_number = (rec as PractitionersPractitioner).CertificationNumber.ToString();
-            level_description = k.Safe((rec as PractitionersPractitioner).LevelDescription,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
-            birth_date = ((rec as PractitionersPractitioner).BirthDate == null ? k.EMPTY : k.Safe((rec as PractitionersPractitioner).BirthDate,k.safe_hint_type.DATE_TIME));
-            county_name = ((rec as PractitionersPractitioner).CountyName == null ? k.EMPTY : k.Safe((rec as PractitionersPractitioner).CountyName,k.safe_hint_type.POSTAL_CITY));
-            status = k.Safe((rec as PractitionersPractitioner).Status,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
-            be_instructor = ((rec as PractitionersPractitioner).IsInstructor == "Y");
+            certification_number = k.Safe((rec as Practitioner).certification_number,k.safe_hint_type.NUM);
+            level_description = k.Safe((rec as Practitioner).level,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
+            status = k.Safe((rec as Practitioner).status,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
+            county_name = k.Safe((rec as Practitioner).county,k.safe_hint_type.POSTAL_CITY);
+            region_name = k.Safe((rec as Practitioner).region,k.safe_hint_type.ORG_NAME);
             //
             // The following logic will prevent this app from detecting when EMSRS reassigns a certification_number to a different person.  The latest person to hold the certification number will therefore be associated, in
-            // this app, with the prior assignee's history of class attendance.  But that doesn't seem to be a concern since EMSRS, not this app, is the authoritative source for a practitioner's historical class attendance.
+            // this ecosystem, with the prior assignee's attributes.  In ConEdLink, that doesn't seem to be a concern since EMSRS, not ConEdLink, is the authoritative source for a practitioner's historical class attendance.
             //
             id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + certification_number + "'",connection).ExecuteScalar();
             if (id_obj == null)
@@ -409,11 +403,9 @@ namespace Class_db_practitioners
                 + " , certification_number = '" + certification_number + "'"
                 + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
                 + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
-                + " , birth_date = STR_TO_DATE('" + birth_date + "','%m/%d/%Y')"
                 + " , be_birth_date_confirmed = TRUE"
                 + " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')"
-                + " , status_id = (select id from practitioner_status where description = '" + status + "')"
-                + " , be_instructor = " + be_instructor.ToString(),
+                + " , status_id = (select id from practitioner_status where description = '" + status + "')",
                 connection
                 )
                 .ExecuteNonQuery();
@@ -428,12 +420,10 @@ namespace Class_db_practitioners
                 + " , middle_initial = '" + middle_initial + "'"
                 + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
                 + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
-                + (birth_date.Length > 0 ? " , birth_date = STR_TO_DATE('" + birth_date + "','%m/%d/%Y') , be_birth_date_confirmed = TRUE" : k.EMPTY)
                 + (county_name.Length > 0 ? " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')" : k.EMPTY)
                 + " , status_id = (select id from practitioner_status where description = '" + status + "')"
                 + " , be_stale = false"
                 + " , be_past = false"
-                + " , be_instructor = " + be_instructor.ToString()
                 + " where id = '" + id_obj.ToString() + "'",
                 connection
                 )

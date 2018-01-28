@@ -143,25 +143,15 @@ namespace Class_biz_practitioners
 
     public void ImportLatestFromEmsrs()
       {
-      var client = new PractitionerClient();
-      var practitioner_status_list_obj = new PractitionerStatusList();
-      practitioner_status_list_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
-      //
       db_practitioners.MarkAllStale();
-      foreach (var status in new Status[] {Status.Active,Status.Expired,Status.Probation,Status.Suspended})
+      //
+      var context = new Class_ss_emsams.PractitionersContext();
+      while (context.county_option_index.val < context.county_option_index.LAST)
         {
-        practitioner_status_list_obj.Items = new Status[] {status};
-        var practitioner_status_list = new StringWriter();
-        new XmlSerializer(typeof(PractitionerStatusList)).Serialize(practitioner_status_list,practitioner_status_list_obj);
-        var response = client.GetInfoByStatus(statusXML:practitioner_status_list.ToString());
-        if (response != "<DocumentElement />")
-          {
-          db_practitioners.ImportLatestFromEmsrs
-            (recs:ArrayList.Adapter(((Practitioners)new XmlSerializer(typeof(Practitioners)).Deserialize(new StringReader(response))).Practitioner));
-          }
+        db_practitioners.ImportLatestFromEmsrs(ss_emsams.Practitioners(context));
         }
+      //
       db_practitioners.RemoveStale();
-      client.Close();
       }
 
     public string LastNameOf(object summary)
