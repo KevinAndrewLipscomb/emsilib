@@ -2432,10 +2432,6 @@ namespace ConEdLink.component.ss
             }
           }
         //
-        //context.view_state = html_document.GetElementbyId("__VIEWSTATE").Attributes["value"].Value;
-        //context.view_state_generator = html_document.GetElementbyId("__VIEWSTATEGENERATOR").Attributes["value"].Value;
-        //context.event_validation = html_document.GetElementbyId("__EVENTVALIDATION").Attributes["value"].Value;
-        //
         context.county_option_index.val++;
         }
       return active_practitioners;
