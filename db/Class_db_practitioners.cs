@@ -377,12 +377,13 @@ namespace Class_db_practitioners
           region_name = k.Safe((rec as Practitioner).region,k.safe_hint_type.ORG_NAME);
           if ((last_name.Length > 0) && (region_name.Length > 0))
             {
-            first_name = name_section_array[1];
+            var given_section = name_section_array[1].Trim();
+            first_name = given_section;
             middle_initial = k.EMPTY;
-            if ((name_section_array[1].Contains(k.SPACE)) && (name_section_array[1].LastIndexOf(k.SPACE) == name_section_array[1].Length - 2))
+            if ((given_section.Contains(k.SPACE)) && (given_section.LastIndexOf(k.SPACE) == given_section.Length - 2))
               {
-              middle_initial = name_section_array[1].Substring(name_section_array[1].Length - 1);
-              first_name = name_section_array[1].Substring(0,name_section_array[1].Length - 2);
+              middle_initial = given_section.Substring(given_section.Length - 1);
+              first_name = given_section.Substring(0,given_section.Length - 2);
               }
             certification_number = k.Safe((rec as Practitioner).certification_number,k.safe_hint_type.NUM);
             level_description = k.Safe((rec as Practitioner).level,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
@@ -392,42 +393,45 @@ namespace Class_db_practitioners
             // The following logic will prevent this app from detecting when EMSRS reassigns a certification_number to a different person.  The latest person to hold the certification number will therefore be associated, in
             // this ecosystem, with the prior assignee's attributes.  In ConEdLink, that doesn't seem to be a concern since EMSRS, not ConEdLink, is the authoritative source for a practitioner's historical class attendance.
             //
-            id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + certification_number + "'",connection).ExecuteScalar();
-            if (id_obj == null)
+            if (new ArrayList() {"Active","Expired","Probation","Suspended"}.Contains(status))
               {
-              new MySqlCommand
-                (
-                "insert ignore practitioner set last_name = '" + last_name + "'"
-                + " , first_name = '" + first_name + "'"
-                + " , middle_initial = '" + middle_initial + "'"
-                + " , certification_number = '" + certification_number + "'"
-                + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
-                + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
-                + " , be_birth_date_confirmed = TRUE"
-                + " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')"
-                + " , status_id = (select id from practitioner_status where description = '" + status + "')",
-                connection
-                )
-                .ExecuteNonQuery();
-              }
-            else
-              {
-              new MySqlCommand
-                (
-                "update ignore practitioner"
-                + " set last_name = '" + last_name + "'"
-                + " , first_name = '" + first_name + "'"
-                + " , middle_initial = '" + middle_initial + "'"
-                + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
-                + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
-                + (county_name.Length > 0 ? " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')" : k.EMPTY)
-                + " , status_id = (select id from practitioner_status where description = '" + status + "')"
-                + " , be_stale = false"
-                + " , be_past = false"
-                + " where id = '" + id_obj.ToString() + "'",
-                connection
-                )
-                .ExecuteNonQuery();
+              id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + certification_number + "'",connection).ExecuteScalar();
+              if (id_obj == null)
+                {
+                new MySqlCommand
+                  (
+                  "insert ignore practitioner set last_name = '" + last_name + "'"
+                  + " , first_name = '" + first_name + "'"
+                  + " , middle_initial = '" + middle_initial + "'"
+                  + " , certification_number = '" + certification_number + "'"
+                  + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
+                  + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
+                  + " , be_birth_date_confirmed = TRUE"
+                  + " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')"
+                  + " , status_id = (select id from practitioner_status where description = '" + status + "')",
+                  connection
+                  )
+                  .ExecuteNonQuery();
+                }
+              else
+                {
+                new MySqlCommand
+                  (
+                  "update ignore practitioner"
+                  + " set last_name = '" + last_name + "'"
+                  + " , first_name = '" + first_name + "'"
+                  + " , middle_initial = '" + middle_initial + "'"
+                  + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
+                  + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
+                  + (county_name.Length > 0 ? " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')" : k.EMPTY)
+                  + " , status_id = (select id from practitioner_status where description = '" + status + "')"
+                  + " , be_stale = false"
+                  + " , be_past = false"
+                  + " where id = '" + id_obj.ToString() + "'",
+                  connection
+                  )
+                  .ExecuteNonQuery();
+                }
               }
             }
           }
