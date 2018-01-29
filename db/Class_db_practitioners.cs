@@ -383,7 +383,7 @@ namespace Class_db_practitioners
             if ((given_section.Contains(k.SPACE)) && (given_section.LastIndexOf(k.SPACE) == given_section.Length - 2))
               {
               middle_initial = given_section.Substring(given_section.Length - 1);
-              first_name = given_section.Substring(0,given_section.Length - 2);
+              first_name = given_section.Substring(0,given_section.Length - 2).Trim();
               }
             certification_number = k.Safe((rec as Practitioner).certification_number,k.safe_hint_type.NUM);
             level_description = k.Safe((rec as Practitioner).level,k.safe_hint_type.HYPHENATED_ALPHA_WORDS);
