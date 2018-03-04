@@ -105,10 +105,16 @@ namespace Class_db_trail
       //
       k.SmtpMailSend
         (
-        ConfigurationManager.AppSettings["sender_email_address"],
-        ConfigurationManager.AppSettings["failsafe_recipient_email_address"],
-        "DB action by " + (imitator_designator.Length == 0 ? k.EMPTY : imitator_designator + " IMITATING ") + HttpContext.Current.User.Identity.Name,
-        "/*" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff") + "*/ " + action
+        from:ConfigurationManager.AppSettings["sender_email_address"],
+        to:ConfigurationManager.AppSettings["failsafe_recipient_email_address"],
+        subject:"DB action by " + (imitator_designator.Length == 0 ? k.EMPTY : imitator_designator + " IMITATING ") + HttpContext.Current.User.Identity.Name,
+        message_string:k.WrapText
+          (
+          t:"/*" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff") + "*/ " + action,
+          insert_string:k.NEW_LINE,
+          break_char_array:new char[] {},
+          max_line_len:k.MAX_RFC_2822_ET_SEQ_EMAIL_LINE_LENGTH
+          )
         );
       return action;
       }
