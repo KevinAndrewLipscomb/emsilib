@@ -2636,8 +2636,8 @@ namespace ConEdLink.component.ss
         var hnc_certification_number = hn_target_table.SelectNodes("tr/td[2]");
         var hnc_level = hn_target_table.SelectNodes("tr/td[3]");
         var hnc_status = hn_target_table.SelectNodes("tr/td[4]");
-        var hnc_county = hn_target_table.SelectNodes("tr/td[5]");
-        var hnc_region = hn_target_table.SelectNodes("tr/td[6]");
+        var hnc_county = hn_target_table.SelectNodes("tr/td[6]");
+        var hnc_region = hn_target_table.SelectNodes("tr/td[7]");
         //
         var certification_number = k.EMPTY;
         for (var i = new k.subtype<int>(1,hnc_name.Count - 1); i.val < i.LAST; i.val++)  //limits take into account non-data header
