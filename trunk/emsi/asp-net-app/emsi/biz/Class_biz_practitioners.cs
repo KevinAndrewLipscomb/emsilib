@@ -146,12 +146,16 @@ namespace Class_biz_practitioners
       db_practitioners.MarkAllStale();
       //
       var context = new Class_ss_emsams.PractitionersContext();
-      while (context.county_option_index.val < context.county_option_index.LAST)
+      do
         {
         db_practitioners.ImportLatestFromEmsrs(ss_emsams.Practitioners(context));
         }
+      while (context.disposition.val == 0);
       //
-      db_practitioners.RemoveStale();
+      if (context.disposition.val == 1)
+        {
+        db_practitioners.RemoveStale();
+        }
       }
 
     public string LastNameOf(object summary)

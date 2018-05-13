@@ -1511,7 +1511,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private static bool Request_ems_health_state_pa_us_EmsregActivepractitioners
+    private static bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -1521,14 +1521,13 @@ namespace ConEdLink.component.ss
 
 	    try
 	    {
-		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/emsreg/activepractitioners.aspx");
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx");
         NormalizeWithCookie(request,cookie_container);
 
 		    request.Accept = "text/html, application/xhtml+xml, image/jxr, */*";
 		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
 		    request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
 		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
-		    request.Headers.Add("DNT", @"1");
 
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
@@ -1546,7 +1545,7 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private bool Request_ems_health_state_pa_us_EmsregActivepractitioners_ByCounty
+    private bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_ByCounty
       (
       CookieContainer cookie_container,
       string view_state,
@@ -1560,11 +1559,11 @@ namespace ConEdLink.component.ss
 
 	    try
 	    {
-		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/emsreg/activepractitioners.aspx");
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/registry/registry/activepractitioners.aspx");
         NormalizeWithCookie(request,cookie_container);
 
 		    request.Accept = "text/html, application/xhtml+xml, image/jxr, */*";
-		    request.Referer = "https://ems.health.state.pa.us/emsreg/activepractitioners.aspx";
+		    request.Referer = "https://ems.health.state.pa.us/registry/registry/activepractitioners.aspx";
 		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
 		    request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
 		    request.ContentType = "application/x-www-form-urlencoded";
@@ -1594,6 +1593,194 @@ namespace ConEdLink.component.ss
 		    Stream stream = request.GetRequestStream();
 		    stream.Write(postBytes, 0, postBytes.Length);
 		    stream.Close();
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+      }
+
+    private static bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next
+      (
+      CookieContainer cookie_container,
+      string view_state,
+      string view_state_generator,
+      string event_validation,
+      out HttpWebResponse response
+      )
+      {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx");
+        NormalizeWithCookie(request,cookie_container);
+
+		    request.Accept = "text/html, application/xhtml+xml, image/jxr, */*";
+		    request.Referer = "https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
+		    request.ContentType = "application/x-www-form-urlencoded";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    request.Headers.Set(HttpRequestHeader.CacheControl, "no-cache");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=qz4fif2xqgthlxvg34ndnghh");
+
+		    request.Method = "POST";
+		    request.ServicePoint.Expect100Continue = false;
+
+	      string body = @"__EVENTTARGET=ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl103%24lbtnNext"
+        + "&__EVENTARGUMENT="
+        + "&__LASTFOCUS="
+        + "&__VIEWSTATE=" + HttpUtility.UrlEncode(view_state)
+        + "&__VIEWSTATEGENERATOR=" + HttpUtility.UrlEncode(view_state_generator)
+        + "&__VIEWSTATEENCRYPTED="
+        + "&__EVENTVALIDATION=" + HttpUtility.UrlEncode(event_validation)
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl103%24ddlPerPage=100";
+		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(body);
+		    request.ContentLength = postBytes.Length;
+		    Stream stream = request.GetRequestStream();
+		    stream.Write(postBytes, 0, postBytes.Length);
+		    stream.Close();
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+      }
+
+    private static bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100
+      (
+      CookieContainer cookie_container,
+      string view_state,
+      string view_state_generator,
+      string event_validation,
+      out HttpWebResponse response
+      )
+      {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx");
+        NormalizeWithCookie(request,cookie_container);
+
+		    request.Accept = "text/html, application/xhtml+xml, image/jxr, */*";
+		    request.Referer = "https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
+		    request.ContentType = "application/x-www-form-urlencoded";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    request.Headers.Set(HttpRequestHeader.CacheControl, "no-cache");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=qz4fif2xqgthlxvg34ndnghh");
+
+		    request.Method = "POST";
+		    request.ServicePoint.Expect100Continue = false;
+
+		    string body = @"__EVENTTARGET=ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl13%24ddlPerPage"
+        + "&__EVENTARGUMENT="
+        + "&__LASTFOCUS="
+        + "&__VIEWSTATE=" + HttpUtility.UrlEncode(view_state)
+        + "&__VIEWSTATEGENERATOR=" + HttpUtility.UrlEncode(view_state_generator)
+        + "&__VIEWSTATEENCRYPTED="
+        + "&__EVENTVALIDATION=" + HttpUtility.UrlEncode(event_validation)
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl13%24ddlPerPage=100";
+		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(body);
+		    request.ContentLength = postBytes.Length;
+		    Stream stream = request.GetRequestStream();
+		    stream.Write(postBytes, 0, postBytes.Length);
+		    stream.Close();
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+      }
+
+    private bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search
+      (
+      CookieContainer cookie_container,
+      string view_state,
+      string view_state_generator,
+      string event_validation,
+      out HttpWebResponse response
+      )
+      {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx");
+        NormalizeWithCookie(request,cookie_container);
+
+		    request.Accept = "text/html, application/xhtml+xml, image/jxr, */*";
+		    request.Referer = "https://ems.health.state.pa.us/Registry/Registry/ActivePractitioners.aspx";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
+		    request.ContentType = "application/x-www-form-urlencoded";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    request.Headers.Set(HttpRequestHeader.CacheControl, "no-cache");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=hifdcolbktrih0ybwyj4b3h3");
+
+		    request.Method = "POST";
+		    request.ServicePoint.Expect100Continue = false;
+
+		    string body = @"__EVENTTARGET="
+        + "&__EVENTARGUMENT="
+        + "&__VIEWSTATE=" + HttpUtility.UrlEncode(view_state)
+        + "&__VIEWSTATEGENERATOR=" + HttpUtility.UrlEncode(view_state_generator)
+        + "&__VIEWSTATEENCRYPTED="
+        + "&__EVENTVALIDATION=" + HttpUtility.UrlEncode(event_validation)
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24ddlCertification=0"
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtLastName="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24tbwmeLastName_ClientState="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtFistName="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24tbwmeFirstName_ClientState="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtCertNumber="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtCertNumber_MaskedEditExtender_ClientState="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24ddlRegion=0"
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24ddlCounty=0"
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtCity="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24ddlState=0"
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtZIP="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24txtZIP_MaskedEditExtender_ClientState="
+        + "&ctl00%24ctl00%24SessionLinkBar%24Content%24btnSearch=Search";
+		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(body);
+		    request.ContentLength = postBytes.Length;
+		    Stream stream = request.GetRequestStream();
+		    stream.Write(postBytes, 0, postBytes.Length);
+		    stream.Close();
+
+        request.Timeout = int.Parse(ConfigurationManager.AppSettings["Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search_timeout_milliseconds"]);
 
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
@@ -2366,18 +2553,29 @@ namespace ConEdLink.component.ss
       internal string event_validation = k.EMPTY;
       internal HtmlNodeCollection county_option_collection = null;
       internal k.subtype<int> county_option_index;
+      internal k.int_sign_range disposition = null;
       //
       public PractitionersContext()
         {
         HttpWebResponse response;
         cookie_container = new CookieContainer();
-        Request_ems_health_state_pa_us_EmsregActivepractitioners(cookie_container,out response);
+        disposition = new k.int_sign_range();
+        if(!Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners
+            (
+            cookie_container:cookie_container,
+            response:out response
+            )
+          )
+        //then
+          {
+          throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners returned FALSE.");
+          }
         var html_document = HtmlDocumentOf(ConsumedStreamOf(response));
         view_state = ViewstateOf(html_document);
         view_state_generator = ViewstateGeneratorOf(html_document);
         event_validation = EventValidationOf(html_document);
-        county_option_collection = html_document.DocumentNode.SelectNodes("//select[@id='_ctl0__ctl0_SessionLinkBar_Content_ddlCounty']/option/@value");
-        county_option_index = new k.subtype<int>(1,county_option_collection.Count); // skips the first "Please choose a county" / -1 t option.
+        county_option_collection = html_document.DocumentNode.SelectNodes("//select[@id='SessionLinkBar_Content_ddlCounty']/option/@value");
+        county_option_index = new k.subtype<int>(the_first:0,the_last:county_option_collection.Count); // Change the_first value to 1 to skip the first "Select county" / -1 select option if actually pulling data county-by-county.
         }
       }
     internal ArrayList Practitioners
@@ -2387,26 +2585,52 @@ namespace ConEdLink.component.ss
       {
       var active_practitioners = new ArrayList();
       //
+      HtmlDocument html_document;
+      //
       HttpWebResponse response;
       //
       if(
-        Request_ems_health_state_pa_us_EmsregActivepractitioners_ByCounty
+        !Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search
+          (
+          cookie_container: context.cookie_container,
+          view_state: context.view_state,
+          view_state_generator: context.view_state_generator,
+          event_validation: context.event_validation,
+          response: out response
+          )
+        )
+      //then
+        {
+        throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search() returned FALSE.");
+        }
+      html_document = HtmlDocumentOf(ConsumedStreamOf(response));
+      context.view_state = ViewstateOf(html_document);
+      context.view_state_generator = ViewstateGeneratorOf(html_document);
+      context.event_validation = EventValidationOf(html_document);
+      //
+      if(!Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100
           (
           cookie_container:context.cookie_container,
           view_state:context.view_state,
           view_state_generator:context.view_state_generator,
           event_validation:context.event_validation,
-          county:context.county_option_collection[context.county_option_index.val].Attributes[0].Value,
           response:out response
           )
         )
       //then
         {
-        var html_document = HtmlDocumentOf(ConsumedStreamOf(response));
+        throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100() returned FALSE.");
+        }
+      do
+        {
+        html_document = HtmlDocumentOf(ConsumedStreamOf(response));
+        context.view_state = ViewstateOf(html_document);
+        context.view_state_generator = ViewstateGeneratorOf(html_document);
+        context.event_validation = EventValidationOf(html_document);
         //
         // The initial XPaths are determined by visiting the page in Google Chrome and activating the XPath Helper Wizard and/or Relative XPath Helper extensions.
         //
-        var hn_target_table = html_document.GetElementbyId("_ctl0__ctl0_SessionLinkBar_Content_dgSearchResults"); 
+        var hn_target_table = html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults"); 
         //
         var hnc_name = hn_target_table.SelectNodes("tr/td[1]");
         var hnc_certification_number = hn_target_table.SelectNodes("tr/td[2]");
@@ -2431,9 +2655,29 @@ namespace ConEdLink.component.ss
             active_practitioners.Add(practitioner);
             }
           }
-        //
-        context.county_option_index.val++;
+        if (hnc_name[hnc_name.Count - 1].SelectNodes("div/div/a[contains(@id,'SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage')]") == null)
+          {
+          context.disposition.val = 1;
+          }
+        else
+          {
+          context.disposition.val = 0;
+          if(!Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next
+              (
+              cookie_container:context.cookie_container,
+              view_state:context.view_state,
+              view_state_generator:context.view_state_generator,
+              event_validation:context.event_validation,
+              response:out response
+              )
+            )
+          //then
+            {
+            throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next() returned FALSE.");
+            }
+          }
         }
+      while (context.disposition.val == 0);
       return active_practitioners;
       }
 
