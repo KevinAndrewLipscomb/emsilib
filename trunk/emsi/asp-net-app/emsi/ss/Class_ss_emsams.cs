@@ -1610,12 +1610,13 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private static bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next
+    private static bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage
       (
       CookieContainer cookie_container,
       string view_state,
       string view_state_generator,
       string event_validation,
+      k.subtype<int> target_next_page_button_num,
       out HttpWebResponse response
       )
       {
@@ -1638,7 +1639,7 @@ namespace ConEdLink.component.ss
 		    request.Method = "POST";
 		    request.ServicePoint.Expect100Continue = false;
 
-	      string body = @"__EVENTTARGET=ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl103%24lbtnNext"
+	      string body = @"__EVENTTARGET=ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl103%24lbtnPage" + target_next_page_button_num.val.ToString()
         + "&__EVENTARGUMENT="
         + "&__LASTFOCUS="
         + "&__VIEWSTATE=" + HttpUtility.UrlEncode(view_state)
@@ -2621,6 +2622,8 @@ namespace ConEdLink.component.ss
         {
         throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100() returned FALSE.");
         }
+      var target_next_page_button_num = new k.subtype<int>(1,5);
+      target_next_page_button_num.val = 2;
       do
         {
         html_document = HtmlDocumentOf(ConsumedStreamOf(response));
@@ -2655,19 +2658,20 @@ namespace ConEdLink.component.ss
             active_practitioners.Add(practitioner);
             }
           }
-        if (hnc_name[hnc_name.Count - 1].SelectNodes("div/div/a[contains(@id,'SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage')]") == null)
+        if (html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage" + target_next_page_button_num.val.ToString()) == null)
           {
           context.disposition.val = 1;
           }
         else
           {
           context.disposition.val = 0;
-          if(!Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next
+          if(!Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage
               (
               cookie_container:context.cookie_container,
               view_state:context.view_state,
               view_state_generator:context.view_state_generator,
               event_validation:context.event_validation,
+              target_next_page_button_num:target_next_page_button_num,
               response:out response
               )
             )
@@ -2675,6 +2679,7 @@ namespace ConEdLink.component.ss
             {
             throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next() returned FALSE.");
             }
+          target_next_page_button_num.val = (target_next_page_button_num.val < target_next_page_button_num.LAST ? target_next_page_button_num.val + 1 : 1);
           }
         }
       while (context.disposition.val == 0);
