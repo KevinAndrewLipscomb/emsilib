@@ -1529,6 +1529,8 @@ namespace ConEdLink.component.ss
 		    request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko";
 		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
 
+        request.Timeout = int.Parse(ConfigurationManager.AppSettings["Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search_timeout_milliseconds"]);
+
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
 	    catch (WebException e)
@@ -1653,6 +1655,8 @@ namespace ConEdLink.component.ss
 		    stream.Write(postBytes, 0, postBytes.Length);
 		    stream.Close();
 
+        request.Timeout = int.Parse(ConfigurationManager.AppSettings["Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search_timeout_milliseconds"]);
+
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
 	    catch (WebException e)
@@ -1710,6 +1714,8 @@ namespace ConEdLink.component.ss
 		    Stream stream = request.GetRequestStream();
 		    stream.Write(postBytes, 0, postBytes.Length);
 		    stream.Close();
+
+        request.Timeout = int.Parse(ConfigurationManager.AppSettings["Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search_timeout_milliseconds"]);
 
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
