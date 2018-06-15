@@ -2638,28 +2638,35 @@ namespace ConEdLink.component.ss
         //
         var hn_target_table = html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults"); 
         //
-        var hnc_name = hn_target_table.SelectNodes("tr/td[1]");
-        var hnc_certification_number = hn_target_table.SelectNodes("tr/td[2]");
-        var hnc_level = hn_target_table.SelectNodes("tr/td[3]");
-        var hnc_status = hn_target_table.SelectNodes("tr/td[4]");
-        var hnc_county = hn_target_table.SelectNodes("tr/td[6]");
-        var hnc_region = hn_target_table.SelectNodes("tr/td[7]");
-        //
-        var certification_number = k.EMPTY;
-        for (var i = new k.subtype<int>(1,hnc_name.Count - 1); i.val < i.LAST; i.val++)  //limits take into account non-data header
+        try
           {
-          certification_number = k.Safe(hnc_certification_number[i.val].InnerText.Trim(),k.safe_hint_type.NUM);
-          if (certification_number.Length > 0)
+          var hnc_name = hn_target_table.SelectNodes("tr/td[1]");
+          var hnc_certification_number = hn_target_table.SelectNodes("tr/td[2]");
+          var hnc_level = hn_target_table.SelectNodes("tr/td[3]");
+          var hnc_status = hn_target_table.SelectNodes("tr/td[4]");
+          var hnc_county = hn_target_table.SelectNodes("tr/td[6]");
+          var hnc_region = hn_target_table.SelectNodes("tr/td[7]");
+          //
+          var certification_number = k.EMPTY;
+          for (var i = new k.subtype<int>(1,hnc_name.Count - 1); i.val < i.LAST; i.val++)  //limits take into account non-data header
             {
-            var practitioner = new Practitioner();
-            practitioner.name = k.Safe(hnc_name[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME_CSV);
-            practitioner.certification_number = certification_number;
-            practitioner.level = k.Safe(hnc_level[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
-            practitioner.status = k.Safe(hnc_status[i.val].InnerText.Trim(),k.safe_hint_type.ALPHA);
-            practitioner.county = k.Safe(hnc_county[i.val].InnerText.Trim(),k.safe_hint_type.POSTAL_CITY);
-            practitioner.region = k.Safe(hnc_region[i.val].InnerText.Trim(),k.safe_hint_type.ORG_NAME);
-            active_practitioners.Add(practitioner);
+            certification_number = k.Safe(hnc_certification_number[i.val].InnerText.Trim(),k.safe_hint_type.NUM);
+            if (certification_number.Length > 0)
+              {
+              var practitioner = new Practitioner();
+              practitioner.name = k.Safe(hnc_name[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME_CSV);
+              practitioner.certification_number = certification_number;
+              practitioner.level = k.Safe(hnc_level[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
+              practitioner.status = k.Safe(hnc_status[i.val].InnerText.Trim(),k.safe_hint_type.ALPHA);
+              practitioner.county = k.Safe(hnc_county[i.val].InnerText.Trim(),k.safe_hint_type.POSTAL_CITY);
+              practitioner.region = k.Safe(hnc_region[i.val].InnerText.Trim(),k.safe_hint_type.ORG_NAME);
+              active_practitioners.Add(practitioner);
+              }
             }
+          }
+        catch (Exception e)
+          {
+          throw new Exception(e.StackTrace + k.NEW_LINE + k.NEW_LINE + "The received html_document was: " + k.NEW_LINE + html_document);
           }
         if (html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage" + target_next_page_button_num.val.ToString()) == null)
           {
