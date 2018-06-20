@@ -2637,6 +2637,7 @@ namespace ConEdLink.component.ss
         // The initial XPaths are determined by visiting the page in Google Chrome and activating the XPath Helper Wizard and/or Relative XPath Helper extensions.
         //
         var hn_target_table = html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults"); 
+        var saved_practitioner_name = k.EMPTY;
         //
         try
           {
@@ -2655,6 +2656,7 @@ namespace ConEdLink.component.ss
               {
               var practitioner = new Practitioner();
               practitioner.name = k.Safe(hnc_name[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME_CSV);
+              saved_practitioner_name = practitioner.name;
               practitioner.certification_number = certification_number;
               practitioner.level = k.Safe(hnc_level[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
               practitioner.status = k.Safe(hnc_status[i.val].InnerText.Trim(),k.safe_hint_type.ALPHA);
@@ -2686,7 +2688,12 @@ namespace ConEdLink.component.ss
             );
           if(result.Length > 0)
             {
-            throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Next() returned '" + result + "'.");
+            throw new Exception
+              (
+              "Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage() returned '" + result + "'"
+              + " with saved_practitioner_name = '" + saved_practitioner_name + "'"
+              + " and target_next_page_button_num.val = '" + target_next_page_button_num.val + "'"
+              );
             }
           target_next_page_button_num.val = (target_next_page_button_num.val < target_next_page_button_num.LAST ? target_next_page_button_num.val + 1 : 1);
           }
