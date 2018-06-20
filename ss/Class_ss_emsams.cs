@@ -2668,7 +2668,7 @@ namespace ConEdLink.component.ss
           }
         catch (Exception e)
           {
-          throw new Exception(e.StackTrace + k.NEW_LINE + k.NEW_LINE + "The received html_document was: " + k.NEW_LINE + html_document);
+          throw new Exception(e.StackTrace + k.NEW_LINE + k.NEW_LINE + "The received html_document was: " + k.NEW_LINE + html_document.DocumentNode.InnerHtml);
           }
         if (html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage" + target_next_page_button_num.val.ToString()) == null)
           {
