@@ -2627,6 +2627,8 @@ namespace ConEdLink.component.ss
         }
       var target_next_page_button_num = new k.subtype<int>(1,5);
       target_next_page_button_num.val = 2;
+      var page_index = new k.int_positive();
+      var row_index = new k.int_positive();
       do
         {
         html_document = HtmlDocumentOf(ConsumedStreamOf(response));
@@ -2651,6 +2653,7 @@ namespace ConEdLink.component.ss
           var certification_number = k.EMPTY;
           for (var i = new k.subtype<int>(1,hnc_name.Count - 1); i.val < i.LAST; i.val++)  //limits take into account non-data header
             {
+            row_index.val = i.val;
             certification_number = k.Safe(hnc_certification_number[i.val].InnerText.Trim(),k.safe_hint_type.NUM);
             if (certification_number.Length > 0)
               {
@@ -2668,7 +2671,7 @@ namespace ConEdLink.component.ss
           }
         catch (Exception e)
           {
-          throw new Exception(e.StackTrace + k.NEW_LINE + k.NEW_LINE + "The received html_document was: " + k.NEW_LINE + html_document.DocumentNode.InnerHtml);
+          throw new Exception(e.StackTrace + k.NEW_LINE + k.NEW_LINE + "At page_index.val " + page_index.val + " row_index.val " + row_index.val + " the received html_document was: " + k.NEW_LINE + html_document.DocumentNode.InnerHtml);
           }
         if (html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage" + target_next_page_button_num.val.ToString()) == null)
           {
@@ -2697,6 +2700,7 @@ namespace ConEdLink.component.ss
             }
           target_next_page_button_num.val = (target_next_page_button_num.val < target_next_page_button_num.LAST ? target_next_page_button_num.val + 1 : 1);
           }
+        page_index.val++;
         }
       while (context.disposition.val == 0);
       return active_practitioners;
