@@ -1642,6 +1642,7 @@ namespace ConEdLink.component.ss
 		    request.ServicePoint.Expect100Continue = false;
         request.Timeout = int.Parse(ConfigurationManager.AppSettings["Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search_timeout_milliseconds"]);
         request.ReadWriteTimeout = int.Parse(ConfigurationManager.AppSettings["Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search_timeout_milliseconds"]);
+        request.KeepAlive = false;
 
 	      string body = @"__EVENTTARGET=ctl00%24ctl00%24SessionLinkBar%24Content%24gvPractitionerSearchResults%24ctl103%24lbtnPage" + target_next_page_button_num.val.ToString()
         + "&__EVENTARGUMENT="
@@ -2628,7 +2629,7 @@ namespace ConEdLink.component.ss
       var target_next_page_button_num = new k.subtype<int>(1,5);
       target_next_page_button_num.val = 2;
       var page_index = new k.int_positive();
-      var row_index = new k.int_positive();
+      var row_index = new k.int_nonnegative();
       do
         {
         html_document = HtmlDocumentOf(ConsumedStreamOf(response));
@@ -2667,6 +2668,7 @@ namespace ConEdLink.component.ss
               practitioner.region = k.Safe(hnc_region[i.val].InnerText.Trim(),k.safe_hint_type.ORG_NAME);
               active_practitioners.Add(practitioner);
               }
+            row_index.val = 0;
             }
           }
         catch (Exception e)
@@ -2689,13 +2691,15 @@ namespace ConEdLink.component.ss
             target_next_page_button_num:target_next_page_button_num,
             response:out response
             );
-          if(result.Length > 0)
+          if (result.Length > 0)
             {
             throw new Exception
               (
               "Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage() returned '" + result + "'"
               + " with saved_practitioner_name = '" + saved_practitioner_name + "'"
               + " and target_next_page_button_num.val = '" + target_next_page_button_num.val + "'"
+              + " and page_index.val '" + page_index.val + "'"
+              + " and row_index.val '" + row_index.val + "'"
               );
             }
           target_next_page_button_num.val = (target_next_page_button_num.val < target_next_page_button_num.LAST ? target_next_page_button_num.val + 1 : 1);
