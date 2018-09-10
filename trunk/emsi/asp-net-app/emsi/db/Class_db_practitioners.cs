@@ -406,7 +406,7 @@ namespace Class_db_practitioners
                   + " , certification_number = '" + certification_number + "'"
                   + " , level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + level_description + "')"
                   + " , regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + region_name + "')"
-                  + " , be_birth_date_confirmed = TRUE"
+                  + " , be_birth_date_confirmed = FALSE" // Set back to TRUE if Pennsylvania ever exposes DOB again and we are inserting it here.
                   + " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')"
                   + " , status_id = (select id from practitioner_status where description = '" + status + "')",
                   connection
