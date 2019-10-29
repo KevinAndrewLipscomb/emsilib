@@ -312,11 +312,25 @@ namespace Class_db_users
         }
 
         public void SetEmailAddress(string id, string email_address)
-        {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("UPDATE user " + "SET password_reset_email_address = \"" + email_address + "\"" + "WHERE id = " + id), this.connection).ExecuteNonQuery();
-            this.Close();
-        }
+          {
+          Open();
+          new MySqlCommand
+            (
+            db_trail.Saved
+              (
+              "START TRANSACTION"
+              + ";"
+              + " delete from user where (password_reset_email_address = '" + email_address + "') and (id not in (select user_id from user_member_map)) limit 1" // The limit should not be necessary but adds protection if another part of the query turns out to have been programmed erroneously.
+              + ";"
+              + " update user set password_reset_email_address = '" + email_address + "'" + " WHERE id = '" + id + "'"
+              + ";"
+              + " COMMIT"
+              ),
+            connection
+            )
+            .ExecuteNonQuery();
+          Close();
+          }
 
         public void SetPassword(string id, string encoded_password)
         {
