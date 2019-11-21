@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
+using System.Threading;
 using System.Web;
 
 namespace ConEdLink.component.ss
@@ -2682,26 +2683,35 @@ namespace ConEdLink.component.ss
         else
           {
           context.disposition.val = 0;
-          result = Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage
-            (
-            cookie_container:context.cookie_container,
-            view_state:context.view_state,
-            view_state_generator:context.view_state_generator,
-            event_validation:context.event_validation,
-            target_next_page_button_num:target_next_page_button_num,
-            response:out response
-            );
-          if (result.Length > 0)
+          do
             {
-            throw new Exception
+            result = Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage
               (
-              "Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage() returned '" + result + "'"
-              + " with saved_practitioner_name = '" + saved_practitioner_name + "'"
-              + " and target_next_page_button_num.val = '" + target_next_page_button_num.val + "'"
-              + " and page_index.val '" + page_index.val + "'"
-              + " and row_index.val '" + row_index.val + "'"
+              cookie_container:context.cookie_container,
+              view_state:context.view_state,
+              view_state_generator:context.view_state_generator,
+              event_validation:context.event_validation,
+              target_next_page_button_num:target_next_page_button_num,
+              response:out response
               );
+            if (result.Length > 0)
+              {
+              var log = new StreamWriter(path:HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["scratch_folder"] + "/Class_ss_emsams.Practitioners.log"),append:true);
+              log.AutoFlush = true;
+              log.WriteLine
+                (
+                DateTime.Now.ToString("s") + ":"
+                + " Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage() returned '" + result + "'"
+                + " with saved_practitioner_name = '" + saved_practitioner_name + "'"
+                + " and target_next_page_button_num.val = '" + target_next_page_button_num.val + "'"
+                + " and page_index.val '" + page_index.val + "'"
+                + " and row_index.val '" + row_index.val + "'"
+                );
+              log.Close();
+              Thread.Sleep(millisecondsTimeout:int.Parse(ConfigurationManager.AppSettings["server_error_recovery_pause_in_seconds"])*1000);
+              }
             }
+          while (result.Length > 0);
           target_next_page_button_num.val = (target_next_page_button_num.val < target_next_page_button_num.LAST ? target_next_page_button_num.val + 1 : 1);
           }
         page_index.val++;
