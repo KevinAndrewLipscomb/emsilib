@@ -2708,7 +2708,7 @@ namespace ConEdLink.component.ss
                 + " and row_index.val '" + row_index.val + "'"
                 );
               log.Close();
-              Thread.Sleep(millisecondsTimeout:int.Parse(ConfigurationManager.AppSettings["server_error_recovery_pause_in_seconds"])*1000);
+              Thread.Sleep(millisecondsTimeout:5000);
               }
             }
           while (result.Length > 0);
