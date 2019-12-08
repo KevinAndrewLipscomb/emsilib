@@ -3,15 +3,11 @@
 using Class_db_practitioners;
 using Class_db_regions;
 using ConEdLink.component.ss;
-using emsi.ServiceReference_emsams_Practitioner;
-using external_data_binding.emsams.PractitionerInfo;
-using external_data_binding.emsams.PractitionerStatusList;
 using kix;
 using System;
 using System.Collections;
 using System.Configuration;
-using System.IO;
-using System.Xml.Serialization;
+using System.Threading;
 
 namespace Class_biz_practitioners
   {
@@ -146,15 +142,27 @@ namespace Class_biz_practitioners
       db_practitioners.MarkAllStale();
       //
       var context = new Class_ss_emsams.PractitionersContext();
-      do
+      while (context.disposition.val < 1)
         {
-        db_practitioners.ImportLatestFromEmsrs(ss_emsams.Practitioners(context));
-        }
-      while (context.disposition.val == 0);
-      //
-      if (context.disposition.val == 1)
-        {
-        db_practitioners.RemoveStale();
+        try
+          {
+          do
+            {
+            db_practitioners.ImportLatestFromEmsrs(ss_emsams.Practitioners(context));
+            }
+          while (context.disposition.val == 0);
+          //
+          if (context.disposition.val == 1)
+            {
+            db_practitioners.RemoveStale();
+            }
+          }
+        catch (Exception e)
+          {
+          k.EscalatedException(the_exception:e);
+          Thread.Sleep(millisecondsTimeout:new Random().Next(minValue:300000,maxValue:600000));
+          context = new Class_ss_emsams.PractitionersContext();
+          }
         }
       }
 
