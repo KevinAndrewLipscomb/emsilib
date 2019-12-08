@@ -151,11 +151,6 @@ namespace Class_biz_practitioners
             db_practitioners.ImportLatestFromEmsrs(ss_emsams.Practitioners(context));
             }
           while (context.disposition.val == 0);
-          //
-          if (context.disposition.val == 1)
-            {
-            db_practitioners.RemoveStale();
-            }
           }
         catch (Exception e)
           {
@@ -164,6 +159,8 @@ namespace Class_biz_practitioners
           context = new Class_ss_emsams.PractitionersContext();
           }
         }
+      //
+      db_practitioners.RemoveStale();
       }
 
     public string LastNameOf(object summary)
