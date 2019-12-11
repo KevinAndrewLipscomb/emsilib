@@ -154,8 +154,8 @@ namespace Class_biz_practitioners
           }
         catch (Exception e)
           {
-          k.EscalatedException(the_exception:e);
-          Thread.Sleep(millisecondsTimeout:new Random().Next(minValue:300000,maxValue:600000));
+          k.SilentAlarm(the_exception:e);
+          Thread.Sleep(millisecondsTimeout:new Random().Next(minValue:1800000,maxValue:5400000));
           context = new Class_ss_emsams.PractitionersContext();
           }
         }
