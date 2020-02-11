@@ -2598,6 +2598,11 @@ namespace ConEdLink.component.ss
       HttpWebResponse response;
       var result = k.EMPTY;
       //
+      var log = new StreamWriter(path:HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["scratch_folder"] + "/Class_ss_emsams.Practitioners.log"),append:true);
+      log.AutoFlush = true;
+      log.WriteLine(DateTime.Now.ToString("s") + ": NEW Class_ss_emsams.Practitioners JOB STARTING");
+      //
+      log.WriteLine(DateTime.Now.ToString("s") + ": Calling Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search");
       result = Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search
         (
         cookie_container: context.cookie_container,
@@ -2608,6 +2613,7 @@ namespace ConEdLink.component.ss
         );
       if (result.Length > 0)
         {
+        log.WriteLine(DateTime.Now.ToString("s") + ": EXCEPTION - Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search() returned '" + result + "'.");
         throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search() returned '" + result + "'.");
         }
       html_document = HtmlDocumentOf(ConsumedStreamOf(response));
@@ -2615,6 +2621,7 @@ namespace ConEdLink.component.ss
       context.view_state_generator = ViewstateGeneratorOf(html_document);
       context.event_validation = EventValidationOf(html_document);
       //
+      log.WriteLine(DateTime.Now.ToString("s") + ": Calling Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100");
       result = Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100
         (
         cookie_container:context.cookie_container,
@@ -2625,6 +2632,7 @@ namespace ConEdLink.component.ss
         );
       if(result.Length > 0)
         {
+        log.WriteLine(DateTime.Now.ToString("s") + ": EXCEPTION - Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100() returned '" + result + "'.");
         throw new Exception("Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Perpage100() returned '" + result + "'.");
         }
       var target_next_page_button_num = new k.subtype<int>(1,5);
@@ -2674,6 +2682,7 @@ namespace ConEdLink.component.ss
           }
         catch (Exception e)
           {
+          log.WriteLine(DateTime.Now.ToString("s") + ": EXCEPTION - " + e.StackTrace + k.NEW_LINE + k.NEW_LINE + "At page_index.val " + page_index.val + " row_index.val " + row_index.val + " the received html_document was: " + k.NEW_LINE + html_document.DocumentNode.InnerHtml);
           throw new Exception(e.StackTrace + k.NEW_LINE + k.NEW_LINE + "At page_index.val " + page_index.val + " row_index.val " + row_index.val + " the received html_document was: " + k.NEW_LINE + html_document.DocumentNode.InnerHtml);
           }
         if (html_document.GetElementbyId("SessionLinkBar_Content_gvPractitionerSearchResults_lbtnPage" + target_next_page_button_num.val.ToString()) == null)
@@ -2685,6 +2694,7 @@ namespace ConEdLink.component.ss
           context.disposition.val = 0;
           do
             {
+            log.WriteLine(DateTime.Now.ToString("s") + ": Calling Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage");
             result = Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_NextNumericalPage
               (
               cookie_container:context.cookie_container,
@@ -2696,8 +2706,6 @@ namespace ConEdLink.component.ss
               );
             if (result.Length > 0)
               {
-              var log = new StreamWriter(path:HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["scratch_folder"] + "/Class_ss_emsams.Practitioners.log"),append:true);
-              log.AutoFlush = true;
               log.WriteLine
                 (
                 DateTime.Now.ToString("s") + ":"
@@ -2707,7 +2715,6 @@ namespace ConEdLink.component.ss
                 + " and page_index.val '" + page_index.val + "'"
                 + " and row_index.val '" + row_index.val + "'"
                 );
-              log.Close();
               Thread.Sleep(millisecondsTimeout:5000);
               }
             }
@@ -2717,6 +2724,8 @@ namespace ConEdLink.component.ss
         page_index.val++;
         }
       while (context.disposition.val == 0);
+      log.WriteLine(DateTime.Now.ToString("s") + ": Class_ss_emsams.Practitioners DONE");
+      log.Close();
       return active_practitioners;
       }
 
