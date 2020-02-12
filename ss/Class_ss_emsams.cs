@@ -2600,7 +2600,7 @@ namespace ConEdLink.component.ss
       //
       var log = new StreamWriter(path:HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["scratch_folder"] + "/Class_ss_emsams.Practitioners.log"),append:true);
       log.AutoFlush = true;
-      log.WriteLine(DateTime.Now.ToString("s") + ": NEW Class_ss_emsams.Practitioners JOB STARTING");
+      log.WriteLine(DateTime.Now.ToString("s") + ": NEW JOB STARTING");
       //
       log.WriteLine(DateTime.Now.ToString("s") + ": Calling Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search");
       result = Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_Search
@@ -2724,7 +2724,7 @@ namespace ConEdLink.component.ss
         page_index.val++;
         }
       while (context.disposition.val == 0);
-      log.WriteLine(DateTime.Now.ToString("s") + ": Class_ss_emsams.Practitioners DONE");
+      log.WriteLine(DateTime.Now.ToString("s") + ": DONE");
       log.Close();
       return active_practitioners;
       }

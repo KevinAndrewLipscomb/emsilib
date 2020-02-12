@@ -139,7 +139,7 @@ namespace Class_biz_practitioners
 
     public void ImportLatestFromEmsrs()
       {
-      db_practitioners.MarkAllStale();
+//      db_practitioners.MarkAllStale();
       //
       var context = new Class_ss_emsams.PractitionersContext();
       while (context.disposition.val < 1)
@@ -160,7 +160,7 @@ namespace Class_biz_practitioners
           }
         }
       //
-      db_practitioners.RemoveStale();
+//      db_practitioners.RemoveStale();
       }
 
     public string LastNameOf(object summary)
