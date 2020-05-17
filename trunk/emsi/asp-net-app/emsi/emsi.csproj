@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>emsi</RootNamespace>
     <AssemblyName>emsi</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion> <!-- The specified version must be installed on the ACTIVE production server. -->
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <LangVersion>preview</LangVersion>
