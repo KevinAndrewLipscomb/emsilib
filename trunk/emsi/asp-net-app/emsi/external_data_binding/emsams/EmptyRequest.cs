@@ -30,10 +30,10 @@ namespace external_data_binding.emsams.EmptyRequest {
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string GUID {
             get {
-                return this.gUIDField;
+                return gUIDField;
             }
             set {
-                this.gUIDField = value;
+                gUIDField = value;
             }
         }
     }

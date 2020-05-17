@@ -12,11 +12,11 @@ namespace Class_biz_accounts
 {
     public class TClass_biz_accounts
     {
-        private TClass_biz_counties biz_counties = null;
-        private TClass_biz_services biz_services = null;
-        private TClass_biz_user biz_user = null;
-        private TClass_db_accounts db_accounts = null;
-        private TClass_db_emsof_requests db_emsof_requests = null;
+        private readonly TClass_biz_counties biz_counties = null;
+        private readonly TClass_biz_services biz_services = null;
+        private readonly TClass_biz_user biz_user = null;
+        private readonly TClass_db_accounts db_accounts = null;
+        private readonly TClass_db_emsof_requests db_emsof_requests = null;
 
         public TClass_biz_accounts() : base()
         {
@@ -45,12 +45,10 @@ namespace Class_biz_accounts
             return result;
         }
 
-        public bool BeValidSysAdminCredentials(string encoded_password)
-        {
-            bool result;
-            result = (encoded_password == ConfigurationManager.AppSettings["sysadmin_encoded_password"]);
-            return result;
-        }
+    public bool BeValidSysAdminCredentials(string encoded_password)
+      {
+      return (encoded_password == ConfigurationManager.AppSettings["sysadmin_encoded_password"]);
+      }
 
         public void BindConedSponsorsInRegion
           (
@@ -243,7 +241,7 @@ namespace Class_biz_accounts
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], county_coord_email_address + k.COMMA + EmailTargetByRegionAndRole(biz_counties.RegionCodeOf(county_code),"emsof-coordinator"), "Service missed deadline", message_text);
         }
 
-        public void MakeDemotionNotification(string role, string reviewer_descriptor, string new_status_description, string service_id, string service_name, string fy_designator, bool be_ok_to_rework, string reason, string county_code, string emsof_ante)
+        public void MakeDemotionNotification(string role, string reviewer_descriptor, string service_id, string service_name, string fy_designator, bool be_ok_to_rework, string reason, string county_code, string emsof_ante)
         {
             char[] BreakChars = new char[3 + 1];
             string other_stakeholder_email_address = k.EMPTY;
@@ -314,7 +312,7 @@ namespace Class_biz_accounts
             string next_reviewer_email_target;
             string self_email_address;
             // Get the next approver's email address.
-            if (next_reviewer_role != k.EMPTY)
+            if (next_reviewer_role.Length > 0)
             {
                 next_reviewer_email_target = EmailTargetByRegionAndRole(biz_services.RegionCodeOf(service_id),next_reviewer_role);
             }
@@ -324,7 +322,7 @@ namespace Class_biz_accounts
             }
             self_email_address = SelfEmailAddress();
             messageText = reviewer_descriptor + " has promoted " + service_name + "\'s " + fy_designator + " EMSOF request." + k.NEW_LINE + k.NEW_LINE + "The status of this EMSOF request is now \"" + new_status_description + "\".  ";
-            if (next_reviewer_email_target != k.EMPTY)
+            if (next_reviewer_email_target.Length > 0)
             {
                 messageText = messageText + "The next reviewer\'s email address is <" + next_reviewer_email_target + ">.";
             }
@@ -340,7 +338,7 @@ namespace Class_biz_accounts
             // reply_to
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailAddressByKindId("service", service_id), "Promotion of EMSOF request", messageText, false, sponsor_county_email_address, k.EMPTY, self_email_address);
             // Send notification to region.
-            if (next_reviewer_email_target != k.EMPTY)
+            if (next_reviewer_email_target.Length > 0)
             {
                 // be_html
                 // cc

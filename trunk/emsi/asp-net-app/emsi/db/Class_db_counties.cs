@@ -6,18 +6,18 @@ using System.Web.UI.WebControls;
 
 namespace Class_db_counties
 {
-  public class county_summary
-    {
-    public string code;
-    public string default_match_level_id;
-    public string email_address;
-    public string name;
-    }
-
     public class TClass_db_counties: TClass_db
     {
 
-        private TClass_db_trail db_trail;
+    private class county_summary
+      {
+      public string code;
+      public string default_match_level_id;
+      public string email_address;
+      public string name;
+      }
+
+        private readonly TClass_db_trail db_trail;
 
         //Constructor  Create()
         public TClass_db_counties() : base()
@@ -34,27 +34,27 @@ namespace Class_db_counties
           )
           {
           ((target) as ListControl).Items.Clear();
-          if (unselected_literal != k.EMPTY)
+          if (unselected_literal.Length > 0)
             {
             ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
           Open();
-          var dr = new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             "SELECT code,name"
             + " FROM county_code_name_map"
             +     (region_code.Length > 0 ? " join county_region_map on (county_region_map.county_code=county_code_name_map.code) where region_code = '" + region_code + "'" : k.EMPTY)
             + " order by name",
             connection
-            )
-            .ExecuteReader();
+            );
+          var dr = my_sql_command.ExecuteReader();
           while (dr.Read())
             {
             ((target) as ListControl).Items.Add(new ListItem(dr["name"].ToString(), dr["code"].ToString()));
             }
           dr.Close();
           Close();
-          if (selected_value != k.EMPTY)
+          if (selected_value.Length > 0)
             {
             ((target) as ListControl).SelectedValue = selected_value;
             }
@@ -64,19 +64,20 @@ namespace Class_db_counties
         {
             MySqlDataReader dr;
             ((target) as ListControl).Items.Clear();
-            if (unselected_literal != k.EMPTY)
+            if (unselected_literal.Length > 0)
             {
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
-            this.Open();
-            dr = new MySqlCommand("SELECT emsrs_code,name FROM county_code_name_map order by name", this.connection).ExecuteReader();
+            Open();
+            using var my_sql_command = new MySqlCommand("SELECT emsrs_code,name FROM county_code_name_map order by name", connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["name"].ToString(), dr["emsrs_code"].ToString()));
             }
             dr.Close();
-            this.Close();
-            if (selected_value != k.EMPTY)
+            Close();
+            if (selected_value.Length > 0)
             {
                 ((target) as ListControl).SelectedValue = selected_value;
             }
@@ -101,7 +102,7 @@ namespace Class_db_counties
             sort_order = sort_order.Replace("%", " desc");
             }
           Open();
-          ((target) as BaseDataList).DataSource = new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             "select code"
             + " , county_code_name_map.name as name"
@@ -124,8 +125,8 @@ namespace Class_db_counties
             +   " join match_level on (match_level.id=county_code_name_map.default_match_level_id)"
             + " order by " + sort_order,
             connection
-            )
-            .ExecuteReader();
+            );
+          ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
           ((target) as BaseDataList).DataBind();
           Close();
           }
@@ -138,7 +139,8 @@ namespace Class_db_counties
     internal string DefaultMatchLevelIdOfCode(string code)
       {
       Open();
-      var default_match_level_code = new MySqlCommand("select default_match_level_id from county_code_name_map where code = '" + code + "'",connection).ExecuteScalar().ToString();
+      using var my_sql_command = new MySqlCommand("select default_match_level_id from county_code_name_map where code = '" + code + "'",connection);
+      var default_match_level_code = my_sql_command.ExecuteScalar().ToString();
       Close();
       return default_match_level_code;
       }
@@ -156,9 +158,10 @@ namespace Class_db_counties
         public string NameOf(string code)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select name from county_code_name_map where code = " + code, this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select name from county_code_name_map where code = " + code, connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -170,7 +173,8 @@ namespace Class_db_counties
     public string RegionCodeOf(string county_code)
       {
       Open();
-      var region_code_of = new MySqlCommand("select region_code from county_region_map where county_code = '" + county_code + "'",connection).ExecuteScalar().ToString();
+      using var my_sql_command = new MySqlCommand("select region_code from county_region_map where county_code = '" + county_code + "'",connection);
+      var region_code_of = my_sql_command.ExecuteScalar().ToString();
       Close();
       return region_code_of;
       }
@@ -183,32 +187,29 @@ namespace Class_db_counties
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved("update county_code_name_map join county_user on (county_user.id=county_code_name_map.code) set password_reset_email_address = '" + email_address + "', default_match_level_id = '" + default_match_level_id + "' where code = '" + code + "'"),
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     public object Summary(string code)
       {
       Open();
-      var dr =
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "select name"
-          + " , password_reset_email_address"
-          + " , default_match_level_id"
-          + " from county_code_name_map"
-          +   " join county_user on (county_user.id=county_code_name_map.code)"
-          + " where code = '" + code + "'",
-          connection
-          )
-          .ExecuteReader()
+        "select name"
+        + " , password_reset_email_address"
+        + " , default_match_level_id"
+        + " from county_code_name_map"
+        +   " join county_user on (county_user.id=county_code_name_map.code)"
+        + " where code = '" + code + "'",
+        connection
         );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       var the_summary = new county_summary()
         {

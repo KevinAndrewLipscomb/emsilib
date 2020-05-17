@@ -8,24 +8,24 @@ namespace Class_biz_appropriations
 {
     public class TClass_biz_appropriations
     {
-        private TClass_biz_fiscal_years biz_fiscal_years = null;
-        private TClass_biz_user biz_user = null;
-        private TClass_db_appropriations db_appropriations = null;
+        private readonly TClass_biz_fiscal_years biz_fiscal_years = null;
+        private readonly TClass_db_appropriations db_appropriations = null;
         //Constructor  Create()
         public TClass_biz_appropriations() : base()
         {
             // TODO: Add any constructor code here
             biz_fiscal_years = new TClass_biz_fiscal_years();
-            biz_user = new TClass_biz_user();
             db_appropriations = new TClass_db_appropriations();
         }
 
         internal void AddRegionDictum
           (
+          #pragma warning disable IDE0060 // Remove unused parameter
           string sda_id,
           string county_code,
           string amount,
           string default_match_level_id
+          #pragma warning restore IDE0060 // Remove unused parameter
           )
           {
           throw new NotImplementedException();
@@ -168,15 +168,15 @@ namespace Class_biz_appropriations
             decimal result;
             TClass_biz_user biz_user;
             biz_user = new TClass_biz_user();
-            if (recipient_kind == k.EMPTY)
+            if (recipient_kind.Length == 0)
             {
                 recipient_kind = biz_user.Kind();
             }
-            if (recipient_id == k.EMPTY)
+            if (recipient_id.Length == 0)
             {
                 recipient_id = biz_user.IdNum();
             }
-            if (fy_id == k.EMPTY)
+            if (fy_id.Length == 0)
             {
                 fy_id = biz_fiscal_years.IdOfCurrent();
             }
@@ -204,15 +204,15 @@ namespace Class_biz_appropriations
             decimal result;
             TClass_biz_user biz_user;
             biz_user = new TClass_biz_user();
-            if (recipient_kind == k.EMPTY)
+            if (recipient_kind.Length == 0)
             {
                 recipient_kind = biz_user.Kind();
             }
-            if (recipient_id == k.EMPTY)
+            if (recipient_id.Length == 0)
             {
                 recipient_id = biz_user.IdNum();
             }
-            if (fy_id == k.EMPTY)
+            if (fy_id.Length == 0)
             {
                 fy_id = biz_fiscal_years.IdOfCurrent();
             }
@@ -247,7 +247,7 @@ namespace Class_biz_appropriations
             decimal result;
             TClass_biz_user biz_user;
             biz_user = new TClass_biz_user();
-            if (fy_id == k.EMPTY)
+            if (fy_id.Length == 0)
             {
                 result = db_appropriations.SumOfSelfDictatedAppropriations(biz_user.Kind(), biz_user.IdNum(), biz_fiscal_years.IdOfCurrent());
             }

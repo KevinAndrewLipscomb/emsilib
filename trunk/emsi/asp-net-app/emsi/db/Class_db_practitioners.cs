@@ -27,7 +27,7 @@ namespace Class_db_practitioners
       public string email_address;
       }
 
-    private TClass_db_trail db_trail = null;
+    private readonly TClass_db_trail db_trail = null;
 
     public TClass_db_practitioners() : base()
       {
@@ -56,7 +56,7 @@ namespace Class_db_practitioners
         }
       Open();
       ((target) as ListControl).Items.Clear();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select id"
         + " , CONVERT(" + concat_clause + " USING utf8) as spec"
@@ -65,8 +65,8 @@ namespace Class_db_practitioners
         +     sponsor_filter_clause
         + " order by spec",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -84,15 +84,15 @@ namespace Class_db_practitioners
       {
       Open();
       ((target) as ListControl).Items.Clear();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "SELECT id"
         + " , CONVERT(concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(certification_number,'-'),'|',IFNULL(level_id,'-'),'|',IFNULL(regional_council_code,'-'),'|',IFNULL(birth_date,'-')) USING utf8) as spec"
         + " FROM practitioner"
         + " order by spec",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -104,10 +104,9 @@ namespace Class_db_practitioners
     public void BindDirectToListControlForRoster
       (
       object target,
-      string region_code,
       string starting_with,
       k.int_positive limit,
-      bool do_limit_to_21_yo_or_older
+      bool do_limit_to_21_yo_or_older = false
       )
       {
       Open();
@@ -128,7 +127,7 @@ namespace Class_db_practitioners
         {
         matching_clause += " and ADDDATE(birth_date,INTERVAL 21 YEAR) <= CURDATE()";
         }
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "SELECT id"
         + " , CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(DATE_FORMAT(birth_date,'%m/%d/%Y'),'-')) USING utf8) as spec"
@@ -137,18 +136,14 @@ namespace Class_db_practitioners
         + " order by spec"
         + " limit " + limit.val,
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
         }
       dr.Close();
       Close();
-      }
-    public void BindDirectToListControlForRoster(object target,string region_code,string starting_with,k.int_positive limit)
-      {
-      BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yo_or_older:false);
       }
 
     internal string BirthDateOf(object summary)
@@ -164,7 +159,7 @@ namespace Class_db_practitioners
     public void ClearBeInstructorFlagsInSubscriberRegions()
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "update practitioner"
         + " join region_code_name_map on (region_code_name_map.code=practitioner.regional_council_code)"
@@ -172,8 +167,8 @@ namespace Class_db_practitioners
         + " where be_conedlink_subscriber"
         +   " and code not in (15)",  //Don't clear flags when EMSRS login access to associated regions has been lost.
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -183,7 +178,8 @@ namespace Class_db_practitioners
       Open();
       try
         {
-        new MySqlCommand(db_trail.Saved("delete from practitioner where id = \"" + id + "\""), connection).ExecuteNonQuery();
+        using var my_sql_command = new MySqlCommand(db_trail.Saved("delete from practitioner where id = \"" + id + "\""), connection);
+        my_sql_command.ExecuteNonQuery();
         }
       catch(System.Exception e)
         {
@@ -193,7 +189,7 @@ namespace Class_db_practitioners
           }
         else
           {
-          throw e;
+          throw;
           }
         }
       Close();
@@ -209,7 +205,8 @@ namespace Class_db_practitioners
       {
       var email_address_of_id = k.EMPTY;
       Open();
-      email_address_of_id = new MySqlCommand("select email_address from practitioner where id = '" + id + "'",connection).ExecuteScalar().ToString();
+      using var my_sql_command = new MySqlCommand("select email_address from practitioner where id = '" + id + "'",connection);
+      email_address_of_id = my_sql_command.ExecuteScalar().ToString();
       Close();
       return email_address_of_id;
       }
@@ -259,7 +256,8 @@ namespace Class_db_practitioners
       var result = false;
       //
       Open();
-      var dr = new MySqlCommand("select * from practitioner where CAST(id AS CHAR) = '" + id + "'", connection).ExecuteReader();
+      using var my_sql_command = new MySqlCommand("select * from practitioner where CAST(id AS CHAR) = '" + id + "'", connection);
+      var dr = my_sql_command.ExecuteReader();
       if (dr.Read())
         {
         last_name = dr["last_name"].ToString();
@@ -299,7 +297,7 @@ namespace Class_db_practitioners
       )
       {
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select certification_number"
         + " , DATE_FORMAT(birth_date,'%m/%d/%Y') as birth_date"
@@ -313,8 +311,8 @@ namespace Class_db_practitioners
         +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
         + " where CAST(practitioner.id AS CHAR) = '" + id + "'",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       certification_number = dr["certification_number"].ToString();
       birth_date = dr["birth_date"].ToString();
@@ -357,7 +355,8 @@ namespace Class_db_practitioners
         //    + "),"
         //    );
         //  }
-        //new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection).ExecuteNonQuery();
+        //using var my_sql_command = new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection);
+        //my_sql_command.ExecuteNonQuery();
         //Close();
         //
         var first_name = k.EMPTY;
@@ -395,10 +394,11 @@ namespace Class_db_practitioners
             //
             if (new ArrayList() {"Active","Expired","Probation","Suspended"}.Contains(status))
               {
-              id_obj = new MySqlCommand("select id from practitioner where certification_number = '" + certification_number + "'",connection).ExecuteScalar();
+              using var my_sql_command_1 = new MySqlCommand("select id from practitioner where certification_number = '" + certification_number + "'",connection);
+              id_obj = my_sql_command_1.ExecuteScalar();
               if (id_obj == null)
                 {
-                new MySqlCommand
+                using var my_sql_command_2 = new MySqlCommand
                   (
                   "insert ignore practitioner set last_name = '" + last_name + "'"
                   + " , first_name = '" + first_name + "'"
@@ -410,12 +410,12 @@ namespace Class_db_practitioners
                   + " , residence_county_code = (select code from county_code_name_map where name = '" + county_name + "')"
                   + " , status_id = (select id from practitioner_status where description = '" + status + "')",
                   connection
-                  )
-                  .ExecuteNonQuery();
+                  );
+                my_sql_command_2.ExecuteNonQuery();
                 }
               else
                 {
-                new MySqlCommand
+                using var my_sql_command_3 = new MySqlCommand
                   (
                   "update ignore practitioner"
                   + " set last_name = '" + last_name + "'"
@@ -429,8 +429,8 @@ namespace Class_db_practitioners
                   + " , be_past = false"
                   + " where id = '" + id_obj.ToString() + "'",
                   connection
-                  )
-                  .ExecuteNonQuery();
+                  );
+                my_sql_command_3.ExecuteNonQuery();
                 }
               }
             }
@@ -452,14 +452,15 @@ namespace Class_db_practitioners
     public void MarkAllStale()
       {
       Open();
-      new MySqlCommand("update practitioner set be_stale = TRUE",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update practitioner set be_stale = TRUE",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal void MarkDobsConfirmed(string id)
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -469,30 +470,23 @@ namespace Class_db_practitioners
           + "  where coned_offering_id = '" + id + "'"
           ),
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
-    public k.int_nonnegative MaxSpecLength
-      (
-      string region_code,
-      string starting_with
-      )
+    public k.int_nonnegative MaxSpecLength(string region_code)
       {
       var max_spec_length = new k.int_nonnegative();
       Open();
-      max_spec_length.val = int.Parse
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "SELECT IFNULL(max(length(CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(birth_date,'-')) USING utf8))),0)"
-          + " FROM practitioner"
-          + (region_code.Length > 0 ? " where regional_council_code = '" + region_code + "'" : k.EMPTY),
-          connection
-          )
-          .ExecuteScalar().ToString()
+        "SELECT IFNULL(max(length(CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(birth_date,'-')) USING utf8))),0)"
+        + " FROM practitioner"
+        + (region_code.Length > 0 ? " where regional_council_code = '" + region_code + "'" : k.EMPTY),
+        connection
         );
+      max_spec_length.val = int.Parse(my_sql_command.ExecuteScalar().ToString());
       Close();
       return max_spec_length;
       }
@@ -505,7 +499,7 @@ namespace Class_db_practitioners
     public void RemoveStale()
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "START TRANSACTION"
         + ";"
@@ -518,8 +512,8 @@ namespace Class_db_practitioners
         + ";"
         + " COMMIT",
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -563,7 +557,7 @@ namespace Class_db_practitioners
       + " , be_past = " + be_past.ToString()
       + k.EMPTY;
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -574,8 +568,8 @@ namespace Class_db_practitioners
           + childless_field_assignments_clause
           ),
           connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -586,7 +580,7 @@ namespace Class_db_practitioners
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -594,8 +588,8 @@ namespace Class_db_practitioners
           + " where id = '" + id + "'"
           ),
           connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -608,7 +602,7 @@ namespace Class_db_practitioners
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -618,8 +612,8 @@ namespace Class_db_practitioners
           + " where id = '" + id + "'"
           ),
           connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -631,7 +625,7 @@ namespace Class_db_practitioners
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -640,32 +634,29 @@ namespace Class_db_practitioners
           + " where id = '" + id + "'"
           ),
           connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal object Summary(string id)
       {
       Open();
-      var dr =
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "SELECT email_address"
-          + " , last_name"
-          + " , first_name"
-          + " , middle_initial"
-          + " , practitioner_level.short_description as level_description"
-          + " , certification_number"
-          + " , DATE_FORMAT(birth_date,'%Y-%m-%d') as birth_date"
-          + " FROM practitioner"
-          +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
-          + " where practitioner.id = '" + id + "'",
-          connection
-          )
-          .ExecuteReader()
+        "SELECT email_address"
+        + " , last_name"
+        + " , first_name"
+        + " , middle_initial"
+        + " , practitioner_level.short_description as level_description"
+        + " , certification_number"
+        + " , DATE_FORMAT(birth_date,'%Y-%m-%d') as birth_date"
+        + " FROM practitioner"
+        +   " join practitioner_level on (practitioner_level.id=practitioner.level_id)"
+        + " where practitioner.id = '" + id + "'",
+        connection
         );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       var the_summary = new practitioner_summary()
         {

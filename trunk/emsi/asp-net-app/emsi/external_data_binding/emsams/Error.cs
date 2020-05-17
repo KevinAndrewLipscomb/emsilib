@@ -30,10 +30,10 @@ namespace external_data_binding.emsams.Error {
         [System.Xml.Serialization.XmlTextAttribute()]
         public string Value {
             get {
-                return this.valueField;
+                return valueField;
             }
             set {
-                this.valueField = value;
+                valueField = value;
             }
         }
     }

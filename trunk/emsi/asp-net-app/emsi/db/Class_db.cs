@@ -1,4 +1,5 @@
 using MySql.Data.MySqlClient;
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -10,18 +11,24 @@ namespace Class_db
     // The class should be abstract once all db operations in WebEMSOF are performed via descendants of this class.
     {
 
-    public MySqlConnection connection = null;
+    private MySqlConnection the_connection = null;
+
+    public MySqlConnection connection
       // The connection member should be protected rather than public once all db operations in WebEMSOF are performed via descendants of this class.
+      {
+      get => the_connection;
+      set => the_connection = value;
+      }
 
     public TClass_db() : base()
       {
-      connection = new MySqlConnection(connectionString:ConfigurationManager.AppSettings["db_connection_string"]);
+      the_connection = new MySqlConnection(connectionString:ConfigurationManager.AppSettings["db_connection_string"]);
       }
 
     public void Close()
       // This routine should be protected rather than public once all db operations in WebEMSOF are performed via descendants of this class.
       {
-      connection.Close();
+      the_connection.Close();
       }
 
     protected void ExecuteOneOffProcedureScriptWithTolerance
@@ -40,7 +47,7 @@ namespace Class_db
           }
         catch (MySqlException the_exception)
           {
-          if (!new ArrayList() {"PROCEDURE " + procedure_name + " already exists","PROCEDURE " + connection.Database + "." + procedure_name + " does not exist"}.Contains(the_exception.Message))
+          if (!new ArrayList() {"PROCEDURE " + procedure_name + " already exists","PROCEDURE " + the_connection.Database + "." + procedure_name + " does not exist"}.Contains(the_exception.Message))
             {
             throw;
             }
@@ -51,9 +58,9 @@ namespace Class_db
     public void Open()
       // This routine should be protected rather than public once all db operations in WebEMSOF are performed via descendants of this class.
       {
-      if (connection.State != ConnectionState.Open)
+      if (the_connection.State != ConnectionState.Open)
         {
-        connection.Open();
+        the_connection.Open();
         }
       }
 

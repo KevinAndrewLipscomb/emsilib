@@ -30,10 +30,10 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlElementAttribute("Class")]
         public ClassInfoClass[] Class {
             get {
-                return this.classField;
+                return classField;
             }
             set {
-                this.classField = value;
+                classField = value;
             }
         }
     }
@@ -123,20 +123,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         /// <remarks/>
         public uint ClassID {
             get {
-                return this.classIDField;
+                return classIDField;
             }
             set {
-                this.classIDField = value;
+                classIDField = value;
             }
         }
         
         /// <remarks/>
         public ulong ClassNumber {
             get {
-                return this.classNumberField;
+                return classNumberField;
             }
             set {
-                this.classNumberField = value;
+                classNumberField = value;
             }
         }
         
@@ -144,20 +144,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool ClassNumberSpecified {
             get {
-                return this.classNumberFieldSpecified;
+                return classNumberFieldSpecified;
             }
             set {
-                this.classNumberFieldSpecified = value;
+                classNumberFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public uint CourseNumber {
             get {
-                return this.courseNumberField;
+                return courseNumberField;
             }
             set {
-                this.courseNumberField = value;
+                courseNumberField = value;
             }
         }
         
@@ -165,130 +165,130 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool CourseNumberSpecified {
             get {
-                return this.courseNumberFieldSpecified;
+                return courseNumberFieldSpecified;
             }
             set {
-                this.courseNumberFieldSpecified = value;
+                courseNumberFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public string CourseTitle {
             get {
-                return this.courseTitleField;
+                return courseTitleField;
             }
             set {
-                this.courseTitleField = value;
+                courseTitleField = value;
             }
         }
         
         /// <remarks/>
         public string Location {
             get {
-                return this.locationField;
+                return locationField;
             }
             set {
-                this.locationField = value;
+                locationField = value;
             }
         }
         
         /// <remarks/>
         public string StartDateTime {
             get {
-                return this.startDateTimeField;
+                return startDateTimeField;
             }
             set {
-                this.startDateTimeField = value;
+                startDateTimeField = value;
             }
         }
         
         /// <remarks/>
         public string StartTime {
             get {
-                return this.startTimeField;
+                return startTimeField;
             }
             set {
-                this.startTimeField = value;
+                startTimeField = value;
             }
         }
         
         /// <remarks/>
         public string EndDateTime {
             get {
-                return this.endDateTimeField;
+                return endDateTimeField;
             }
             set {
-                this.endDateTimeField = value;
+                endDateTimeField = value;
             }
         }
         
         /// <remarks/>
         public string EndTime {
             get {
-                return this.endTimeField;
+                return endTimeField;
             }
             set {
-                this.endTimeField = value;
+                endTimeField = value;
             }
         }
         
         /// <remarks/>
         public byte Approved {
             get {
-                return this.approvedField;
+                return approvedField;
             }
             set {
-                this.approvedField = value;
+                approvedField = value;
             }
         }
         
         /// <remarks/>
         public ushort SponsorID {
             get {
-                return this.sponsorIDField;
+                return sponsorIDField;
             }
             set {
-                this.sponsorIDField = value;
+                sponsorIDField = value;
             }
         }
         
         /// <remarks/>
         public string SponsorNumber {
             get {
-                return this.sponsorNumberField;
+                return sponsorNumberField;
             }
             set {
-                this.sponsorNumberField = value;
+                sponsorNumberField = value;
             }
         }
         
         /// <remarks/>
         public string SponsorName {
             get {
-                return this.sponsorNameField;
+                return sponsorNameField;
             }
             set {
-                this.sponsorNameField = value;
+                sponsorNameField = value;
             }
         }
         
         /// <remarks/>
         public string PublicContactEmail {
             get {
-                return this.publicContactEmailField;
+                return publicContactEmailField;
             }
             set {
-                this.publicContactEmailField = value;
+                publicContactEmailField = value;
             }
         }
         
         /// <remarks/>
         public decimal FR_MedTrauma_Hrs {
             get {
-                return this.fR_MedTrauma_HrsField;
+                return fR_MedTrauma_HrsField;
             }
             set {
-                this.fR_MedTrauma_HrsField = value;
+                fR_MedTrauma_HrsField = value;
             }
         }
         
@@ -296,20 +296,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FR_MedTrauma_HrsSpecified {
             get {
-                return this.fR_MedTrauma_HrsFieldSpecified;
+                return fR_MedTrauma_HrsFieldSpecified;
             }
             set {
-                this.fR_MedTrauma_HrsFieldSpecified = value;
+                fR_MedTrauma_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal FR_Other_Hrs {
             get {
-                return this.fR_Other_HrsField;
+                return fR_Other_HrsField;
             }
             set {
-                this.fR_Other_HrsField = value;
+                fR_Other_HrsField = value;
             }
         }
         
@@ -317,20 +317,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool FR_Other_HrsSpecified {
             get {
-                return this.fR_Other_HrsFieldSpecified;
+                return fR_Other_HrsFieldSpecified;
             }
             set {
-                this.fR_Other_HrsFieldSpecified = value;
+                fR_Other_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal EMT_MedTrauma_Hrs {
             get {
-                return this.eMT_MedTrauma_HrsField;
+                return eMT_MedTrauma_HrsField;
             }
             set {
-                this.eMT_MedTrauma_HrsField = value;
+                eMT_MedTrauma_HrsField = value;
             }
         }
         
@@ -338,20 +338,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EMT_MedTrauma_HrsSpecified {
             get {
-                return this.eMT_MedTrauma_HrsFieldSpecified;
+                return eMT_MedTrauma_HrsFieldSpecified;
             }
             set {
-                this.eMT_MedTrauma_HrsFieldSpecified = value;
+                eMT_MedTrauma_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal EMT_Other_Hrs {
             get {
-                return this.eMT_Other_HrsField;
+                return eMT_Other_HrsField;
             }
             set {
-                this.eMT_Other_HrsField = value;
+                eMT_Other_HrsField = value;
             }
         }
         
@@ -359,20 +359,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EMT_Other_HrsSpecified {
             get {
-                return this.eMT_Other_HrsFieldSpecified;
+                return eMT_Other_HrsFieldSpecified;
             }
             set {
-                this.eMT_Other_HrsFieldSpecified = value;
+                eMT_Other_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal EMTP_MedTrauma_Hrs {
             get {
-                return this.eMTP_MedTrauma_HrsField;
+                return eMTP_MedTrauma_HrsField;
             }
             set {
-                this.eMTP_MedTrauma_HrsField = value;
+                eMTP_MedTrauma_HrsField = value;
             }
         }
         
@@ -380,20 +380,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EMTP_MedTrauma_HrsSpecified {
             get {
-                return this.eMTP_MedTrauma_HrsFieldSpecified;
+                return eMTP_MedTrauma_HrsFieldSpecified;
             }
             set {
-                this.eMTP_MedTrauma_HrsFieldSpecified = value;
+                eMTP_MedTrauma_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal EMTP_Other_Hrs {
             get {
-                return this.eMTP_Other_HrsField;
+                return eMTP_Other_HrsField;
             }
             set {
-                this.eMTP_Other_HrsField = value;
+                eMTP_Other_HrsField = value;
             }
         }
         
@@ -401,20 +401,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool EMTP_Other_HrsSpecified {
             get {
-                return this.eMTP_Other_HrsFieldSpecified;
+                return eMTP_Other_HrsFieldSpecified;
             }
             set {
-                this.eMTP_Other_HrsFieldSpecified = value;
+                eMTP_Other_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal PHRN_MedTrauma_Hrs {
             get {
-                return this.pHRN_MedTrauma_HrsField;
+                return pHRN_MedTrauma_HrsField;
             }
             set {
-                this.pHRN_MedTrauma_HrsField = value;
+                pHRN_MedTrauma_HrsField = value;
             }
         }
         
@@ -422,20 +422,20 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PHRN_MedTrauma_HrsSpecified {
             get {
-                return this.pHRN_MedTrauma_HrsFieldSpecified;
+                return pHRN_MedTrauma_HrsFieldSpecified;
             }
             set {
-                this.pHRN_MedTrauma_HrsFieldSpecified = value;
+                pHRN_MedTrauma_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public decimal PHRN_Other_Hrs {
             get {
-                return this.pHRN_Other_HrsField;
+                return pHRN_Other_HrsField;
             }
             set {
-                this.pHRN_Other_HrsField = value;
+                pHRN_Other_HrsField = value;
             }
         }
         
@@ -443,60 +443,60 @@ namespace external_data_binding.emsams.ConEdClassInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool PHRN_Other_HrsSpecified {
             get {
-                return this.pHRN_Other_HrsFieldSpecified;
+                return pHRN_Other_HrsFieldSpecified;
             }
             set {
-                this.pHRN_Other_HrsFieldSpecified = value;
+                pHRN_Other_HrsFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public string Length {
             get {
-                return this.lengthField;
+                return lengthField;
             }
             set {
-                this.lengthField = value;
+                lengthField = value;
             }
         }
         
         /// <remarks/>
         public string Email {
             get {
-                return this.emailField;
+                return emailField;
             }
             set {
-                this.emailField = value;
+                emailField = value;
             }
         }
         
         /// <remarks/>
         public byte RegionCouncilNum {
             get {
-                return this.regionCouncilNumField;
+                return regionCouncilNumField;
             }
             set {
-                this.regionCouncilNumField = value;
+                regionCouncilNumField = value;
             }
         }
         
         /// <remarks/>
         public byte ClassCountyCode {
             get {
-                return this.classCountyCodeField;
+                return classCountyCodeField;
             }
             set {
-                this.classCountyCodeField = value;
+                classCountyCodeField = value;
             }
         }
         
         /// <remarks/>
         public string LocationEmail {
             get {
-                return this.locationEmailField;
+                return locationEmailField;
             }
             set {
-                this.locationEmailField = value;
+                locationEmailField = value;
             }
         }
     }

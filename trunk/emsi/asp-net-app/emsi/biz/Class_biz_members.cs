@@ -9,8 +9,8 @@ namespace Class_biz_members
   public class TClass_biz_members
     {
 
-    private TClass_biz_notifications biz_notifications = null;
-    private TClass_db_members db_members = null;
+    private readonly TClass_biz_notifications biz_notifications = null;
+    private readonly TClass_db_members db_members = null;
 
     public TClass_biz_members() : base()
       {
@@ -77,17 +77,12 @@ namespace Class_biz_members
     public void BindDirectToListControlForRoster
       (
       object target,
-      string region_code,
       string starting_with,
       k.int_positive limit,
-      bool do_limit_to_21_yoa_or_older
+      bool do_limit_to_21_yoa_or_older = false
       )
       {
-      db_members.BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yoa_or_older);
-      }
-    public void BindDirectToListControlForRoster(object target,string region_code,string starting_with,k.int_positive limit)
-      {
-      BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yoa_or_older:false);
+      db_members.BindDirectToListControlForRoster(target,starting_with,limit,do_limit_to_21_yoa_or_older);
       }
 
     public string CertificationNumberOf(object summary)
@@ -177,11 +172,12 @@ namespace Class_biz_members
       string residence_county_name,
       string street_address_1,
       string street_address_2,
-      string city_state_zip
+      string city_state_zip,
+      string certification_number
       )
       {
       var id_of_member_added = k.EMPTY;
-      if (!db_members.BeKnown(first_name, last_name, birth_date))
+      if (!db_members.BeKnown(first_name, last_name, birth_date, certification_number))
         {
         id_of_member_added = db_members.IdOfMemberAdded
           (
@@ -195,23 +191,26 @@ namespace Class_biz_members
           residence_county_code:residence_county_code,
           street_address_1:street_address_1,
           street_address_2:street_address_2,
-          city_state_zip:city_state_zip
+          city_state_zip:city_state_zip,
+          certification_number:certification_number
           );
-        biz_notifications.IssueForMemberAdded
-          (
-          member_id:id_of_member_added,
-          last_name:last_name,
-          first_name:first_name,
-          middle_initial:middle_initial,
-          practitioner_level_short_description:practitioner_level_short_description,
-          regional_council_name:regional_council_name,
-          birth_date:birth_date,
-          email_address:email_address,
-          residence_county_name:residence_county_name,
-          street_address_1:street_address_1,
-          street_address_2:street_address_2,
-          city_state_zip:city_state_zip
-          );
+        if (certification_number.Length == 0)
+          {
+          biz_notifications.IssueForMemberAdded
+            (
+            member_id:id_of_member_added,
+            last_name:last_name,
+            first_name:first_name,
+            practitioner_level_short_description:practitioner_level_short_description,
+            regional_council_name:regional_council_name,
+            birth_date:birth_date,
+            email_address:email_address,
+            residence_county_name:residence_county_name,
+            street_address_1:street_address_1,
+            street_address_2:street_address_2,
+            city_state_zip:city_state_zip
+            );
+          }
         }
       return id_of_member_added;
       }
@@ -240,13 +239,9 @@ namespace Class_biz_members
       return db_members.LevelOf(summary);
       }
 
-    public k.int_nonnegative MaxSpecLength
-      (
-      string region_code,
-      string starting_with
-      )
+    public k.int_nonnegative MaxSpecLength(string region_code)
       {
-      return db_members.MaxSpecLength(region_code,starting_with);
+      return db_members.MaxSpecLength(region_code);
       }
 
     public void SetFieldsNotImportedFromState

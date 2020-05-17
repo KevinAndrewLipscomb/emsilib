@@ -12,27 +12,25 @@ using kix;
 using System;
 using System.Collections;
 using System.Configuration;
-using System.IO;
 using System.Web;
 
 namespace Class_biz_emsof_requests
-{
-    public class TClass_biz_emsof_requests
+  {
+  public class TClass_biz_emsof_requests
     {
-        private TClass_db_appropriations db_appropriations = null;
-        private TClass_db_emsof_requests db_emsof_requests = null;
-        private TClass_biz_accounts biz_accounts = null;
-        private TClass_biz_appropriations biz_appropriations = null;
-        private TClass_biz_equipment biz_equipment = null;
-        private TClass_biz_fiscal_years biz_fiscal_years = null;
-        private TClass_biz_match_level biz_match_level = null;
-        private TClass_biz_milestones biz_milestones = null;
-        private TClass_biz_regional_staffers biz_regional_staffers = null;
-        private TClass_biz_user biz_user = null;
-        //Constructor  Create()
+        private readonly TClass_db_appropriations db_appropriations = null;
+        private readonly TClass_db_emsof_requests db_emsof_requests = null;
+        private readonly TClass_biz_accounts biz_accounts = null;
+        private readonly TClass_biz_appropriations biz_appropriations = null;
+        private readonly TClass_biz_equipment biz_equipment = null;
+        private readonly TClass_biz_fiscal_years biz_fiscal_years = null;
+        private readonly TClass_biz_match_level biz_match_level = null;
+        private readonly TClass_biz_milestones biz_milestones = null;
+        private readonly TClass_biz_regional_staffers biz_regional_staffers = null;
+        private readonly TClass_biz_user biz_user = null;
+
         public TClass_biz_emsof_requests() : base()
         {
-            // TODO: Add any constructor code here
             db_appropriations = new TClass_db_appropriations();
             db_emsof_requests = new TClass_db_emsof_requests();
             biz_accounts = new TClass_biz_accounts();
@@ -44,6 +42,7 @@ namespace Class_biz_emsof_requests
             biz_regional_staffers = new TClass_biz_regional_staffers();
             biz_user = new TClass_biz_user();
         }
+
         public decimal ActualValueOf(string master_id)
         {
             decimal result;
@@ -148,7 +147,7 @@ namespace Class_biz_emsof_requests
             switch(status)
             {
                 case status_type.NEEDS_COUNTY_APPROVAL:
-                    result = (new TClass_biz_user().Kind() == "county");
+                    result = (biz_user.Kind() == "county");
                     break;
                 case status_type.NEEDS_REGIONAL_COMPLIANCE_CHECK:
                     result = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator") || HttpContext.Current.User.IsInRole("emsof-planner");
@@ -401,7 +400,18 @@ namespace Class_biz_emsof_requests
                 next_status = status_type.REJECTED;
             }
             db_emsof_requests.Demote(IdOf(e_item), (uint)(next_status));
-            biz_accounts.MakeDemotionNotification(role, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item), be_ok_to_rework, reason, SponsorCountyCodeOf(e_item), emsof_ante);
+            biz_accounts.MakeDemotionNotification
+              (
+              role:role,
+              reviewer_descriptor:reviewer_descriptor,
+              service_id:ServiceIdOf(e_item),
+              service_name:ServiceNameOf(e_item),
+              fy_designator:FyDesignatorOf(e_item),
+              be_ok_to_rework:be_ok_to_rework,
+              reason:reason,
+              county_code:SponsorCountyCodeOf(e_item),
+              emsof_ante:emsof_ante
+              );
 
         }
 
@@ -495,7 +505,7 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
-        public void MarkDone(object e_item, string promoter)
+        public void MarkDone(object e_item)
         {
             string master_id;
             status_type next_status;
@@ -535,7 +545,7 @@ namespace Class_biz_emsof_requests
 
         }
 
-        public void MarkFailed(object e_item, string failer)
+        public void MarkFailed(object e_item)
         {
             string master_id;
             master_id = IdOf(e_item);
@@ -693,7 +703,7 @@ namespace Class_biz_emsof_requests
               {
               decimal additional_service_ante = 0;
               var allowable_cost_value = decimal.MaxValue;
-              if (allowable_cost != k.EMPTY)
+              if (allowable_cost.Length > 0)
                 {
                 allowable_cost_value = decimal.Parse(allowable_cost);
                 }
@@ -761,7 +771,11 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
+        #pragma warning disable IDE0060 // Remove unused parameter
+        #pragma warning disable CA1801 // Remove unused parameter
         public void SubmitToState(object Table_report, string request_physical_path, status_type status_of_interest, string regional_staffer_user_id, string amendment_num_string)
+        #pragma warning restore CA1801 // Remove unused parameter
+        #pragma warning restore IDE0060 // Remove unused parameter
         {
             string body;
             //string qualifier = k.EMPTY;
@@ -771,11 +785,11 @@ namespace Class_biz_emsof_requests
             {
                 case status_type.NEEDS_SENT_TO_PA_DOH_EMSO:
                     //qualifier = "fresh";
-                    body = body + "new";
+                    body += "new";
                     break;
                 case status_type.NEEDS_PA_DOH_EMSO_APPROVAL:
                     //qualifier = "repeat";
-                    body = body + "a RE-TRANSMISSION of";
+                    body += "a RE-TRANSMISSION of";
                     break;
             }
             region_name = biz_regional_staffers.RegionNameOf(regional_staffer_user_id);
@@ -798,7 +812,7 @@ namespace Class_biz_emsof_requests
         public decimal SumOfActualValues(string fy_id)
         {
             decimal result;
-            if (fy_id == k.EMPTY)
+            if (fy_id.Length == 0)
             {
                 result = db_emsof_requests.SumOfActualValues(biz_user.Kind(), biz_user.IdNum(), new TClass_biz_fiscal_years().IdOfCurrent());
             }
@@ -840,7 +854,7 @@ namespace Class_biz_emsof_requests
         public decimal SumOfRequestValues(string fy_id)
         {
             decimal result;
-            if (fy_id == k.EMPTY)
+            if (fy_id.Length == 0)
             {
                 result = db_emsof_requests.SumOfRequestValues(biz_user.Kind(), biz_user.IdNum(), new TClass_biz_fiscal_years().IdOfCurrent());
             }

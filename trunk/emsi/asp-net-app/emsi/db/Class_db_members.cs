@@ -23,7 +23,7 @@ namespace Class_db_members
       public string email_address;
       }
 
-    private TClass_db_trail db_trail = null;
+    private readonly TClass_db_trail db_trail = null;
 
     public TClass_db_members() : base()
       {
@@ -34,12 +34,21 @@ namespace Class_db_members
       (
       string first_name,
       string last_name,
-      DateTime birth_date
+      DateTime birth_date,
+      string certification_number
       )
       {
       Open();
-      var be_known_obj = new MySqlCommand("select 1 from member where last_name = '" + last_name + "' and first_name = '" + first_name + "' and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'",connection)
-        .ExecuteScalar();
+      using var my_sql_command = new MySqlCommand
+        (
+        "select 1"
+        + " from member"
+        + " where"
+        +   " (last_name = '" + last_name + "' and first_name = '" + first_name + "' and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "')"
+        +   (certification_number.Length > 0 ? " or (certification_number = '" + certification_number + "')" : k.EMPTY),
+        connection
+        );
+      var be_known_obj = my_sql_command.ExecuteScalar();
       Close();
       return be_known_obj != null;
       }
@@ -62,7 +71,7 @@ namespace Class_db_members
           claimed_member_id = k.EMPTY;
           claimed_member_email_address = k.EMPTY;
           Open();
-          var dr = new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             "select role.name as role_name"
             + " , concat(member.first_name,' ',member.last_name) as member_name"
@@ -79,8 +88,8 @@ namespace Class_db_members
             + " order by role.pecking_order"
             + " limit 1",
             connection
-            )
-            .ExecuteReader();
+            );
+          var dr = my_sql_command.ExecuteReader();
           if (dr.Read())
             {
             claimed_role_name = dr["role_name"].ToString();
@@ -97,9 +106,10 @@ namespace Class_db_members
         public bool BeValidProfile(string id)
         {
             bool result;
-            this.Open();
-            result = ("1" == new MySqlCommand("select be_valid_profile from member where id = " + id, this.connection).ExecuteScalar().ToString());
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select be_valid_profile from member where id = " + id, connection);
+            result = ("1" == my_sql_command.ExecuteScalar().ToString());
+            Close();
             return result;
         }
 
@@ -112,7 +122,7 @@ namespace Class_db_members
       var concat_clause = "concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(certification_number,'nocert'),'|',IFNULL(birth_date,'-'))";
       Open();
       ((target) as ListControl).Items.Clear();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select id"
         + " , CONVERT(" + concat_clause + " USING utf8) as spec"
@@ -120,8 +130,8 @@ namespace Class_db_members
         + " where " + concat_clause + " like '%" + partial_spec.ToUpper() + "%'"
         + " order by spec",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -135,19 +145,20 @@ namespace Class_db_members
         {
             MySqlDataReader dr;
             ((target) as ListControl).Items.Clear();
-            if (unselected_literal != k.EMPTY)
+            if (unselected_literal.Length > 0)
             {
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
-            this.Open();
-            dr = new MySqlCommand("select member.id as member_id" + " , concat(last_name,\", \",first_name) as member_designator" + " from member" + " order by member_designator", this.connection).ExecuteReader();
+            Open();
+            using var my_sql_command = new MySqlCommand("select member.id as member_id" + " , concat(last_name,\", \",first_name) as member_designator" + " from member" + " order by member_designator", connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["member_designator"].ToString(), dr["member_id"].ToString()));
             }
             dr.Close();
-            this.Close();
-            if (selected_value != k.EMPTY)
+            Close();
+            if (selected_value.Length > 0)
             {
                 ((target) as ListControl).SelectedValue = selected_value;
             }
@@ -167,7 +178,6 @@ namespace Class_db_members
     public void BindDirectToListControlForRoster
       (
       object target,
-      string region_code,
       string starting_with,
       k.int_positive limit,
       bool do_limit_to_21_yo_or_older
@@ -191,7 +201,7 @@ namespace Class_db_members
         {
         matching_clause += " and ADDDATE(birth_date,INTERVAL 21 YEAR) <= CURDATE()";
         }
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "SELECT id"
         + " , CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',IFNULL(certification_number,'nocert'),', ',IFNULL(DATE_FORMAT(birth_date,'%m/%d/%Y'),'-')) USING utf8) as spec"
@@ -200,8 +210,8 @@ namespace Class_db_members
         + " order by spec"
         + " limit " + limit.val,
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -209,9 +219,9 @@ namespace Class_db_members
       dr.Close();
       Close();
       }
-    public void BindDirectToListControlForRoster(object target,string region_code,string starting_with,k.int_positive limit)
+    public void BindDirectToListControlForRoster(object target,string starting_with,k.int_positive limit)
       {
-      BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yo_or_older:false);
+      BindDirectToListControlForRoster(target,starting_with,limit,do_limit_to_21_yo_or_older:false);
       }
 
     internal string CertificationNumberOf(object summary)
@@ -225,7 +235,8 @@ namespace Class_db_members
       Open();
       try
         {
-        new MySqlCommand(db_trail.Saved("delete from member where id = '" + id + "'"), connection).ExecuteNonQuery();
+        using var my_sql_command = new MySqlCommand(db_trail.Saved("delete from member where id = '" + id + "'"), connection);
+        my_sql_command.ExecuteNonQuery();
         }
       catch(System.Exception e)
         {
@@ -235,7 +246,7 @@ namespace Class_db_members
           }
         else
           {
-          throw e;
+          throw;
           }
         }
       Close();
@@ -252,7 +263,7 @@ namespace Class_db_members
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -265,8 +276,8 @@ namespace Class_db_members
           +   " and id = '" + id + "'"
           ),
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -274,8 +285,9 @@ namespace Class_db_members
         {
             string result;
             object email_address_obj;
-            this.Open();
-            email_address_obj = new MySqlCommand("select email_address from member where id = " + member_id, this.connection).ExecuteScalar().ToString();
+            Open();
+            using var my_sql_command = new MySqlCommand("select email_address from member where id = " + member_id, connection);
+            email_address_obj = my_sql_command.ExecuteScalar().ToString();
             if (email_address_obj != null)
             {
                 result = email_address_obj.ToString();
@@ -284,7 +296,7 @@ namespace Class_db_members
             {
                 result = k.EMPTY;
             }
-            this.Close();
+            Close();
             return result;
         }
 
@@ -296,9 +308,10 @@ namespace Class_db_members
         public string FirstNameOfMemberId(string member_id)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select first_name from member where id = \"" + member_id + "\"", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select first_name from member where id = \"" + member_id + "\"", connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -342,7 +355,8 @@ namespace Class_db_members
       var result = false;
       //
       Open();
-      var dr = new MySqlCommand("select * from member where CAST(id AS CHAR) = '" + id + "'", connection).ExecuteReader();
+      using var my_sql_command = new MySqlCommand("select * from member where CAST(id AS CHAR) = '" + id + "'", connection);
+      var dr = my_sql_command.ExecuteReader();
       if (dr.Read())
         {
         last_name = dr["last_name"].ToString();
@@ -372,8 +386,9 @@ namespace Class_db_members
         {
             string result;
             object member_id_obj;
-            this.Open();
-            member_id_obj = new MySqlCommand("select member_id from user_member_map where user_id = " + user_id, this.connection).ExecuteScalar();
+            Open();
+            using var my_sql_command = new MySqlCommand("select member_id from user_member_map where user_id = " + user_id, connection);
+            member_id_obj = my_sql_command.ExecuteScalar();
             if (member_id_obj != null)
             {
                 result = member_id_obj.ToString();
@@ -382,7 +397,7 @@ namespace Class_db_members
             {
                 result = k.EMPTY;
             }
-            this.Close();
+            Close();
             return result;
         }
 
@@ -394,9 +409,10 @@ namespace Class_db_members
         public string LastNameOfMemberId(string member_id)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select last_name from member where id = \"" + member_id + "\"", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select last_name from member where id = \"" + member_id + "\"", connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -405,25 +421,18 @@ namespace Class_db_members
       return (summary as member_summary).level_description;
       }
 
-    public k.int_nonnegative MaxSpecLength
-      (
-      string region_code,
-      string starting_with
-      )
+    public k.int_nonnegative MaxSpecLength(string region_code)
       {
       var max_spec_length = new k.int_nonnegative();
       Open();
-      max_spec_length.val = int.Parse
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "SELECT IFNULL(max(length(CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',IFNULL(certification_number,'nocert'),', ',IFNULL(birth_date,'-')) USING utf8))),0)"
-          + " FROM member"
-          + (region_code.Length > 0 ? " where regional_council_code = '" + region_code + "'" : k.EMPTY),
-          connection
-          )
-          .ExecuteScalar().ToString()
+        "SELECT IFNULL(max(length(CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',IFNULL(certification_number,'nocert'),', ',IFNULL(birth_date,'-')) USING utf8))),0)"
+        + " FROM member"
+        + (region_code.Length > 0 ? " where regional_council_code = '" + region_code + "'" : k.EMPTY),
+        connection
         );
+      max_spec_length.val = int.Parse(my_sql_command.ExecuteScalar().ToString());
       Close();
       return max_spec_length;
       }
@@ -440,17 +449,19 @@ namespace Class_db_members
       string residence_county_code,
       string street_address_1,
       string street_address_2,
-      string city_state_zip
+      string city_state_zip,
+      string certification_number
       )
       {
       Open();
       var transaction = connection.BeginTransaction();
-      new MySqlCommand
+      //
+      using var my_sql_command_1 = new MySqlCommand
         (
         db_trail.Saved
           (
           "insert member"
-          + " set be_practitioner = FALSE"
+          + " set be_practitioner = " + (certification_number.Length > 0).ToString().ToUpper()
           + " , last_name = NULLIF('" + last_name.Trim().ToUpper() + "','')"
           + " , first_name = NULLIF('" + first_name.Trim().ToUpper() + "','')"
           + " , middle_initial = '" + middle_initial.ToUpper() + "'"
@@ -462,12 +473,16 @@ namespace Class_db_members
           + " , street_address_1 = NULLIF('" + street_address_1.Trim().ToUpper() + "','')"
           + " , street_address_2 = NULLIF('" + street_address_2.Trim().ToUpper() + "','')"
           + " , city_state_zip = NULLIF('" + city_state_zip.Trim().ToUpper() + "','')"
+          + " , certification_number = NULLIF('" + certification_number + "','')"
           ),
         connection,
         transaction
-        )
-        .ExecuteNonQuery();
-      var id_of_member_added = new MySqlCommand("select LAST_INSERT_ID()",connection,transaction).ExecuteScalar().ToString();
+        );
+      my_sql_command_1.ExecuteNonQuery();
+      //
+      using var my_sql_command_2 = new MySqlCommand("select LAST_INSERT_ID()",connection,transaction);
+      var id_of_member_added = my_sql_command_2.ExecuteScalar().ToString();
+      //
       transaction.Commit();
       Close();
       return id_of_member_added;
@@ -480,7 +495,8 @@ namespace Class_db_members
       )
       {
       Open();
-      new MySqlCommand(db_trail.Saved("UPDATE member SET email_address = '" + email_address + "' WHERE id = '" + id + "'"), connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand(db_trail.Saved("UPDATE member SET email_address = '" + email_address + "' WHERE id = '" + id + "'"), connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -492,7 +508,7 @@ namespace Class_db_members
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -501,32 +517,29 @@ namespace Class_db_members
           + " where id = '" + id + "'"
           ),
           connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal object Summary(string id)
       {
       Open();
-      var dr =
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "SELECT email_address"
-          + " , last_name"
-          + " , first_name"
-          + " , middle_initial"
-          + " , IFNULL(practitioner_level.short_description,'') as level_description"
-          + " , IFNULL(certification_number,'nocert') as certification_number"
-          + " , DATE_FORMAT(birth_date,'%Y-%m-%d') as birth_date"
-          + " FROM member"
-          +   " left join practitioner_level on (practitioner_level.id=member.level_id)"
-          + " where member.id = '" + id + "'",
-          connection
-          )
-          .ExecuteReader()
+        "SELECT email_address"
+        + " , last_name"
+        + " , first_name"
+        + " , middle_initial"
+        + " , IFNULL(practitioner_level.short_description,'') as level_description"
+        + " , IFNULL(certification_number,'nocert') as certification_number"
+        + " , DATE_FORMAT(birth_date,'%Y-%m-%d') as birth_date"
+        + " FROM member"
+        +   " left join practitioner_level on (practitioner_level.id=member.level_id)"
+        + " where member.id = '" + id + "'",
+        connection
         );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       var the_summary = new member_summary()
         {
@@ -547,8 +560,9 @@ namespace Class_db_members
         {
             string result;
             object user_id_obj;
-            this.Open();
-            user_id_obj = new MySqlCommand("select user_id from user_member_map where member_id = " + member_id, this.connection).ExecuteScalar();
+            Open();
+            using var my_sql_command = new MySqlCommand("select user_id from user_member_map where member_id = " + member_id, connection);
+            user_id_obj = my_sql_command.ExecuteScalar();
             if (user_id_obj != null)
             {
                 result = user_id_obj.ToString();
@@ -557,7 +571,7 @@ namespace Class_db_members
             {
                 result = k.EMPTY;
             }
-            this.Close();
+            Close();
             return result;
         }
 

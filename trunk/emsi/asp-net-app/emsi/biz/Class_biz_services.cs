@@ -9,8 +9,8 @@ namespace Class_biz_services
   {
   public class TClass_biz_services
     {
-        private TClass_db_appropriations db_appropriations = null;
-        private TClass_db_services db_services = null;
+        private readonly TClass_db_appropriations db_appropriations = null;
+        private readonly TClass_db_services db_services = null;
         //Constructor  Create()
         public TClass_biz_services() : base()
         {
@@ -508,7 +508,6 @@ namespace Class_biz_services
           string num_ambulances,
           bool be_dera,
           string charter_other_kind,
-          bool be_new_affirmation,
           bool be_valid_profile,
           string federal_tax_id,
           bool be_qrs_unrecognized,

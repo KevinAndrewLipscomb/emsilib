@@ -5,7 +5,7 @@ namespace Class_biz_roles
 {
     public class TClass_biz_roles
     {
-        private TClass_db_roles db_roles = null;
+        private readonly TClass_db_roles db_roles = null;
         //Constructor  Create()
         public TClass_biz_roles() : base()
         {

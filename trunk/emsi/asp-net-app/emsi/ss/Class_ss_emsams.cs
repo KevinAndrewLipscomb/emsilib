@@ -1,3 +1,6 @@
+#pragma warning disable CA1031 // Do not catch general exception types
+#pragma warning disable CA2234 // Pass system uri objects instead of strings
+
 using Class_biz_regions;
 using Class_ss;
 using HtmlAgilityPack;
@@ -20,14 +23,14 @@ namespace ConEdLink.component.ss
   public class Class_ss_emsams : TClass_ss
     {
 
-    private TClass_biz_regions biz_regions = null;
+    private readonly TClass_biz_regions biz_regions = null;
 
     public Class_ss_emsams() : base()
       {      
       biz_regions = new TClass_biz_regions();
       }
 
-    private bool Request_ems_health_state_pa_us_Emsportal
+    private static bool Request_ems_health_state_pa_us_Emsportal
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -114,7 +117,7 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private bool Request_ems_health_state_pa_us_EmsportalApplicationlist
+    private static bool Request_ems_health_state_pa_us_EmsportalApplicationlist
     (
     CookieContainer cookie_container,
     out HttpWebResponse response
@@ -226,7 +229,7 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private bool Request_ems_health_state_pa_us_EmsregDefault
+    private static bool Request_ems_health_state_pa_us_EmsregDefault
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -263,7 +266,7 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private string Request_ems_health_state_pa_us_EmsregPractitionerHome
+    private static string Request_ems_health_state_pa_us_EmsregPractitionerHome
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -300,7 +303,7 @@ namespace ConEdLink.component.ss
 	    return k.EMPTY;
     }
 
-    private string Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch
+    private static string Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch
       (
       CookieContainer cookie_container,
       string region_code,
@@ -338,7 +341,7 @@ namespace ConEdLink.component.ss
 	    return k.EMPTY;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport
+    private static bool Request_ems_health_state_pa_us_EmsregReportsEmsinstructorlistsearch_ExcelGeneratereport
       (
       CookieContainer cookie_container,
       string view_state,
@@ -388,7 +391,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private string Request_ems_health_state_pa_us_EmsregReportsReportlist
+    private static string Request_ems_health_state_pa_us_EmsregReportsReportlist
       (
       CookieContainer cookie_container,
       string region_code,
@@ -426,7 +429,7 @@ namespace ConEdLink.component.ss
 	    return k.EMPTY;
     }
 
-    private bool Request_ems_health_state_pa_us_emsregPractitionerSearch
+    private static bool Request_ems_health_state_pa_us_emsregPractitionerSearch
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -463,7 +466,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregPractitionerSearchresults_1000recordsperpage
+    private static bool Request_ems_health_state_pa_us_EmsregPractitionerSearchresults_1000recordsperpage
       (
       CookieContainer cookie_container,
       string view_state,
@@ -513,7 +516,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private string Request_ems_health_state_pa_us_EmsregPractitionerSearchresults_Next
+    private static string Request_ems_health_state_pa_us_EmsregPractitionerSearchresults_Next
       (
       CookieContainer cookie_container,
       string view_state,
@@ -567,7 +570,7 @@ namespace ConEdLink.component.ss
 	    return k.EMPTY;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregReportsAvailablececlasseslistsearch
+    private static bool Request_ems_health_state_pa_us_EmsregReportsAvailablececlasseslistsearch
       (
       CookieContainer cookie_container,
       out HttpWebResponse response
@@ -604,7 +607,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspendedExpiredProbation_Submit
+    private static bool Request_ems_health_state_pa_us_EmsregPractitionerSearch_PractitionerstatusActiveSuspendedExpiredProbation_Submit
       (
       CookieContainer cookie_container,
       string view_state,
@@ -654,7 +657,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregReportsAvailablececlasseslistsearch_From
+    private static bool Request_ems_health_state_pa_us_EmsregReportsAvailablececlasseslistsearch_From
       (
       CookieContainer cookie_container,
       string view_state,
@@ -705,7 +708,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_ConedClassreg_Classid
+    private static bool Request_ems_health_state_pa_us_ConedClassreg_Classid
       (
       CookieContainer cookie_container,
       string class_id,
@@ -743,7 +746,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_ConedClassreg_ClasswascanceledClassmaintenance
+    private static bool Request_ems_health_state_pa_us_ConedClassreg_ClasswascanceledClassmaintenance
       (
       CookieContainer cookie_container,
       string class_id,
@@ -1133,6 +1136,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedExportSponsorsearchtxt
       (
       CookieContainer cookie_container,
@@ -1170,6 +1174,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedListclassnumbers
       (
       CookieContainer cookie_container,
@@ -1207,6 +1212,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedListClassNumbers_Coned_2011_999999_ShowNumbers
       (
       CookieContainer cookie_container,
@@ -1255,6 +1261,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_Coned_Mainmenu_Logout
       (
       CookieContainer cookie_container,
@@ -1292,6 +1299,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedSponsorsearch
       (
       CookieContainer cookie_container,
@@ -1327,8 +1335,9 @@ namespace ConEdLink.component.ss
 	    }
 
 	    return true;
-    }    
+    }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedSponsorsearch_Filedelimited_Searchnow
       (
       CookieContainer cookie_container,
@@ -1426,6 +1435,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedUsersearch
       (
       CookieContainer cookie_container,
@@ -1463,6 +1473,7 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
     private static bool Request_ems_health_state_pa_us_ConedUsersearch_RegionalCouncilId_SearchNow
       (
       CookieContainer cookie_container,
@@ -1548,7 +1559,8 @@ namespace ConEdLink.component.ss
 	    return true;
       }
 
-    private bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_ByCounty
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members")]
+    private static bool Request_ems_health_state_pa_us_RegistryRegistryActivepractitioners_ByCounty
       (
       CookieContainer cookie_container,
       string view_state,
@@ -2461,7 +2473,7 @@ namespace ConEdLink.component.ss
       return class_search_tab_delimited;
       }
 
-    public class TeachingEntity
+    private class TeachingEntity
       {
       public string id = k.EMPTY;
       public string date_created = k.EMPTY;
@@ -2742,10 +2754,11 @@ namespace ConEdLink.component.ss
       internal string gender = k.EMPTY;
       internal string status = k.EMPTY;
       }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible")]
     public class DetailedCurrentPractitionersContext
       {
       internal CookieContainer cookie_container = null;
-      public k.int_sign_range disposition = null;
+      internal k.int_sign_range disposition = null;
       internal string event_validation = k.EMPTY;
       internal string view_state = k.EMPTY;
       //

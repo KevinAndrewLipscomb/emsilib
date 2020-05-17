@@ -30,10 +30,10 @@ namespace external_data_binding.emsams.PractitionerInfo {
         [System.Xml.Serialization.XmlElementAttribute("Practitioner")]
         public PractitionersPractitioner[] Practitioner {
             get {
-                return this.practitionerField;
+                return practitionerField;
             }
             set {
-                this.practitionerField = value;
+                practitionerField = value;
             }
         }
     }
@@ -69,100 +69,100 @@ namespace external_data_binding.emsams.PractitionerInfo {
         /// <remarks/>
         public string CertificationNumber {
             get {
-                return this.certificationNumberField;
+                return certificationNumberField;
             }
             set {
-                this.certificationNumberField = value;
+                certificationNumberField = value;
             }
         }
         
         /// <remarks/>
         public string LevelDescription {
             get {
-                return this.levelDescriptionField;
+                return levelDescriptionField;
             }
             set {
-                this.levelDescriptionField = value;
+                levelDescriptionField = value;
             }
         }
         
         /// <remarks/>
         public string CountyName {
             get {
-                return this.countyNameField;
+                return countyNameField;
             }
             set {
-                this.countyNameField = value;
+                countyNameField = value;
             }
         }
         
         /// <remarks/>
         public string RegionalCouncilName {
             get {
-                return this.regionalCouncilNameField;
+                return regionalCouncilNameField;
             }
             set {
-                this.regionalCouncilNameField = value;
+                regionalCouncilNameField = value;
             }
         }
         
         /// <remarks/>
         public string BirthDate {
             get {
-                return this.birthDateField;
+                return birthDateField;
             }
             set {
-                this.birthDateField = value;
+                birthDateField = value;
             }
         }
         
         /// <remarks/>
         public string Status {
             get {
-                return this.statusField;
+                return statusField;
             }
             set {
-                this.statusField = value;
+                statusField = value;
             }
         }
         
         /// <remarks/>
         public string LastName {
             get {
-                return this.lastNameField;
+                return lastNameField;
             }
             set {
-                this.lastNameField = value;
+                lastNameField = value;
             }
         }
         
         /// <remarks/>
         public string FirstName {
             get {
-                return this.firstNameField;
+                return firstNameField;
             }
             set {
-                this.firstNameField = value;
+                firstNameField = value;
             }
         }
         
         /// <remarks/>
         public string MI {
             get {
-                return this.miField;
+                return miField;
             }
             set {
-                this.miField = value;
+                miField = value;
             }
         }
         
         /// <remarks/>
         public string IsInstructor {
             get {
-                return this.isInstructorField;
+                return isInstructorField;
             }
             set {
-                this.isInstructorField = value;
+                isInstructorField = value;
             }
         }
     }

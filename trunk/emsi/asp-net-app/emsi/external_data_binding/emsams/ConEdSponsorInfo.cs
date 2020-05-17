@@ -30,10 +30,10 @@ namespace external_data_binding.emsams.ConEdSponsorInfo {
         [System.Xml.Serialization.XmlElementAttribute("Sponsor")]
         public SponsorsSponsor[] Sponsor {
             get {
-                return this.sponsorField;
+                return sponsorField;
             }
             set {
-                this.sponsorField = value;
+                sponsorField = value;
             }
         }
     }
@@ -63,40 +63,40 @@ namespace external_data_binding.emsams.ConEdSponsorInfo {
         /// <remarks/>
         public ushort SponsorID {
             get {
-                return this.sponsorIDField;
+                return sponsorIDField;
             }
             set {
-                this.sponsorIDField = value;
+                sponsorIDField = value;
             }
         }
         
         /// <remarks/>
         public string Email {
             get {
-                return this.emailField;
+                return emailField;
             }
             set {
-                this.emailField = value;
+                emailField = value;
             }
         }
         
         /// <remarks/>
         public string Name {
             get {
-                return this.nameField;
+                return nameField;
             }
             set {
-                this.nameField = value;
+                nameField = value;
             }
         }
         
         /// <remarks/>
         public byte Region {
             get {
-                return this.regionField;
+                return regionField;
             }
             set {
-                this.regionField = value;
+                regionField = value;
             }
         }
         
@@ -104,30 +104,30 @@ namespace external_data_binding.emsams.ConEdSponsorInfo {
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool RegionSpecified {
             get {
-                return this.regionFieldSpecified;
+                return regionFieldSpecified;
             }
             set {
-                this.regionFieldSpecified = value;
+                regionFieldSpecified = value;
             }
         }
         
         /// <remarks/>
         public string SponsorNumber {
             get {
-                return this.sponsorNumberField;
+                return sponsorNumberField;
             }
             set {
-                this.sponsorNumberField = value;
+                sponsorNumberField = value;
             }
         }
         
         /// <remarks/>
         public string SponsorStatusDescription {
             get {
-                return this.sponsorStatusDescriptionField;
+                return sponsorStatusDescriptionField;
             }
             set {
-                this.sponsorStatusDescriptionField = value;
+                sponsorStatusDescriptionField = value;
             }
         }
     }

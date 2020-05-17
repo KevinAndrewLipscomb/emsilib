@@ -7,16 +7,16 @@ using System.Web;
 namespace Class_biz_user
   {
 
-  public class Class_biz_user_Static
-    {
-    public const string KIND_THAT_HAS_ROLES = "regional_staffer";
-    }
-
   public class TClass_biz_user
     {
 
-    private TClass_db_user db_user = null;
-    private TClass_db_users db_users = null;
+    private static class Static
+      {
+      public const string KIND_THAT_HAS_ROLES = "regional_staffer";
+      }
+
+    private readonly TClass_db_user db_user = null;
+    private readonly TClass_db_users db_users = null;
 
     public TClass_biz_user() : base()
       {
@@ -79,7 +79,7 @@ namespace Class_biz_user
         }
       else
         {
-        if (Kind() == Class_biz_user_Static.KIND_THAT_HAS_ROLES)
+        if (Kind() == Static.KIND_THAT_HAS_ROLES)
           {
           result = new TClass_db_user().RolesOf("regional_staffer_", IdNum());
           }

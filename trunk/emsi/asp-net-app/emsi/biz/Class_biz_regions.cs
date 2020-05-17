@@ -7,7 +7,7 @@ namespace Class_biz_regions
   public class TClass_biz_regions
     {
 
-    private TClass_db_regions db_regions = null;
+    private readonly TClass_db_regions db_regions = null;
 
     public TClass_biz_regions() : base()
       {      

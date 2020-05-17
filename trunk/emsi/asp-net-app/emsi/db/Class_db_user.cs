@@ -21,7 +21,7 @@ namespace Class_db_user
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select role.name as role"
         + " , IF(service_id is not null,4,IF(region_code is not null,2,1)) as tier"
@@ -35,8 +35,8 @@ namespace Class_db_user
         + " where user.id = '" + id + "'"
         + " order by role,tier,scope",
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -48,7 +48,7 @@ namespace Class_db_user
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select distinct privilege.name as privilege"
         + " , IF(service_id is not null,4,IF(region_code is not null,2,1)) as tier"
@@ -63,8 +63,8 @@ namespace Class_db_user
         + " where user.id = '" + id + "'"
         + " order by privilege,tier,scope",
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -76,7 +76,7 @@ namespace Class_db_user
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select distinct notification.name as notification"
         + " , IF(service_id is not null,4,IF(region_code is not null,2,1)) as tier"
@@ -91,8 +91,8 @@ namespace Class_db_user
         + " where user.id = '" + id + "'"
         + " order by notification,tier,scope",
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -101,12 +101,12 @@ namespace Class_db_user
       {
       var roles_of_string_collection = new StringCollection();
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select distinct name from role join role_member_map on (role_member_map.role_id=role.id) join user_member_map on (user_member_map.member_id=role_member_map.member_id) where user_member_map.user_id = '" + id + "'",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         roles_of_string_collection.Add(dr["name"].ToString());
@@ -122,7 +122,7 @@ namespace Class_db_user
       {
       var roles_of_string_collection = new StringCollection();
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select " + target_user_table + "group.name as group_name"
         + " from " + target_user_table + "role"
@@ -130,8 +130,8 @@ namespace Class_db_user
         +   " join " + target_user_table + "user on (" + target_user_table + "user.id=" + target_user_table + "role.user_id)"
         + " where " + target_user_table + "user.id = '" + id + "'",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         roles_of_string_collection.Add(dr["group_name"].ToString());

@@ -6,7 +6,6 @@ using Class_db_coned_offering_statuses;
 using Class_db_coned_offerings;
 using Class_db_practitioners;
 using Class_db_regions;
-using ConEdLink.component.ss;
 using emsi.ServiceReference_emsams_ConEd;
 using external_data_binding.emsams.ConEdClassInfo;
 using external_data_binding.emsams.EmptyRequest;
@@ -16,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Class_biz_coned_offerings
@@ -23,12 +23,11 @@ namespace Class_biz_coned_offerings
 
   public class TClass_biz_coned_offerings
     {
-    private TClass_biz_accounts biz_accounts = null;
-    private TClass_biz_notifications biz_notifications = null;
-    private TClass_db_coned_offerings db_coned_offerings = null;
-    private TClass_db_practitioners db_practitioners = null;
-    private TClass_db_regions db_regions = null;
-    private Class_ss_emsams ss_emsams = null;
+    private readonly TClass_biz_accounts biz_accounts = null;
+    private readonly TClass_biz_notifications biz_notifications = null;
+    private readonly TClass_db_coned_offerings db_coned_offerings = null;
+    private readonly TClass_db_practitioners db_practitioners = null;
+    private readonly TClass_db_regions db_regions = null;
 
     public TClass_biz_coned_offerings() : base()
       {
@@ -37,7 +36,6 @@ namespace Class_biz_coned_offerings
       db_coned_offerings = new TClass_db_coned_offerings();
       db_practitioners = new TClass_db_practitioners();
       db_regions = new TClass_db_regions();
-      ss_emsams = new Class_ss_emsams();
       }
 
     public void Archive
@@ -116,7 +114,6 @@ namespace Class_biz_coned_offerings
 
     public void BindClassCatalog
       (
-      string region_code,
       string coned_sponsor_user_id,
       string range,
       string sort_order,
@@ -124,7 +121,7 @@ namespace Class_biz_coned_offerings
       object target
       )
       {
-      db_coned_offerings.BindClassCatalog(region_code,coned_sponsor_user_id,range,sort_order,be_sort_order_ascending,target);
+      db_coned_offerings.BindClassCatalog(coned_sponsor_user_id,range,sort_order,be_sort_order_ascending,target);
       }
 
     public void BindDirectToListControlForCopy
@@ -203,7 +200,6 @@ namespace Class_biz_coned_offerings
         db_coned_offerings.SetStatus(id,coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING);
         biz_notifications.IssueForClassClosed
           (
-          sponsor_id:db_coned_offerings.SponsorIdOf(summary),
           sponsor_number:db_coned_offerings.SponsorNumberOf(summary),
           sponsor_name:db_coned_offerings.SponsorNameOf(summary),
           sponsor_email:db_coned_offerings.SponsorEmailOf(summary),
@@ -537,10 +533,11 @@ namespace Class_biz_coned_offerings
       empty_request_obj.GUID = ConfigurationManager.AppSettings["emsams_service_references_guid"];
       //
       db_coned_offerings.MarkUntouchedAsStale();
-      var empty_request = new StringWriter();
+      using var empty_request = new StringWriter();
       new XmlSerializer(typeof(EmptyRequest)).Serialize(empty_request,empty_request_obj);
       var response = client.GetClassInfo(emptyRequest:empty_request.ToString());
-      db_coned_offerings.ImportLatestFromEmsrs(recs:ArrayList.Adapter(((ClassInfo)new XmlSerializer(typeof(ClassInfo)).Deserialize(new StringReader(response))).Class));
+      using var xml_reader = XmlReader.Create(input:new StringReader(response));
+      db_coned_offerings.ImportLatestFromEmsrs(recs:ArrayList.Adapter(((ClassInfo)new XmlSerializer(typeof(ClassInfo)).Deserialize(xml_reader)).Class));
       db_coned_offerings.MarkStaleAsCanceled();
       client.Close();
       }
@@ -573,13 +570,11 @@ namespace Class_biz_coned_offerings
 
     public void MarkRosterAlreadySubmitted
       (
-      object summary,
-      string region_code
+      object summary
       )
       {
       biz_notifications.IssueForSponsorSaysAlreadySubmitted
         (
-        sponsor_id:db_coned_offerings.SponsorIdOf(summary),
         sponsor_number:db_coned_offerings.SponsorNumberOf(summary),
         sponsor_name:db_coned_offerings.SponsorNameOf(summary),
         sponsor_email:db_coned_offerings.SponsorEmailOf(summary),
@@ -600,13 +595,11 @@ namespace Class_biz_coned_offerings
 
     public void RequestCancellation
       (
-      object summary,
-      string region_code
+      object summary
       )
       {
       biz_notifications.IssueForSponsorSaysCanceled
         (
-        sponsor_id:db_coned_offerings.SponsorIdOf(summary),
         sponsor_number:db_coned_offerings.SponsorNumberOf(summary),
         sponsor_name:db_coned_offerings.SponsorNameOf(summary),
         sponsor_email:db_coned_offerings.SponsorEmailOf(summary),
@@ -627,13 +620,11 @@ namespace Class_biz_coned_offerings
 
     public void RequestRanNoCe
       (
-      object summary,
-      string region_code
+      object summary
       )
       {
       biz_notifications.IssueForSponsorSaysRanNoCe
         (
-        sponsor_id:db_coned_offerings.SponsorIdOf(summary),
         sponsor_number:db_coned_offerings.SponsorNumberOf(summary),
         sponsor_name:db_coned_offerings.SponsorNameOf(summary),
         sponsor_email:db_coned_offerings.SponsorEmailOf(summary),

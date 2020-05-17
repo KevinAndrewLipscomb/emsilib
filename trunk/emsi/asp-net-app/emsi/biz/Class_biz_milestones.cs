@@ -7,13 +7,7 @@ using System;
 using System.Collections;
 
 namespace Class_biz_milestones
-{
-    public struct reminder_control_record_type
-    {
-        public uint num_reminders;
-        public uint[] relative_day_num_array;
-    } // end reminder_control_record_type
-
+  {
     public enum milestone_type
     {
         COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE = 1,
@@ -24,30 +18,42 @@ namespace Class_biz_milestones
         SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE = 6
     } // end milestone_type
 
-    public static class Class_biz_milestones_Static
+  public class TClass_biz_milestones
     {
-        // REMINDER_CONTROL_TABLE
-        public const int MAX_NUM_REMINDERS = 6;
-        public static reminder_control_record_type[] REMINDER_CONTROL_TABLE =
-          {
-            // COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE
-            new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
-            // SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE
-            new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
-            // SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE
-            new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
-            // SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE
-            new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
-            // END_OF_CYCLE_MILESTONE
-            new reminder_control_record_type {num_reminders = 0} ,
-            // SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE
-            new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}}
-          };
-    } // end Class_biz_milestones
 
-    public class TClass_biz_milestones
-    {
-        private TClass_db_milestones db_milestones = null;
+    private struct reminder_control_record_type
+      {
+      public uint num_reminders;
+      public uint[] relative_day_num_array;
+      } // end reminder_control_record_type
+
+    private static class Class_biz_milestones_Static
+      {
+      // REMINDER_CONTROL_TABLE
+      public const int MAX_NUM_REMINDERS = 6;
+      private static reminder_control_record_type[] the_remider_control_table =
+        {
+        // COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE
+        new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
+        // SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE
+        new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
+        // SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE
+        new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
+        // SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE
+        new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
+        // END_OF_CYCLE_MILESTONE
+        new reminder_control_record_type {num_reminders = 0} ,
+        // SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE
+        new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}}
+        };
+      public static reminder_control_record_type[] REMINDER_CONTROL_TABLE
+        {
+        get => the_remider_control_table;
+        set => the_remider_control_table = value;
+        }
+      } // end Class_biz_milestones
+
+        private readonly TClass_db_milestones db_milestones = null;
         public bool BeProcessed(milestone_type milestone)
         {
             bool result;
@@ -152,7 +158,7 @@ namespace Class_biz_milestones
                                   }
                                 }
                             }
-                            i = i + 1;
+                            i++;
                         }
                     }
                 }
@@ -161,5 +167,4 @@ namespace Class_biz_milestones
 
     } // end TClass_biz_milestones
 
-}
-
+  }

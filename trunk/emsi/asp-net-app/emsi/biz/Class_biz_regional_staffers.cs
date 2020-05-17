@@ -4,7 +4,7 @@ namespace Class_biz_regional_staffers
 {
     public class TClass_biz_regional_staffers
     {
-        private TClass_db_regional_staffers db_regional_staffers = null;
+        private readonly TClass_db_regional_staffers db_regional_staffers = null;
         //Constructor  Create()
         public TClass_biz_regional_staffers() : base()
         {
