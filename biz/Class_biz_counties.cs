@@ -6,7 +6,7 @@ namespace Class_biz_counties
 {
     public class TClass_biz_counties
     {
-        private TClass_db_counties db_counties = null;
+        private readonly TClass_db_counties db_counties = null;
         //Constructor  Create()
         public TClass_biz_counties() : base()
         {

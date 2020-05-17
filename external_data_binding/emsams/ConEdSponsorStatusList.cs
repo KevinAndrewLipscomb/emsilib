@@ -32,10 +32,10 @@ namespace external_data_binding.emsams.ConEdSponsorStatusList {
         [System.Xml.Serialization.XmlElementAttribute("Status")]
         public Status[] Items {
             get {
-                return this.itemsField;
+                return itemsField;
             }
             set {
-                this.itemsField = value;
+                itemsField = value;
             }
         }
         
@@ -43,10 +43,10 @@ namespace external_data_binding.emsams.ConEdSponsorStatusList {
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string GUID {
             get {
-                return this.gUIDField;
+                return gUIDField;
             }
             set {
-                this.gUIDField = value;
+                gUIDField = value;
             }
         }
     }

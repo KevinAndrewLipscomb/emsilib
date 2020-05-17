@@ -18,24 +18,29 @@ using System.Web;
 namespace Class_biz_notifications
   {
 
-  public class Class_biz_notifications_Static
-    {
-    public static char[] BreakChars = new char[3 + 1];
-    static Class_biz_notifications_Static()
-      {
-      BreakChars[1] = Convert.ToChar(k.SPACE);
-      BreakChars[2] = Convert.ToChar(k.TAB);
-      BreakChars[3] = Convert.ToChar(k.HYPHEN);
-      }
-    }
-
   public class TClass_biz_notifications
     {
 
-        private string application_name = k.EMPTY;
-        private string host_domain_name = k.EMPTY;
-        private TClass_db_notifications db_notifications = null;
-        private string runtime_root_fullspec = String.Empty;
+    private class Static
+      {
+      private static char[] breakChars = new char[3 + 1];
+      public static char[] BreakChars
+        {
+        get => breakChars;
+        set => breakChars = value;
+        }
+      static Static()
+        {
+        BreakChars[1] = Convert.ToChar(k.SPACE);
+        BreakChars[2] = Convert.ToChar(k.TAB);
+        BreakChars[3] = Convert.ToChar(k.HYPHEN);
+        }
+      }
+
+        private readonly string application_name = k.EMPTY;
+        private readonly string host_domain_name = k.EMPTY;
+        private readonly TClass_db_notifications db_notifications = null;
+        private readonly string runtime_root_fullspec = k.EMPTY;
 
         public TClass_biz_notifications() : base()
         {
@@ -85,7 +90,6 @@ namespace Class_biz_notifications
     private delegate string IssueForClassCanceled_Merge(string s);
     internal void IssueForClassCanceled
       (
-      string sponsor_id,
       string sponsor_number,
       string sponsor_name,
       string sponsor_email,
@@ -158,7 +162,6 @@ namespace Class_biz_notifications
     private delegate string IssueForClassClosed_Merge(string s);
     internal void IssueForClassClosed
       (
-      string sponsor_id,
       string sponsor_number,
       string sponsor_name,
       string sponsor_email,
@@ -559,7 +562,6 @@ namespace Class_biz_notifications
       string member_id,
       string last_name,
       string first_name,
-      string middle_initial,
       string practitioner_level_short_description,
       string regional_council_name,
       DateTime birth_date,
@@ -567,7 +569,8 @@ namespace Class_biz_notifications
       string residence_county_name,
       string street_address_1,
       string street_address_2,
-      string city_state_zip
+      string city_state_zip,
+      string certification_number
       )
       {
       var actor = k.EMPTY;
@@ -591,6 +594,7 @@ namespace Class_biz_notifications
           .Replace("<street_address_1/>", street_address_1)
           .Replace("<street_address_2/>", street_address_2)
           .Replace("<city_state_zip/>", city_state_zip)
+          .Replace("<certification_number/>", certification_number)
           ;
         };
 
@@ -670,7 +674,7 @@ namespace Class_biz_notifications
                 .Replace("<full_name/>", full_name.ToUpper())
                 .Replace("<user_email_address/>", user_email_address)
                 .Replace("<application_name/>", application_name)
-                .Replace("<explanation/>", k.WrapText(explanation, (k.NEW_LINE + "   "), Class_biz_notifications_Static.BreakChars, short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+                .Replace("<explanation/>", k.WrapText(explanation, (k.NEW_LINE + "   "), Static.BreakChars, short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
                 .Replace("<host_domain_name/>", host_domain_name);
               };
 
@@ -704,7 +708,7 @@ namespace Class_biz_notifications
           .Replace("<deployment_name/>",deployment_name)
           .Replace("<service_name/>",service_name)
           .Replace("<actual_vs_drill_indicator/>",actual_vs_drill_indicator)
-          .Replace("<supplemental_message/>",k.WrapText(supplemental_message,k.NEW_LINE + new string(Convert.ToChar(k.SPACE),6),Class_biz_notifications_Static.BreakChars,short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+          .Replace("<supplemental_message/>",k.WrapText(supplemental_message,k.NEW_LINE + new string(Convert.ToChar(k.SPACE),6),Static.BreakChars,short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
           .Replace("<deployment_coordinator_target/>",deployment_coordinator_target)
           ;
         };
@@ -955,7 +959,7 @@ namespace Class_biz_notifications
               .Replace("<actor/>",actor)
               .Replace("<actor_email_address/>",actor_email_address)
               .Replace("<status_description/>",status_description)
-              .Replace("<reason/>",k.WrapText(t:reason,insert_string:(k.NEW_LINE + "   "),break_char_array:Class_biz_notifications_Static.BreakChars,max_line_len:short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
+              .Replace("<reason/>",k.WrapText(t:reason,insert_string:(k.NEW_LINE + "   "),break_char_array:Static.BreakChars,max_line_len:short.Parse(ConfigurationManager.AppSettings["email_blockquote_maxcol"])))
               ;
             };
 
@@ -1014,7 +1018,6 @@ namespace Class_biz_notifications
     private delegate string IssueForSponsorSaysAlreadySubmitted_Merge(string s);
     internal void IssueForSponsorSaysAlreadySubmitted
       (
-      string sponsor_id,
       string sponsor_number,
       string sponsor_name,
       string sponsor_email,
@@ -1087,7 +1090,6 @@ namespace Class_biz_notifications
     private delegate string IssueForSponsorSaysCanceled_Merge(string s);
     internal void IssueForSponsorSaysCanceled
       (
-      string sponsor_id,
       string sponsor_number,
       string sponsor_name,
       string sponsor_email,
@@ -1160,7 +1162,6 @@ namespace Class_biz_notifications
     private delegate string IssueForSponsorSaysRanNoCe_Merge(string s);
     internal void IssueForSponsorSaysRanNoCe
       (
-      string sponsor_id,
       string sponsor_number,
       string sponsor_name,
       string sponsor_email,

@@ -89,7 +89,7 @@ namespace Class_db_trail
       var imitator_designator = (HttpContext.Current.Session["imitator_designator"] == null ? k.EMPTY : HttpContext.Current.Session["imitator_designator"].ToString());
       var imitator_sql = (imitator_designator.Length == 0 ? k.EMPTY : " , imitator = '" + imitator_designator + "'");
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "insert into journal"
         + " set timestamp = CURRENT_TIMESTAMP"
@@ -97,8 +97,8 @@ namespace Class_db_trail
         + " , actor = '" + HttpContext.Current.User.Identity.Name + "'"
         + " , action = \"" + Regex.Replace(action, Convert.ToString(k.QUOTE), k.DOUBLE_QUOTE) + "\"",
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       //
       // Send a representation of the action offsite as a contingency.
@@ -112,7 +112,7 @@ namespace Class_db_trail
           (
           t:"/*" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff") + "*/ " + action,
           insert_string:k.NEW_LINE,
-          break_char_array:new char[] {},
+          break_char_array: Array.Empty<char>(),
           max_line_len:k.MAX_RFC_2822_ET_SEQ_EMAIL_LINE_LENGTH
           )
         );

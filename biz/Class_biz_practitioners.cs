@@ -1,7 +1,6 @@
 // Derived from KiAspdotnetFramework/component/biz/Class~biz~~template~kicrudhelped~item.cs~template
 
 using Class_db_practitioners;
-using Class_db_regions;
 using ConEdLink.component.ss;
 using kix;
 using System;
@@ -13,14 +12,12 @@ namespace Class_biz_practitioners
   {
   public class TClass_biz_practitioners
     {
-    private TClass_db_practitioners db_practitioners = null;
-    private TClass_db_regions db_regions = null;
-    private Class_ss_emsams ss_emsams = null;
+    private readonly TClass_db_practitioners db_practitioners = null;
+    private readonly Class_ss_emsams ss_emsams = null;
 
     public TClass_biz_practitioners() : base()
       {
       db_practitioners = new TClass_db_practitioners();
-      db_regions = new TClass_db_regions();
       ss_emsams = new Class_ss_emsams();
       }
 
@@ -46,17 +43,12 @@ namespace Class_biz_practitioners
     public void BindDirectToListControlForRoster
       (
       object target,
-      string region_code,
       string starting_with,
       k.int_positive limit,
-      bool do_limit_to_21_yoa_or_older
+      bool do_limit_to_21_yoa_or_older = false
       )
       {
-      db_practitioners.BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yoa_or_older);
-      }
-    public void BindDirectToListControlForRoster(object target,string region_code,string starting_with,k.int_positive limit)
-      {
-      BindDirectToListControlForRoster(target,region_code,starting_with,limit,do_limit_to_21_yoa_or_older:false);
+      db_practitioners.BindDirectToListControlForRoster(target,starting_with,limit,do_limit_to_21_yoa_or_older);
       }
 
     public string BirthDateOf(object summary)
@@ -137,6 +129,7 @@ namespace Class_biz_practitioners
       return db_practitioners.IdOf(summary);
       }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types")]
     public void ImportLatestFromEmsrs()
       {
 //      db_practitioners.MarkAllStale();
@@ -173,13 +166,9 @@ namespace Class_biz_practitioners
       return db_practitioners.LevelOf(summary);
       }
 
-    public k.int_nonnegative MaxSpecLength
-      (
-      string region_code,
-      string starting_with
-      )
+    public k.int_nonnegative MaxSpecLength(string region_code)
       {
-      return db_practitioners.MaxSpecLength(region_code,starting_with);
+      return db_practitioners.MaxSpecLength(region_code);
       }
 
     public string MiddleInitialOf(object summary)

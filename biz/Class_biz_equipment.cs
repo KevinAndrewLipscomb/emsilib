@@ -10,9 +10,10 @@ namespace Class_biz_equipment
 {
     public class TClass_biz_equipment
     {
-        private TClass_db_emsof_requests db_emsof_requests = null;
-        private TClass_db_equipment db_equipment = null;
-        private TClass_db_services db_services = null;
+        private readonly TClass_db_emsof_requests db_emsof_requests = null;
+        private readonly TClass_db_equipment db_equipment = null;
+        private readonly TClass_db_services db_services = null;
+
         //Constructor  Create()
         public TClass_biz_equipment() : base()
         {
@@ -21,27 +22,24 @@ namespace Class_biz_equipment
             db_equipment = new TClass_db_equipment();
             db_services = new TClass_db_services();
         }
+
         public bool BeMatchExempt(string code, nominal_type match_level_enum)
         {
-            bool result;
-            decimal allowable_cost;
-            allowable_cost = db_equipment.AllowableCostOf(code);
-            switch(match_level_enum)
-            {
-                case Class_biz_match_level.nominal_type.STANDARD:
-                    result = (allowable_cost == db_equipment.FundingLevelNonRuralOf(code));
-                    break;
-                case Class_biz_match_level.nominal_type.RURAL:
-                    result = (allowable_cost == db_equipment.FundingLevelRuralOf(code));
-                    break;
-                case Class_biz_match_level.nominal_type.DISTRESSED:
-                    result = (allowable_cost == db_equipment.FundingLevelNonRuralOf(code)) || (allowable_cost == db_equipment.FundingLevelRuralOf(code));
-                    break;
-                default:
-                    result = false;
-                    break;
-            }
-            return result;
+            var be_match_exempt = false;
+            var allowable_cost = db_equipment.AllowableCostOf(code);
+            if (match_level_enum == nominal_type.STANDARD)
+              {
+              be_match_exempt = (allowable_cost == db_equipment.FundingLevelNonRuralOf(code));
+              }
+            else if (match_level_enum == nominal_type.RURAL)
+              {
+              be_match_exempt = (allowable_cost == db_equipment.FundingLevelRuralOf(code));
+              }
+            else if (match_level_enum == nominal_type.DISTRESSED)
+              {
+              be_match_exempt = (allowable_cost == db_equipment.FundingLevelNonRuralOf(code)) || (allowable_cost == db_equipment.FundingLevelRuralOf(code));
+              }
+            return be_match_exempt;
         }
 
         public void CostsAndAntes
@@ -63,11 +61,11 @@ namespace Class_biz_equipment
           var quantity = new k.decimal_nonnegative();
           decimal total_cost;
           var unit_cost = new k.decimal_nonnegative();
-          if ((unit_cost_string != k.EMPTY) && (quantity_string != k.EMPTY))
+          if ((unit_cost_string.Length > 0) && (quantity_string.Length > 0))
             {
             unit_cost.val = decimal.Parse(unit_cost_string);
             quantity.val = decimal.Parse(quantity_string);
-            if (additional_service_ante_string != k.EMPTY)
+            if (additional_service_ante_string.Length > 0)
               {
               additional_service_ante = decimal.Parse(additional_service_ante_string);
               }
@@ -160,7 +158,7 @@ namespace Class_biz_equipment
                     special_rules_violation = special_rules_violation + "The quantity of the requested items exceeds 5." + k.SPACE + k.SPACE;
                 // HasMedicalDirector
                 }
-                else if ((name == "HasMedicalDirector") && (db_services.MdNameOf(service_id) == k.EMPTY))
+                else if ((name == "HasMedicalDirector") && (db_services.MdNameOf(service_id).Length == 0))
                 {
                     special_rules_violation = special_rules_violation + "To request this item, your service\'s profile (annual survey) must first specify a Medical Director." + k.SPACE + k.SPACE;
                 // UpTo1PerAmbulance

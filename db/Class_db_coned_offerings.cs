@@ -56,7 +56,7 @@ namespace Class_db_coned_offerings
       public string eval_summary_misc_remarks;
       }
 
-    private TClass_db_trail db_trail = null;
+    private readonly TClass_db_trail db_trail = null;
 
     public TClass_db_coned_offerings() : base()
       {
@@ -73,7 +73,7 @@ namespace Class_db_coned_offerings
       var concat_clause = "concat(IFNULL(id,'-'),'|',IFNULL(course_id,'-'),'|',IFNULL(class_number,'-'),'|',IFNULL(created_by,'-'),'|',IFNULL(date_created,'-'),'|',IFNULL(last_edited_by,'-'),'|',IFNULL(date_last_edited,'-'),'|',IFNULL(sponsor_id,'-'),'|',IFNULL(sponsor_number,'-'),'|',IFNULL(document_status,'-'),'|',IFNULL(class_final_status,'-'),'|',IFNULL(course_number,'-'),'|',IFNULL(location,'-'),'|',IFNULL(start_date_time,'-'),'|',IFNULL(end_date_time,'-'),'|',IFNULL(instructors,'-'),'|',IFNULL(public_contact_name,'-'),'|',IFNULL(location_address_1,'-'),'|',IFNULL(location_address_2,'-'),'|',IFNULL(location_city,'-'),'|',IFNULL(location_state,'-'),'|',IFNULL(location_zip,'-'),'|',IFNULL(location_of_registration,'-'),'|',IFNULL(primary_text,'-'),'|',IFNULL(additional_texts,'-'),'|',IFNULL(created_by_first_name,'-'),'|',IFNULL(created_by_last_name,'-'),'|',IFNULL(courses_course_number,'-'),'|',IFNULL(course_title,'-'))";
       Open();
       ((target) as ListControl).Items.Clear();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select id"
         + " , CONVERT(" + concat_clause + " USING utf8) as spec"
@@ -81,8 +81,8 @@ namespace Class_db_coned_offerings
         + " where " + concat_clause + " like '%" + partial_spec.ToUpper() + "%'"
         + " order by spec",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -116,7 +116,7 @@ namespace Class_db_coned_offerings
         range_condition = " and YEAR(end_date_time) = '" + range + "'";
         }
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select coned_offering.id as coned_offering_id"
         + " , class_number"
@@ -143,15 +143,14 @@ namespace Class_db_coned_offerings
         +     (sponsor_id_filter.Length > 0 ? " and teaching_entity.id = '" + sponsor_id_filter + "'" : k.EMPTY)
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
 
     internal void BindClassCatalog
       (
-      string region_code,
       string coned_sponsor_user_id,
       string range,
       string sort_order,
@@ -177,7 +176,7 @@ namespace Class_db_coned_offerings
         range_condition = " and YEAR(start_date_time) = '" + range + "'";
         }
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select coned_offering.id as id"
         + " , class_number"
@@ -203,8 +202,8 @@ namespace Class_db_coned_offerings
         + " group by coned_offering.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -218,7 +217,7 @@ namespace Class_db_coned_offerings
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select coned_offering.id as id"
         + " , class_number"
@@ -241,8 +240,8 @@ namespace Class_db_coned_offerings
         +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -256,7 +255,7 @@ namespace Class_db_coned_offerings
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select coned_offering.id as id"
         + " , class_number"
@@ -276,8 +275,8 @@ namespace Class_db_coned_offerings
         +   " and coned_offering_status.description = 'NEEDS_REGIONAL_PROCESSING'"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -286,15 +285,15 @@ namespace Class_db_coned_offerings
       {
       Open();
       ((target) as ListControl).Items.Clear();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "SELECT id"
         + " , CONVERT(concat(IFNULL(id,'-'),'|',IFNULL(course_id,'-'),'|',IFNULL(class_number,'-'),'|',IFNULL(created_by,'-'),'|',IFNULL(date_created,'-'),'|',IFNULL(last_edited_by,'-'),'|',IFNULL(date_last_edited,'-'),'|',IFNULL(sponsor_id,'-'),'|',IFNULL(sponsor_number,'-'),'|',IFNULL(document_status,'-'),'|',IFNULL(class_final_status,'-'),'|',IFNULL(course_number,'-'),'|',IFNULL(location,'-'),'|',IFNULL(start_date_time,'-'),'|',IFNULL(end_date_time,'-'),'|',IFNULL(instructors,'-'),'|',IFNULL(public_contact_name,'-'),'|',IFNULL(location_address_1,'-'),'|',IFNULL(location_address_2,'-'),'|',IFNULL(location_city,'-'),'|',IFNULL(location_state,'-'),'|',IFNULL(location_zip,'-'),'|',IFNULL(location_of_registration,'-'),'|',IFNULL(primary_text,'-'),'|',IFNULL(additional_texts,'-'),'|',IFNULL(created_by_first_name,'-'),'|',IFNULL(created_by_last_name,'-'),'|',IFNULL(courses_course_number,'-'),'|',IFNULL(course_title,'-')) USING utf8) as spec"
         + " FROM coned_offering"
         + " order by spec",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -312,7 +311,7 @@ namespace Class_db_coned_offerings
       ((target) as ListControl).Items.Clear();
       ((target) as ListControl).Items.Add(new ListItem("-- Select --",k.EMPTY));
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "SELECT t.id"
         + " , CONVERT(concat(IFNULL(t.start_date_time,'-'),'|',IFNULL(concat(SUBSTRING(t.class_number,1,2),'-',SUBSTRING(t.class_number,3,6),'-',SUBSTRING(t.class_number,9,6)),'-'),'|',IFNULL(LEFT(t.course_title,30),'-'),'|',IFNULL(LEFT(t.location,12),'-')) USING utf8) as spec"
@@ -324,8 +323,8 @@ namespace Class_db_coned_offerings
         + " group by t.id"  //prevents coned_offerings with no attendees from showing up in target list
         + " order by t.start_date_time desc, t.class_number desc",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
@@ -344,7 +343,7 @@ namespace Class_db_coned_offerings
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select coned_offering.id as id"
         + " , class_number"
@@ -363,11 +362,11 @@ namespace Class_db_coned_offerings
         + " where region_code_name_map.code = '" + region_code + "'"
         +   " and county_region_map.region_code = '" + region_code + "'"
         +   " and coned_offering_status.description like 'SPONSOR_SAYS_%'"
-        +   (filter == k.EMPTY ? k.EMPTY : " and YEAR(CURDATE()) in (YEAR(datetime_discarded),YEAR(start_date_time),YEAR(end_date_time))")
+        +   (filter.Length == 0 ? k.EMPTY : " and YEAR(CURDATE()) in (YEAR(datetime_discarded),YEAR(start_date_time),YEAR(end_date_time))")
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -398,7 +397,8 @@ namespace Class_db_coned_offerings
       Open();
       try
         {
-        new MySqlCommand(db_trail.Saved("delete from coned_offering where id = '" + id + "'"), connection).ExecuteNonQuery();
+        using var my_sql_command = new MySqlCommand(db_trail.Saved("delete from coned_offering where id = '" + id + "'"), connection);
+        my_sql_command.ExecuteNonQuery();
         }
       catch(System.Exception e)
         {
@@ -408,7 +408,7 @@ namespace Class_db_coned_offerings
           }
         else
           {
-          throw e;
+          throw;
           }
         }
       Close();
@@ -644,7 +644,8 @@ namespace Class_db_coned_offerings
       var result = false;
       //
       Open();
-      var dr = new MySqlCommand("select * from coned_offering where CAST(id AS CHAR) = '" + id + "'", connection).ExecuteReader();
+      using var my_sql_command = new MySqlCommand("select * from coned_offering where CAST(id AS CHAR) = '" + id + "'", connection);
+      var dr = my_sql_command.ExecuteReader();
       if (dr.Read())
         {
         id = dr["id"].ToString();
@@ -751,7 +752,7 @@ namespace Class_db_coned_offerings
       )
       {
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select class_number"
         + " , sponsor_number"
@@ -769,8 +770,8 @@ namespace Class_db_coned_offerings
         + " from coned_offering"
         + " where CAST(id AS CHAR) = '" + id + "'",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       class_number = dr["class_number"].ToString();
       sponsor_number = dr["sponsor_number"].ToString();
@@ -847,26 +848,30 @@ namespace Class_db_coned_offerings
           transaction = connection.BeginTransaction();
           try
             {
-            if (new MySqlCommand("select 1 from coned_offering where class_number = '" + class_number + "'",connection,transaction).ExecuteScalar() == null)
+            using var my_sql_command_1 = new MySqlCommand("select 1 from coned_offering where class_number = '" + class_number + "'",connection,transaction);
+            if (my_sql_command_1.ExecuteScalar() == null)
               {
-              new MySqlCommand("insert coned_offering set class_number = NULLIF('" + class_number + "',''), " + childless_field_assignments_clause,connection,transaction).ExecuteNonQuery();
+              using var my_sql_command_2 = new MySqlCommand("insert coned_offering set class_number = NULLIF('" + class_number + "',''), " + childless_field_assignments_clause,connection,transaction);
+              my_sql_command_2.ExecuteNonQuery();
               }
             else
               {
-              new MySqlCommand("update coned_offering set " + childless_field_assignments_clause + " where class_number = '" + class_number + "'",connection,transaction).ExecuteNonQuery();
+              using var my_sql_command_3 = new MySqlCommand("update coned_offering set " + childless_field_assignments_clause + " where class_number = '" + class_number + "'",connection,transaction);
+              my_sql_command_3.ExecuteNonQuery();
               }
             transaction.Commit();
             }
-          catch (Exception e)
+          catch
             {
             transaction.Rollback();
-            throw e;
+            throw;
             }
           }
         Close();
         }
       }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types")]
     internal void ImportLatestFromEmsrs(ArrayList recs)
       {
       if (recs.Count > 0)
@@ -964,15 +969,18 @@ namespace Class_db_coned_offerings
             transaction = connection.BeginTransaction();
             try
               {
-              if (new MySqlCommand("select 1 from coned_offering where class_number = '" + class_number + "'",connection,transaction).ExecuteScalar() == null)
+              using var my_sql_command_1 = new MySqlCommand("select 1 from coned_offering where class_number = '" + class_number + "'",connection,transaction);
+              if (my_sql_command_1.ExecuteScalar() == null)
                 {
-                new MySqlCommand
+                using var my_sql_command_2 = new MySqlCommand
                   ("insert coned_offering set class_number = NULLIF('" + class_number + "',''), " + childless_field_assignments_clause,connection,transaction)
-                  .ExecuteNonQuery();
+                  ;
+                my_sql_command_2.ExecuteNonQuery();
                 }
               else
                 {
-                new MySqlCommand("update coned_offering set " + childless_field_assignments_clause + " where class_number = '" + class_number + "'",connection,transaction).ExecuteNonQuery();
+                using var my_sql_command_3 = new MySqlCommand("update coned_offering set " + childless_field_assignments_clause + " where class_number = '" + class_number + "'",connection,transaction);
+                my_sql_command_3.ExecuteNonQuery();
                 }
               transaction.Commit();
               }
@@ -1008,50 +1016,55 @@ namespace Class_db_coned_offerings
     public void MarkUntouchedAsStale()
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "update coned_offering"
         + " set be_stale = TRUE"
         + " where status_id = (select id from coned_offering_status where description = 'NEEDS_CONED_SPONSOR_FINALIZATION')"
         +   " and (select count(practitioner_id) from coned_offering_roster where coned_offering_roster.coned_offering_id = coned_offering.id) = 0",
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal void MarkCanceled(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where id = '" + id + "'",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where id = '" + id + "'",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal void MarkSponsorSaysAlreadySubmitted(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_ALREADY_SUBMITTED'), datetime_discarded = NOW() where id = '" + id + "'",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_ALREADY_SUBMITTED'), datetime_discarded = NOW() where id = '" + id + "'",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal void MarkSponsorSaysCanceled(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_CANCELED'), datetime_discarded = NOW() where id = '" + id + "'",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_CANCELED'), datetime_discarded = NOW() where id = '" + id + "'",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     internal void MarkSponsorSaysRanNoCe(string id)
       {
       Open();
-      new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_RAN_NO_CE'), datetime_discarded = NOW() where id = '" + id + "'",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update coned_offering set status_id = (select id from coned_offering_status where description = 'SPONSOR_SAYS_RAN_NO_CE'), datetime_discarded = NOW() where id = '" + id + "'",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     public void MarkStaleAsCanceled()
       {
       Open();
-      new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where be_stale",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update coned_offering set class_final_status_id = (select id from coned_offering_class_final_status where short_description = 'CANCELED') where be_stale",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -1073,9 +1086,10 @@ namespace Class_db_coned_offerings
     internal void PurgeStaleUnused()
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         ("delete from coned_offering where be_stale and start_date_time < SUBDATE(CURDATE(),INTERVAL 6 MONTH) and (select count(*) from coned_offering_roster where coned_offering_id = coned_offering.id) = 0",connection)
-        .ExecuteNonQuery();
+        ;
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -1099,7 +1113,7 @@ namespace Class_db_coned_offerings
       {
       var roster_due_q = new Queue<RosterDue>();
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "SELECT class_number"
         + " , coned_offering.sponsor_number as sponsor_number"
@@ -1124,8 +1138,8 @@ namespace Class_db_coned_offerings
         +   " and ((coned_offering_class_final_status.short_description is null) or (coned_offering_class_final_status.short_description <> 'CANCELED'))"
         +   " and end_date_time + '" + days_after.val + "' = CURDATE()",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         roster_due_q.Enqueue
@@ -1316,7 +1330,7 @@ namespace Class_db_coned_offerings
       + " , eval_summary_misc_remarks = NULLIF('" + eval_summary_misc_remarks + "','')"
       + k.EMPTY;
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -1327,8 +1341,8 @@ namespace Class_db_coned_offerings
           + childless_field_assignments_clause
           ),
           connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -1343,7 +1357,7 @@ namespace Class_db_coned_offerings
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -1355,8 +1369,8 @@ namespace Class_db_coned_offerings
           + " where id = '" + id + "'"
           ),
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -1368,7 +1382,7 @@ namespace Class_db_coned_offerings
       )
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         db_trail.Saved
           (
@@ -1378,8 +1392,8 @@ namespace Class_db_coned_offerings
           + " where id = '" + id + "'"
           ),
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -1431,49 +1445,46 @@ namespace Class_db_coned_offerings
     public object Summary(string id)
       {
       Open();
-      var dr =
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "SELECT class_id"
-          + " , class_number"
-          + " , course_number"
-          + " , course_title"
-          + " , location"
-          + " , CONCAT(start_date_time) as start_date_time"
-          + " , start_time"
-          + " , CONCAT(end_date_time) as end_date_time"
-          + " , end_time"
-          + " , IFNULL(length,'') as length"
-          + " , approved"
-          + " , status_id"
-          + " , sponsor_id"
-          + " , coned_offering.sponsor_number as sponsor_number"
-          + " , IFNULL(name,IFNULL(short_name,'')) as sponsor_name"
-          + " , IFNULL(email,'') as sponsor_email"
-          + " , IFNULL(contact_email,'') as sponsor_contact_email"
-          + " , IFNULL(teaching_entity.public_contact_email,'') as sponsor_public_contact_email"
-          + " , IFNULL(coned_offering.public_contact_email,'') as public_contact_email"
-          + " , fr_med_trauma_hours"
-          + " , fr_other_hours"
-          + " , emt_med_trauma_hours"
-          + " , emt_other_hours"
-          + " , emtp_med_trauma_hours"
-          + " , emtp_other_hours"
-          + " , phrn_med_trauma_hours"
-          + " , phrn_other_hours"
-          + " , eval_summary_instructional_staff"
-          + " , eval_summary_time_appropriately_used"
-          + " , eval_summary_classroom_training_site"
-          + " , eval_summary_equipment_av"
-          + " , eval_summary_misc_remarks"
-          + " FROM coned_offering"
-          +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
-          + " where coned_offering.id = '" + id + "'",
-          connection
-          )
-          .ExecuteReader()
+        "SELECT class_id"
+        + " , class_number"
+        + " , course_number"
+        + " , course_title"
+        + " , location"
+        + " , CONCAT(start_date_time) as start_date_time"
+        + " , start_time"
+        + " , CONCAT(end_date_time) as end_date_time"
+        + " , end_time"
+        + " , IFNULL(length,'') as length"
+        + " , approved"
+        + " , status_id"
+        + " , sponsor_id"
+        + " , coned_offering.sponsor_number as sponsor_number"
+        + " , IFNULL(name,IFNULL(short_name,'')) as sponsor_name"
+        + " , IFNULL(email,'') as sponsor_email"
+        + " , IFNULL(contact_email,'') as sponsor_contact_email"
+        + " , IFNULL(teaching_entity.public_contact_email,'') as sponsor_public_contact_email"
+        + " , IFNULL(coned_offering.public_contact_email,'') as public_contact_email"
+        + " , fr_med_trauma_hours"
+        + " , fr_other_hours"
+        + " , emt_med_trauma_hours"
+        + " , emt_other_hours"
+        + " , emtp_med_trauma_hours"
+        + " , emtp_other_hours"
+        + " , phrn_med_trauma_hours"
+        + " , phrn_other_hours"
+        + " , eval_summary_instructional_staff"
+        + " , eval_summary_time_appropriately_used"
+        + " , eval_summary_classroom_training_site"
+        + " , eval_summary_equipment_av"
+        + " , eval_summary_misc_remarks"
+        + " FROM coned_offering"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
+        + " where coned_offering.id = '" + id + "'",
+        connection
         );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       var the_summary = new coned_offering_summary()
         {

@@ -10,7 +10,7 @@ namespace Class_db_users
 {
     public class TClass_db_users: TClass_db
     {
-        private TClass_db_trail db_trail = null;
+        private readonly TClass_db_trail db_trail = null;
         //Constructor  Create()
         public TClass_db_users() : base()
         {
@@ -31,7 +31,7 @@ namespace Class_db_users
           object member_id_obj;
           //
           Open();
-          member_id_obj = new MySqlCommand
+          using var my_sql_command_1 = new MySqlCommand
             (
             "select id"
             + " from member"
@@ -40,11 +40,11 @@ namespace Class_db_users
             +   " and regional_council_code = '" + regional_council_code + "'"
             +   " and birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'",
             connection
-            )
-            .ExecuteScalar();
+            );
+          member_id_obj = my_sql_command_1.ExecuteScalar();
           if (member_id_obj != null)
             {
-            new MySqlCommand
+            using var my_sql_command_2 = new MySqlCommand
               (
               db_trail.Saved
                 (
@@ -65,8 +65,8 @@ namespace Class_db_users
                 )
               ,
               connection
-              )
-              .ExecuteNonQuery();
+              );
+            my_sql_command_2.ExecuteNonQuery();
             accept_as_member = true;
             }
           Close();
@@ -76,36 +76,40 @@ namespace Class_db_users
         public bool BeAuthorized(string username, string encoded_password)
         {
             bool result;
-            this.Open();
-            result = null != new MySqlCommand("SELECT 1 FROM user" + " where username = \"" + username + "\"" + " and encoded_password_hash = SHA1('" + encoded_password + "') and be_active", this.connection).ExecuteScalar();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("SELECT 1 FROM user" + " where username = \"" + username + "\"" + " and encoded_password_hash = SHA1('" + encoded_password + "') and be_active", connection);
+            result = null != my_sql_command.ExecuteScalar();
+            Close();
             return result;
         }
 
         public bool BeRegisteredEmailAddress(string email_address)
         {
             bool result;
-            this.Open();
-            result = null != new MySqlCommand("SELECT 1 FROM user where password_reset_email_address = \"" + email_address + "\"", this.connection).ExecuteScalar();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("SELECT 1 FROM user where password_reset_email_address = \"" + email_address + "\"", connection);
+            result = null != my_sql_command.ExecuteScalar();
+            Close();
             return result;
         }
 
         public bool BeRegisteredUsername(string username)
         {
             bool result;
-            this.Open();
-            result = null != new MySqlCommand("SELECT 1 FROM user where username = \"" + username + "\"", this.connection).ExecuteScalar();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("SELECT 1 FROM user where username = \"" + username + "\"", connection);
+            result = null != my_sql_command.ExecuteScalar();
+            Close();
             return result;
         }
 
         public bool BeStalePassword(string id)
         {
             bool result;
-            this.Open();
-            result = "1" == new MySqlCommand("SELECT be_stale_password FROM user where id=" + id, this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("SELECT be_stale_password FROM user where id=" + id, connection);
+            result = "1" == my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -113,15 +117,16 @@ namespace Class_db_users
         {
             bool result;
             MySqlDataReader dr;
-            this.Open();
+            Open();
             ((target) as ListControl).Items.Clear();
-            dr = new MySqlCommand("SELECT username FROM user WHERE username like \"" + partial_username + "%\" order by username", this.connection).ExecuteReader();
+            using var my_sql_command = new MySqlCommand("SELECT username FROM user WHERE username like \"" + partial_username + "%\" order by username", connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["username"].ToString(), dr["username"].ToString()));
             }
             dr.Close();
-            this.Close();
+            Close();
             result = ((target) as ListControl).Items.Count > 0;
             return result;
         }
@@ -130,19 +135,20 @@ namespace Class_db_users
         {
             MySqlDataReader dr;
             ((target) as ListControl).Items.Clear();
-            if (unselected_literal != k.EMPTY)
+            if (unselected_literal.Length > 0)
             {
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
-            this.Open();
-            dr = new MySqlCommand("select user.id as user_id" + " , name as user_name" + " from user" + " order by user_name", this.connection).ExecuteReader();
+            Open();
+            using var my_sql_command = new MySqlCommand("select user.id as user_id" + " , name as user_name" + " from user" + " order by user_name", connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["user_name"].ToString(), dr["user_id"].ToString()));
             }
             dr.Close();
-            this.Close();
-            if (selected_value != k.EMPTY)
+            Close();
+            if (selected_value.Length > 0)
             {
                 ((target) as ListControl).SelectedValue = selected_value;
             }
@@ -161,9 +167,10 @@ namespace Class_db_users
 
         public void Delete(string username)
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("delete from user where username = \"" + username + "\""), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("delete from user where username = \"" + username + "\""), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public bool Get(string username, out string encoded_password, out bool be_stale_password, out string password_reset_email_address, out bool be_active, out uint num_unsuccessful_login_attempts, out string last_login)
@@ -178,8 +185,9 @@ namespace Class_db_users
             num_unsuccessful_login_attempts = 0;
             last_login = k.EMPTY;
             result = false;
-            this.Open();
-            dr = new MySqlCommand("select username" + " , IFNULL(encoded_password_hash,\"\") as encoded_password" + " , be_stale_password" + " , password_reset_email_address" + " , be_active" + " , num_unsuccessful_login_attempts" + " , IFNULL(last_login,\"\") as last_login" + " from user" + " where username = \"" + username + "\"", this.connection).ExecuteReader();
+            Open();
+            using var my_sql_command = new MySqlCommand("select username" + " , IFNULL(encoded_password_hash,\"\") as encoded_password" + " , be_stale_password" + " , password_reset_email_address" + " , be_active" + " , num_unsuccessful_login_attempts" + " , IFNULL(last_login,\"\") as last_login" + " from user" + " where username = \"" + username + "\"", connection);
+            dr = my_sql_command.ExecuteReader();
             if (dr.Read())
             {
                 username = dr["username"].ToString();
@@ -192,43 +200,47 @@ namespace Class_db_users
                 result = true;
             }
             dr.Close();
-            this.Close();
+            Close();
             return result;
         }
 
         public string IdOf(string username)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select id from user where username = \"" + username + "\"", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select id from user where username = \"" + username + "\"", connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
         public uint NumUnsuccessfulLoginAttemptsOf(string username)
         {
             uint result;
-            this.Open();
-            result = uint.Parse(new MySqlCommand("select num_unsuccessful_login_attempts from user where username = \"" + username + "\"", this.connection).ExecuteScalar().ToString());
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select num_unsuccessful_login_attempts from user where username = \"" + username + "\"", connection);
+            result = uint.Parse(my_sql_command.ExecuteScalar().ToString());
+            Close();
             return result;
         }
 
         public string PasswordResetEmailAddressOfId(string id)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select password_reset_email_address from user where id = " + id, this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select password_reset_email_address from user where id = " + id, connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
         public string PasswordResetEmailAddressOfUsername(string username)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select password_reset_email_address from user where username = \"" + username + "\"", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select password_reset_email_address from user where username = \"" + username + "\"", connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -241,7 +253,7 @@ namespace Class_db_users
       var service_id = k.EMPTY;
       //
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select distinct name"
         + " , IFNULL(region_code,'') as region_code"
@@ -253,8 +265,8 @@ namespace Class_db_users
         + " where user_id = '" + id + "'"
         + " order by name",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         privilege_spec = dr["name"].ToString();
@@ -283,38 +295,42 @@ namespace Class_db_users
 
         public void RecordSuccessfulLogin(string id)
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("update user" + " set num_unsuccessful_login_attempts = 0" + " , last_login = NOW()" + " where id = " + id), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("update user" + " set num_unsuccessful_login_attempts = 0" + " , last_login = NOW()" + " where id = " + id), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public void RecordUnsuccessfulLoginAttempt(string username)
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("update user" + " set num_unsuccessful_login_attempts = num_unsuccessful_login_attempts + 1" + " where username = \"" + username + "\""), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("update user" + " set num_unsuccessful_login_attempts = num_unsuccessful_login_attempts + 1" + " where username = \"" + username + "\""), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public void RegisterNew(string username, string encoded_password, string email_address)
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("insert into user" + " set username = \"" + username + "\"" + " , encoded_password_hash = SHA1('" + encoded_password + "')" + " , be_stale_password = FALSE" + " , password_reset_email_address = \"" + email_address + "\"" + " , last_login = NOW()"), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("insert into user" + " set username = \"" + username + "\"" + " , encoded_password_hash = SHA1('" + encoded_password + "')" + " , be_stale_password = FALSE" + " , password_reset_email_address = \"" + email_address + "\"" + " , last_login = NOW()"), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public void Set(string username, bool be_stale_password, string password_reset_email_address, bool be_active)
         {
             string childless_field_assignments_clause;
             childless_field_assignments_clause = " be_stale_password = " + be_stale_password.ToString() + " , password_reset_email_address = \"" + password_reset_email_address + "\"" + " , be_active = " + be_active.ToString();
-            this.Open();
-            new MySqlCommand(db_trail.Saved("insert user" + " set username = \"" + username + "\"" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("insert user" + " set username = \"" + username + "\"" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public void SetEmailAddress(string id, string email_address)
           {
           Open();
-          new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             db_trail.Saved
               (
@@ -327,31 +343,34 @@ namespace Class_db_users
               + " COMMIT"
               ),
             connection
-            )
-            .ExecuteNonQuery();
+            );
+          my_sql_command.ExecuteNonQuery();
           Close();
           }
 
         public void SetPassword(string id, string encoded_password)
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("update user" + " set encoded_password_hash = SHA1('" + encoded_password + "')," + " be_stale_password = FALSE " + " where id = " + id), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("update user" + " set encoded_password_hash = SHA1('" + encoded_password + "')," + " be_stale_password = FALSE " + " where id = " + id), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public void SetTemporaryPassword(string username, string encoded_password)
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("update user" + " set encoded_password_hash = SHA1('" + encoded_password + "')," + " be_stale_password = TRUE " + " where username = \"" + username + "\""), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("update user" + " set encoded_password_hash = SHA1('" + encoded_password + "')," + " be_stale_password = TRUE " + " where username = \"" + username + "\""), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public string UsernameOfEmailAddress(string email_address)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select username from user where password_reset_email_address = \"" + email_address + "\"", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select username from user where password_reset_email_address = \"" + email_address + "\"", connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 

@@ -5,7 +5,7 @@ namespace Class_biz_fiscal_years
 {
     public class TClass_biz_fiscal_years
     {
-        private TClass_db_fiscal_years db_fiscal_years = null;
+        private readonly TClass_db_fiscal_years db_fiscal_years = null;
         private string new_designator = String.Empty;
         //Constructor  Create()
         public TClass_biz_fiscal_years() : base()

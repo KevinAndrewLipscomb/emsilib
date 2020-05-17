@@ -8,8 +8,8 @@ namespace Class_db_milestones
 {
     public class TClass_db_milestones: TClass_db
     {
-        private TClass_biz_fiscal_years biz_fiscal_years = null;
-        private TClass_db_trail db_trail = null;
+        private readonly TClass_biz_fiscal_years biz_fiscal_years = null;
+        private readonly TClass_db_trail db_trail = null;
 
         //Constructor  Create()
         public TClass_db_milestones() : base()
@@ -21,9 +21,10 @@ namespace Class_db_milestones
         public bool BeProcessed(uint code)
         {
             bool result;
-            this.Open();
-            result = "1" == new MySqlCommand("select be_processed from fy_calendar" + " where fiscal_year_id = " + biz_fiscal_years.IdOfCurrent() + " and milestone_code = " + code.ToString(), this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select be_processed from fy_calendar" + " where fiscal_year_id = " + biz_fiscal_years.IdOfCurrent() + " and milestone_code = " + code.ToString(), connection);
+            result = "1" == my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -32,7 +33,8 @@ namespace Class_db_milestones
             be_processed = true;
             value = DateTime.MaxValue;
             Open();
-            var dr = new MySqlCommand("select be_processed,value from fy_calendar where fiscal_year_id = '" + biz_fiscal_years.IdOfCurrent() + "' and milestone_code = '" + code.ToString() + "'", connection).ExecuteReader();
+            using var my_sql_command = new MySqlCommand("select be_processed,value from fy_calendar where fiscal_year_id = '" + biz_fiscal_years.IdOfCurrent() + "' and milestone_code = '" + code.ToString() + "'", connection);
+            var dr = my_sql_command.ExecuteReader();
             if (dr.Read())
               {
               be_processed = (dr["be_processed"].ToString() == "1");
@@ -46,9 +48,10 @@ namespace Class_db_milestones
         {
             string cmdText;
             cmdText = "update fy_calendar" + " set be_processed = TRUE" + " where fiscal_year_id = " + biz_fiscal_years.IdOfCurrent() + " and milestone_code = " + code.ToString();
-            this.Open();
-            new MySqlCommand(db_trail.Saved(cmdText), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved(cmdText), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
     } // end TClass_db_milestones

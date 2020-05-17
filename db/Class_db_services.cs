@@ -23,8 +23,8 @@ namespace Class_db_services
       public string strike_team_participation_level_id;
       }
 
-        private TClass_biz_notifications biz_notifications = null;
-        private TClass_db_trail db_trail = null;
+        private readonly TClass_biz_notifications biz_notifications = null;
+        private readonly TClass_db_trail db_trail = null;
 
         public TClass_db_services() : base()
         {
@@ -40,9 +40,10 @@ namespace Class_db_services
         public string AffiliateNumOfId(string id)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("SELECT affiliate_num FROM service WHERE id = " + id, this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("SELECT affiliate_num FROM service WHERE id = " + id, connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -50,15 +51,19 @@ namespace Class_db_services
         {
             bool result;
             result = false;
-            this.Open();
-            if ("1" != new MySqlCommand("select max(service_user.id) = max(service.id) from service_user, service", this.connection).ExecuteScalar().ToString())
+            Open();
+            using var my_sql_command_1 = new MySqlCommand("select max(service_user.id) = max(service.id) from service_user, service", connection);
+            if ("1" != my_sql_command_1.ExecuteScalar().ToString())
             {
                 biz_notifications.IssueCorruptionNotification("SERVICE", "BEFORE");
             }
             else
             {
-                new MySqlCommand(db_trail.Saved("SET FOREIGN_KEY_CHECKS=0; SET AUTOCOMMIT=0; START TRANSACTION" + ";" + " insert service" + " set county_code = \"" + county_code + "\"" + " , affiliate_num = \"" + affiliate_num + "\"" + " , name = \"" + service_name + "\"" + " , charter_kind = \"9\"" + " , corpadmin_contact_name =\"\"" + " , corpadmin_primary_phone_num = \"\"" + " , be_emsof_participant = FALSE" + " , coo_name = \"\"" + " , coo_work_phone_num = \"\"" + " , physical_street_address_line_1 = \"\"" + " , physical_city = \"\"" + " , physical_state = \"\"" + " , physical_zip_code = \"\"" + " , mail_address_line_1 = \"\"" + " , mail_city = \"\"" + " , mail_state = \"\"" + " , mail_zip_code = \"\"" + " , num_doh_licensed_vehicles = 0" + " , num_ambulances = 0" + " , be_qrs_unrecognized = FALSE" + " , be_rescue_unrecognized = FALSE" + ";" + " insert service_user set password_reset_email_address = \"" + password_reset_email_address + "\"" + ";" + " SET FOREIGN_KEY_CHECKS=1; COMMIT"), this.connection).ExecuteNonQuery();
-                if ("1" != new MySqlCommand("select max(service_user.id) = max(service.id) from service_user, service", this.connection).ExecuteScalar().ToString())
+                using var my_sql_command_2 = new MySqlCommand(db_trail.Saved("SET FOREIGN_KEY_CHECKS=0; SET AUTOCOMMIT=0; START TRANSACTION" + ";" + " insert service" + " set county_code = \"" + county_code + "\"" + " , affiliate_num = \"" + affiliate_num + "\"" + " , name = \"" + service_name + "\"" + " , charter_kind = \"9\"" + " , corpadmin_contact_name =\"\"" + " , corpadmin_primary_phone_num = \"\"" + " , be_emsof_participant = FALSE" + " , coo_name = \"\"" + " , coo_work_phone_num = \"\"" + " , physical_street_address_line_1 = \"\"" + " , physical_city = \"\"" + " , physical_state = \"\"" + " , physical_zip_code = \"\"" + " , mail_address_line_1 = \"\"" + " , mail_city = \"\"" + " , mail_state = \"\"" + " , mail_zip_code = \"\"" + " , num_doh_licensed_vehicles = 0" + " , num_ambulances = 0" + " , be_qrs_unrecognized = FALSE" + " , be_rescue_unrecognized = FALSE" + ";" + " insert service_user set password_reset_email_address = \"" + password_reset_email_address + "\"" + ";" + " SET FOREIGN_KEY_CHECKS=1; COMMIT"), connection);
+                my_sql_command_2.ExecuteNonQuery();
+                //
+                using var my_sql_command_3 = new MySqlCommand("select max(service_user.id) = max(service.id) from service_user, service", connection);
+                if ("1" != my_sql_command_3.ExecuteScalar().ToString())
                 {
                     biz_notifications.IssueCorruptionNotification("SERVICE", "AFTER");
                 }
@@ -67,7 +72,7 @@ namespace Class_db_services
                     result = true;
                 }
             }
-            this.Close();
+            Close();
 
             return result;
         }
@@ -75,27 +80,30 @@ namespace Class_db_services
         public bool BeDistressed(string id)
         {
             bool result;
-            this.Open();
-            result = "1" == new MySqlCommand("select be_distressed from service where id = \"" + id + "\"", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select be_distressed from service where id = \"" + id + "\"", connection);
+            result = "1" == my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
         public bool BeKnown(string affiliate_num)
         {
             bool result;
-            this.Open();
-            result = null != new MySqlCommand("select 1 from service where affiliate_num = \"" + affiliate_num + "\"", this.connection).ExecuteScalar();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select 1 from service where affiliate_num = \"" + affiliate_num + "\"", connection);
+            result = null != my_sql_command.ExecuteScalar();
+            Close();
             return result;
         }
 
         public bool BeValidAndParticipating(string id)
         {
             bool result;
-            this.Open();
-            result = null != new MySqlCommand("select be_valid_profile and be_emsof_participant from service where id = \"" + id + "\"", this.connection).ExecuteScalar();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select be_valid_profile and be_emsof_participant from service where id = \"" + id + "\"", connection);
+            result = null != my_sql_command.ExecuteScalar();
+            Close();
             return result;
         }
 
@@ -103,15 +111,16 @@ namespace Class_db_services
         {
             bool result;
             MySqlDataReader dr;
-            this.Open();
+            Open();
             ((target) as ListControl).Items.Clear();
-            dr = new MySqlCommand("SELECT affiliate_num" + " , name" + " , concat(affiliate_num,\" - \",name) as descriptor" + " FROM service" + " WHERE concat(affiliate_num,\" - \",name) like \"%" + partial_affiliate_num + "%\"" + " order by name", this.connection).ExecuteReader();
+            using var my_sql_command = new MySqlCommand("SELECT affiliate_num" + " , name" + " , concat(affiliate_num,\" - \",name) as descriptor" + " FROM service" + " WHERE concat(affiliate_num,\" - \",name) like \"%" + partial_affiliate_num + "%\"" + " order by name", connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["descriptor"].ToString(), dr["affiliate_num"].ToString()));
             }
             dr.Close();
-            this.Close();
+            Close();
             result = ((target) as ListControl).Items.Count > 0;
             return result;
         }
@@ -126,7 +135,7 @@ namespace Class_db_services
           )
           {
             Open();
-            ((target) as BaseDataList).DataSource = new MySqlCommand
+            using var my_sql_command = new MySqlCommand
               (
               "select affiliate_num"
               + " , service.name as service_name"
@@ -145,8 +154,8 @@ namespace Class_db_services
               +     (county_code.Length > 0 ? " and '" + county_code + "' in (service.county_code,emsof_extra_service_county_dependency.county_code)" : k.EMPTY)
               + " order by " + sort_order.Replace("%",(be_order_ascending ? " asc" : " desc")),
               connection
-              )
-              .ExecuteReader();
+              );
+            ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
             ((target) as BaseDataList).DataBind();
             Close();
           }
@@ -159,7 +168,7 @@ namespace Class_db_services
         {
             MySqlDataReader dr;
             string cmdText;
-            this.Open();
+            Open();
             ((target) as ListControl).Items.Clear();
             ((target) as ListControl).Items.Add(new ListItem("-- Select --", ""));
             cmdText = "SELECT DISTINCT id,name FROM service_user JOIN service using (id)";
@@ -170,20 +179,21 @@ namespace Class_db_services
             cmdText += " WHERE be_active";
             if (!be_unfiltered)
               {
-              cmdText = cmdText + " and '" + county_user_id + "' in (service.county_code,emsof_extra_service_county_dependency.county_code)";
+              cmdText += " and '" + county_user_id + "' in (service.county_code,emsof_extra_service_county_dependency.county_code)";
               }
             if (!be_inclusive_of_invalids_and_nonparticipants)
             {
-                cmdText = cmdText + " and be_valid_profile and be_emsof_participant";
+                cmdText += " and be_valid_profile and be_emsof_participant";
             }
-            cmdText = cmdText + " ORDER BY name";
-            dr = new MySqlCommand(cmdText, this.connection).ExecuteReader();
+            cmdText += " ORDER BY name";
+            using var my_sql_command = new MySqlCommand(cmdText, connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["name"].ToString(), dr["id"].ToString()));
             }
             dr.Close();
-            this.Close();
+            Close();
         }
 
     internal void BindBaseDataListOfAdHocStrikeTeams
@@ -195,7 +205,7 @@ namespace Class_db_services
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select service.id as id"
         + " , region_code_name_map.code as region_code"
@@ -219,8 +229,8 @@ namespace Class_db_services
         + " group by service.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -245,7 +255,7 @@ namespace Class_db_services
       )
       {
       Open();
-      ((target) as BaseDataList).DataSource = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select service.id as id"
         + " , affiliate_num"
@@ -269,8 +279,8 @@ namespace Class_db_services
         + " group by service.id"
         + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
         connection
-        )
-        .ExecuteReader();
+        );
+      ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
       ((target) as BaseDataList).DataBind();
       Close();
       }
@@ -283,7 +293,7 @@ namespace Class_db_services
       {
       Open();
       ((target) as ListControl).Items.Clear();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select service.id as id"
         + " , service.short_name as name"
@@ -300,8 +310,8 @@ namespace Class_db_services
         + " group by service.id"
         + " order by service.name",
         connection
-        )
-        .ExecuteReader();
+        );
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         ((target) as ListControl).Items.Add(new ListItem(dr["name"].ToString(), dr["id"].ToString()));
@@ -319,7 +329,7 @@ namespace Class_db_services
           )
           {
           Open();
-          ((target) as BaseDataList).DataSource = new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             "select service.id as service_id"
             + " , service.affiliate_num as service_affiliate_num"
@@ -333,8 +343,8 @@ namespace Class_db_services
             +   " and be_pacrat_subscriber"
             + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
             connection
-            )
-            .ExecuteReader();
+            );
+          ((target) as BaseDataList).DataSource = my_sql_command.ExecuteReader();
           ((target) as BaseDataList).DataBind();
           Close();
           }
@@ -342,7 +352,7 @@ namespace Class_db_services
     internal void DeactivateAdHocServices(string region_code)
       {
       Open();
-      new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "update service"
         + " join county_region_map on (county_region_map.county_code=service.county_code)"
@@ -350,8 +360,8 @@ namespace Class_db_services
         + " where strike_team_participation_level_id = (select id from strike_team_participation_level where description = 'Ad-hoc')"
         +   " and county_region_map.region_code = '" + region_code + "'",
         connection
-        )
-        .ExecuteNonQuery();
+        );
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -359,9 +369,10 @@ namespace Class_db_services
         {
             bool result;
             result = true;
-            this.Open();
+            Open();
             try {
-                new MySqlCommand(db_trail.Saved("delete from service where affiliate_num = " + affiliate_num), this.connection).ExecuteNonQuery();
+                using var my_sql_command = new MySqlCommand(db_trail.Saved("delete from service where affiliate_num = " + affiliate_num), connection);
+                my_sql_command.ExecuteNonQuery();
             }
             catch(System.Exception e) {
                 if (e.Message.StartsWith("Cannot delete or update a parent row: a foreign key constraint fails", true, null))
@@ -370,10 +381,10 @@ namespace Class_db_services
                 }
                 else
                 {
-                    throw e;
+                    throw;
                 }
             }
-            this.Close();
+            Close();
             return result;
         }
 
@@ -384,12 +395,12 @@ namespace Class_db_services
       )
       {
       Open();
-      var designator_with_competing_short_name_obj = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         (
         "select concat(name,' (affiliate #',affiliate_num,')') from service where short_name = '" + short_name + "' and affiliate_num <> '" + affiliate_num + "'",
         connection
-        )
-        .ExecuteScalar();
+        );
+      var designator_with_competing_short_name_obj = my_sql_command.ExecuteScalar();
       Close();
       return (designator_with_competing_short_name_obj == null ? k.EMPTY : designator_with_competing_short_name_obj.ToString());
       }
@@ -407,7 +418,8 @@ namespace Class_db_services
               }
             }
           Open();
-          var dr = new MySqlCommand(sql, this.connection).ExecuteReader();
+          using var my_sql_command = new MySqlCommand(sql, connection);
+          var dr = my_sql_command.ExecuteReader();
           while (dr.Read())
             {
             email_target += dr["password_reset_email_address"].ToString() + k.COMMA_SPACE;
@@ -419,7 +431,8 @@ namespace Class_db_services
         internal string EmsofCoordinatorNameOf(string id)
           {
           Open();
-          var emsof_coordinator_name_of = new MySqlCommand("select emsof_contact_name from service where id = '" + id + "'",connection).ExecuteScalar().ToString();
+          using var my_sql_command = new MySqlCommand("select emsof_contact_name from service where id = '" + id + "'",connection);
+          var emsof_coordinator_name_of = my_sql_command.ExecuteScalar().ToString();
           Close();
           return emsof_coordinator_name_of;
           }
@@ -657,7 +670,8 @@ namespace Class_db_services
             short_name = k.EMPTY;
             var result = false;
             Open();
-            MySqlDataReader dr = new MySqlCommand("select * from service where CAST(affiliate_num AS CHAR) = '" + affiliate_num + "'", this.connection).ExecuteReader();
+            using var my_sql_command = new MySqlCommand("select * from service where CAST(affiliate_num AS CHAR) = '" + affiliate_num + "'", connection);
+            MySqlDataReader dr = my_sql_command.ExecuteReader();
             if (dr.Read())
               {
                 id = dr["id"].ToString();
@@ -788,33 +802,37 @@ namespace Class_db_services
         internal string IdOfAffiliateNum(string affiliate_num)
           {
           Open();
-          var id_of_affiliate_num = new MySqlCommand("select id from service where affiliate_num = '" + affiliate_num + "'",connection).ExecuteScalar().ToString();
+          using var my_sql_command = new MySqlCommand("select id from service where affiliate_num = '" + affiliate_num + "'",connection);
+          var id_of_affiliate_num = my_sql_command.ExecuteScalar().ToString();
           Close();
           return id_of_affiliate_num;
           }
 
         public void MarkProfilesStale()
         {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("update service set be_valid_profile = FALSE"), this.connection).ExecuteNonQuery();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand(db_trail.Saved("update service set be_valid_profile = FALSE"), connection);
+            my_sql_command.ExecuteNonQuery();
+            Close();
         }
 
         public string MdNameOf(string service_id)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select md_name from service where id = " + service_id, this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select md_name from service where id = " + service_id, connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
         public string NameOf(string service_id)
         {
             string result;
-            this.Open();
-            result = new MySqlCommand("select name from service where id = '" + service_id + "'", this.connection).ExecuteScalar().ToString();
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select name from service where id = '" + service_id + "'", connection);
+            result = my_sql_command.ExecuteScalar().ToString();
+            Close();
             return result;
         }
 
@@ -826,32 +844,34 @@ namespace Class_db_services
         public uint NumAmbulancesOf(string service_id)
         {
             uint result;
-            this.Open();
-            result = uint.Parse(new MySqlCommand("select num_ambulances from service where id = " + service_id, this.connection).ExecuteScalar().ToString());
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select num_ambulances from service where id = " + service_id, connection);
+            result = uint.Parse(my_sql_command.ExecuteScalar().ToString());
+            Close();
             return result;
         }
 
         public uint NumDohLicensedVehiclesOf(string service_id)
         {
             uint result;
-            this.Open();
-            result = uint.Parse(new MySqlCommand("select num_doh_licensed_vehicles from service where id = " + service_id, this.connection).ExecuteScalar().ToString());
-            this.Close();
+            Open();
+            using var my_sql_command = new MySqlCommand("select num_doh_licensed_vehicles from service where id = " + service_id, connection);
+            result = uint.Parse(my_sql_command.ExecuteScalar().ToString());
+            Close();
             return result;
         }
 
         internal string RegionCodeOf(string service_id)
           {
           Open();
-          var region_code_of = new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             "select region_code"
             + " from service join county_region_map on (county_region_map.county_code=service.county_code)"
             + " where service.id = '" + service_id + "'",
             connection
-            )
-            .ExecuteScalar().ToString();
+            );
+          var region_code_of = my_sql_command.ExecuteScalar().ToString();
           Close();
           return region_code_of;
           }
@@ -860,7 +880,7 @@ namespace Class_db_services
           {
           var service_strike_team_management_footprint_of = k.EMPTY;          
           Open();
-          var service_strike_team_management_footprint_of_obj = new MySqlCommand
+          using var my_sql_command = new MySqlCommand
             (
             "select GROUP_CONCAT(service.id)"
             + " from role_member_map"
@@ -871,8 +891,8 @@ namespace Class_db_services
             +   " and role_id = (select id from role where name = 'Service Strike Team Manager')"
             +   " and be_pacrat_subscriber",
             connection
-            )
-            .ExecuteScalar();
+            );
+          var service_strike_team_management_footprint_of_obj = my_sql_command.ExecuteScalar();
           if (service_strike_team_management_footprint_of_obj != null)
             {
             service_strike_team_management_footprint_of = service_strike_team_management_footprint_of_obj.ToString();
@@ -1127,7 +1147,8 @@ namespace Class_db_services
       )
       {
       Open();
-      new MySqlCommand("update service set short_name = '" + value + "' where id = '" + id + "'",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update service set short_name = '" + value + "' where id = '" + id + "'",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
@@ -1138,14 +1159,16 @@ namespace Class_db_services
       )
       {
       Open();
-      new MySqlCommand("update service set strike_team_participation_level_id = '" + level_id + "' where id = '" + id + "'",connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand("update service set strike_team_participation_level_id = '" + level_id + "' where id = '" + id + "'",connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 
     public string ShortNameOf(string service_id)
       {
       Open();
-      var short_name_of = new MySqlCommand("select short_name from service where id = '" + service_id + "'",connection).ExecuteScalar().ToString();
+      using var my_sql_command = new MySqlCommand("select short_name from service where id = '" + service_id + "'",connection);
+      var short_name_of = my_sql_command.ExecuteScalar().ToString();
       Close();
       return short_name_of;
       }
@@ -1159,9 +1182,10 @@ namespace Class_db_services
       {
       var strike_team_participant_id_q = new Queue<string>();
       Open();
-      var dr = new MySqlCommand
+      using var my_sql_command = new MySqlCommand
         ("select id from service where strike_team_participation_level_id in (select id from strike_team_participation_level where description in ('" + included_descriptions_csv_clause + "'))",connection)
-        .ExecuteReader();
+        ;
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         strike_team_participant_id_q.Enqueue(dr["id"].ToString());
@@ -1178,20 +1202,17 @@ namespace Class_db_services
     internal object Summary(string id)
       {
       Open();
-      var dr =
+      using var my_sql_command = new MySqlCommand
         (
-        new MySqlCommand
-          (
-          "SELECT name"
-          + " , short_name"
-          + " , affiliate_num"
-          + " , strike_team_participation_level_id"
-          + " FROM service"
-          + " where id = '" + id + "'",
-          connection
-          )
-          .ExecuteReader()
+        "SELECT name"
+        + " , short_name"
+        + " , affiliate_num"
+        + " , strike_team_participation_level_id"
+        + " FROM service"
+        + " where id = '" + id + "'",
+        connection
         );
+      var dr = my_sql_command.ExecuteReader();
       dr.Read();
       var the_summary = new service_summary()
         {
@@ -1211,7 +1232,8 @@ namespace Class_db_services
           if (milestone == milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE)
             {
             Open();
-            var dr = new MySqlCommand("select id from service where not be_valid_profile", connection).ExecuteReader();
+            using var my_sql_command = new MySqlCommand("select id from service where not be_valid_profile", connection);
+            var dr = my_sql_command.ExecuteReader();
             while (dr.Read())
               {
               id_q.Enqueue(dr["id"]);

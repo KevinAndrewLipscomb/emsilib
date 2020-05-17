@@ -6,7 +6,7 @@ namespace Class_biz_match_level
 {
     public class TClass_biz_match_level
     {
-        private TClass_db_match_level db_match_level = null;
+        private readonly TClass_db_match_level db_match_level = null;
         //Constructor  Create()
         public TClass_biz_match_level() : base()
         {
@@ -71,13 +71,3 @@ namespace Class_biz_match_level
     } // end nominal_type
 
 }
-
-namespace Class_biz_match_level.Units
-{
-    public class Class_biz_match_level
-    {
-        public const string ID = "$Id";
-    } // end Class_biz_match_level
-
-}
-

@@ -23,8 +23,10 @@ namespace Class_db_notifications
       + " where tier_id = ";
       }
 
-        private string tier_2_match_field = String.Empty;
-        private string tier_3_match_field = String.Empty;
+        #pragma warning disable IDE0052 // Remove unread private members
+        private readonly string tier_2_match_field = String.Empty;
+        private readonly string tier_3_match_field = String.Empty;
+        #pragma warning restore IDE0052 // Remove unread private members
 
         //Constructor  Create()
         public TClass_db_notifications() : base()
@@ -37,19 +39,20 @@ namespace Class_db_notifications
         {
             MySqlDataReader dr;
             ((target) as ListControl).Items.Clear();
-            if (unselected_literal != k.EMPTY)
+            if (unselected_literal.Length > 0)
             {
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
-            this.Open();
-            dr = new MySqlCommand("select notification.id as notification_id" + " , name as notification_name" + " from notification" + " order by notification_name", this.connection).ExecuteReader();
+            Open();
+            using var my_sql_command = new MySqlCommand("select notification.id as notification_id" + " , name as notification_name" + " from notification" + " order by notification_name", connection);
+            dr = my_sql_command.ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["notification_name"].ToString(), dr["notification_id"].ToString()));
             }
             dr.Close();
-            this.Close();
-            if (selected_value != k.EMPTY)
+            Close();
+            if (selected_value.Length > 0)
             {
                 ((target) as ListControl).SelectedValue = selected_value;
             }
@@ -81,13 +84,13 @@ namespace Class_db_notifications
       //
       // Tier 1 stakeholders
       //
-      dr = new MySqlCommand
+      using var my_sql_command_1 = new MySqlCommand
         (
         Static.COMMON_SELECT_EMAIL_ADDRESS_FROM_MEMBER_ROLE_NOTIFICATION_WHERE_TIER_ID_EQUALS + "1"
         + common_notification_name_condition_clause,
         connection
-        )
-        .ExecuteReader();
+        );
+      dr = my_sql_command_1.ExecuteReader();
       if (dr != null)
         {
         while (dr.Read())
@@ -99,13 +102,13 @@ namespace Class_db_notifications
       //
       // Tier 2 stakeholders
       //
-      dr = new MySqlCommand
+      using var my_sql_command_2 = new MySqlCommand
         (
         Static.COMMON_SELECT_EMAIL_ADDRESS_FROM_MEMBER_ROLE_NOTIFICATION_WHERE_TIER_ID_EQUALS + "2 and region_code = (select regional_council_code from member where id = '" + member_id + "')"
         + common_notification_name_condition_clause,
         connection
-        )
-        .ExecuteReader();
+        );
+      dr = my_sql_command_2.ExecuteReader();
       if (dr != null)
         {
         while (dr.Read())
