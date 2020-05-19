@@ -1,6 +1,3 @@
-#pragma warning disable CA1031 // Do not catch general exception types
-#pragma warning disable CA2234 // Pass system uri objects instead of strings
-
 using Class_biz_regions;
 using Class_ss;
 using HtmlAgilityPack;
@@ -29,6 +26,15 @@ namespace ConEdLink.component.ss
       {      
       biz_regions = new TClass_biz_regions();
       }
+
+    //--
+    //
+    // BEGIN code generated initially by Fiddler extension "Request to Code"
+    //
+    #pragma warning disable CA1031 // Do not catch general exception types
+    #pragma warning disable CA2234 // Pass system uri objects instead of strings
+    //
+    //--
 
     private static bool Request_ems_health_state_pa_us_Emsportal
       (
@@ -745,6 +751,15 @@ namespace ConEdLink.component.ss
 
 	    return true;
     }
+
+    //--
+    //
+    #pragma warning restore CA1031 // Do not catch general exception types
+    #pragma warning restore CA2234 // Pass system uri objects instead of strings
+    //
+    // END code generated initially by Fiddler extension "Request to Code"
+    //
+    //--
 
     private static bool Request_ems_health_state_pa_us_ConedClassreg_ClasswascanceledClassmaintenance
       (
