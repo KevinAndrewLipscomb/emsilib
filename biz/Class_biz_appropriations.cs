@@ -10,6 +10,7 @@ namespace Class_biz_appropriations
     {
         private readonly TClass_biz_fiscal_years biz_fiscal_years = null;
         private readonly TClass_db_appropriations db_appropriations = null;
+
         //Constructor  Create()
         public TClass_biz_appropriations() : base()
         {

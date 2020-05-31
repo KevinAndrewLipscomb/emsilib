@@ -11,6 +11,7 @@ namespace Class_biz_services
     {
         private readonly TClass_db_appropriations db_appropriations = null;
         private readonly TClass_db_services db_services = null;
+
         //Constructor  Create()
         public TClass_biz_services() : base()
         {

@@ -802,7 +802,7 @@ namespace Class_biz_emsof_requests
             }
         }
 
-        public Queue SusceptibleTo(milestone_type milestone)
+        internal Queue SusceptibleTo(milestone_type milestone)
         {
             Queue result;
             result = db_emsof_requests.SusceptibleTo(milestone);

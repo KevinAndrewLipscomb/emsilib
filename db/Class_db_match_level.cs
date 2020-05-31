@@ -9,13 +9,16 @@ namespace Class_db_match_level
 {
     public class TClass_db_match_level: TClass_db
     {
+
         private readonly TClass_db_trail db_trail = null;
+
         //Constructor  Create()
         public TClass_db_match_level() : base()
         {
             // TODO: Add any constructor code here
             db_trail = new TClass_db_trail();
         }
+
         public bool Bind(string partial_name, object target)
         {
             bool result;
@@ -119,12 +122,3 @@ namespace Class_db_match_level
     } // end TClass_db_match_level
 
 }
-
-namespace Class_db_match_level.Units
-{
-    public class Class_db_match_level
-    {
-    } // end Class_db_match_level
-
-}
-

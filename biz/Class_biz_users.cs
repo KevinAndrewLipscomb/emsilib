@@ -13,6 +13,7 @@ namespace Class_biz_users
         private readonly TClass_db_members db_members = null;
         private readonly TClass_db_users db_users = null;
         private readonly TClass_biz_notifications biz_notifications = null;
+
         //Constructor  Create()
         public TClass_biz_users() : base()
         {

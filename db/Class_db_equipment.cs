@@ -1,19 +1,21 @@
+using Class_db;
 using MySql.Data.MySqlClient;
 using System;
-
-
 using System.Collections;
 using System.Web.UI.WebControls;
-using Class_db;
+
 namespace Class_db_equipment
-{
-    public class TClass_db_equipment: TClass_db
+  {
+  public class TClass_db_equipment: TClass_db
     {
 
-    private struct serial_indicator_rec_type
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible")]
+    public struct serial_indicator_rec_type
       {
+      #pragma warning disable CA1051 // Do not declare visible instance fields
       public uint year;
       public uint value;
+      #pragma warning restore CA1051 // Do not declare visible instance fields
       }
 
         //Constructor  Create()

@@ -569,8 +569,7 @@ namespace Class_biz_notifications
       string residence_county_name,
       string street_address_1,
       string street_address_2,
-      string city_state_zip,
-      string certification_number
+      string city_state_zip
       )
       {
       var actor = k.EMPTY;
@@ -594,7 +593,6 @@ namespace Class_biz_notifications
           .Replace("<street_address_1/>", street_address_1)
           .Replace("<street_address_2/>", street_address_2)
           .Replace("<city_state_zip/>", city_state_zip)
-          .Replace("<certification_number/>", certification_number)
           ;
         };
 

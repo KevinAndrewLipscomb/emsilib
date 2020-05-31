@@ -752,15 +752,6 @@ namespace ConEdLink.component.ss
 	    return true;
     }
 
-    //--
-    //
-    #pragma warning restore CA1031 // Do not catch general exception types
-    #pragma warning restore CA2234 // Pass system uri objects instead of strings
-    //
-    // END code generated initially by Fiddler extension "Request to Code"
-    //
-    //--
-
     private static bool Request_ems_health_state_pa_us_ConedClassreg_ClasswascanceledClassmaintenance
       (
       CookieContainer cookie_container,
@@ -854,7 +845,7 @@ namespace ConEdLink.component.ss
 
 	    try
 	    {
-		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/ClassReg.asp");
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/ClassReg.asp");
         request.CookieContainer = cookie_container;
         request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
@@ -1833,6 +1824,15 @@ namespace ConEdLink.component.ss
 
 	    return k.EMPTY;
       }
+
+    //--
+    //
+    #pragma warning restore CA1031 // Do not catch general exception types
+    #pragma warning restore CA2234 // Pass system uri objects instead of strings
+    //
+    // END code generated initially by Fiddler extension "Request to Code"
+    //
+    //--
 
     internal class EmsInstructor
       {
