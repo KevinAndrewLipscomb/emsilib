@@ -1115,7 +1115,7 @@ namespace Class_db_emsof_requests
             return result;
         }
 
-        public Queue SusceptibleTo(milestone_type milestone)
+        internal Queue SusceptibleTo(milestone_type milestone)
         {
             Queue result;
             MySqlDataReader dr;

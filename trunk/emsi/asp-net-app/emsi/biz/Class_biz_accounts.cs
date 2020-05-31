@@ -188,7 +188,7 @@ namespace Class_biz_accounts
               );
         }
 
-        public void MakeDeadlineFailureNotification(milestone_type milestone, string service_id, string county_code)
+        internal void MakeDeadlineFailureNotification(milestone_type milestone, string service_id, string county_code)
         {
             bool be_advice_valuable;
             string county_coord_email_address;
@@ -412,7 +412,7 @@ namespace Class_biz_accounts
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailTargetByRegionAndRole(biz_services.RegionCodeOf(service_id),"emsof-coordinator"), "POC has assumed EMSOF resposibility for Service", "Dear Regional Council EMSOF Coordinator," + k.NEW_LINE + k.NEW_LINE + contact_person_name + " has successfully logged into WebEMSOF and has agreed to assume EMSOF Point Of Contact responsibilities " + "for " + service_name + ".  Furthermore, " + contact_person_name + " has agreed to give " + "reasonable advance notice to both the service and the regional council if it becomes necessary to relinquish such " + "responsibilities." + k.NEW_LINE + k.NEW_LINE + "You can contact " + contact_person_name + " at:" + k.NEW_LINE + k.NEW_LINE + "   " + poc_email_address + "  (mailto:" + poc_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, poc_email_address);
         }
 
-        public void Remind(milestone_type milestone, uint num_days_left, DateTime deadline_date, string service_id)
+        internal void Remind(milestone_type milestone, uint num_days_left, DateTime deadline_date, string service_id)
         {
             var task_description = k.EMPTY;
             var service_email_address = EmailAddressByKindId("service", service_id);

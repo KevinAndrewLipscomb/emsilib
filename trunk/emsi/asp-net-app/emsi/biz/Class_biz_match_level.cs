@@ -7,6 +7,7 @@ namespace Class_biz_match_level
     public class TClass_biz_match_level
     {
         private readonly TClass_db_match_level db_match_level = null;
+
         //Constructor  Create()
         public TClass_biz_match_level() : base()
         {

@@ -6,6 +6,18 @@ using System.Web.UI.WebControls;
 
 namespace Class_db_roles
   {
+
+  public struct crosstab_metadata_rec_type
+    {
+    #pragma warning disable CA1051 // Do not declare visible instance fields
+    public uint index;
+    public string sql_name;
+    public string id;
+    public string natural_text;
+    public string soft_hyphenation_text;
+    #pragma warning restore CA1051 // Do not declare visible instance fields
+    }
+
   public class TClass_db_roles: TClass_db
     {
 

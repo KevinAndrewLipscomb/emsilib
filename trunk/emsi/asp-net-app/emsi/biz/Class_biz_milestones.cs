@@ -8,15 +8,16 @@ using System.Collections;
 
 namespace Class_biz_milestones
   {
-    public enum milestone_type
+
+  public enum milestone_type
     {
-        COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE = 1,
-        SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE = 2,
-        SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE = 3,
-        SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE = 4,
-        END_OF_CYCLE_MILESTONE = 5,
-        SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE = 6
-    } // end milestone_type
+    COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE = 1,
+    SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE = 2,
+    SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE = 3,
+    SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE = 4,
+    END_OF_CYCLE_MILESTONE = 5,
+    SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE = 6
+    }
 
   public class TClass_biz_milestones
     {
@@ -54,7 +55,8 @@ namespace Class_biz_milestones
       } // end Class_biz_milestones
 
         private readonly TClass_db_milestones db_milestones = null;
-        public bool BeProcessed(milestone_type milestone)
+
+        internal bool BeProcessed(milestone_type milestone)
         {
             bool result;
             result = db_milestones.BeProcessed((uint)(milestone));

@@ -26,6 +26,7 @@ namespace Class_db_appropriations
         private readonly TClass_biz_fiscal_years biz_fiscal_years = null;
         private readonly TClass_biz_regional_staffers biz_regional_staffers = null;
         private readonly TClass_db_trail db_trail = null;
+
         //Constructor  Create()
         public TClass_db_appropriations() : base()
         {
