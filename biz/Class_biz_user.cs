@@ -1,6 +1,7 @@
 using Class_db_user;
 using Class_db_users;
 using kix;
+using System;
 using System.Configuration;
 using System.Web;
 
@@ -63,6 +64,11 @@ namespace Class_biz_user
       {
       var name = HttpContext.Current.User.Identity.Name;
       return name.Substring(0, name.LastIndexOf("_"));
+      }
+
+    public DateTime LastLoginTime()
+      {
+      return db_user.LastLoginTime(IdNum());
       }
 
     public string[] Privileges()
