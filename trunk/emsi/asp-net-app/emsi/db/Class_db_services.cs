@@ -1183,8 +1183,15 @@ namespace Class_db_services
       var strike_team_participant_id_q = new Queue<string>();
       Open();
       using var my_sql_command = new MySqlCommand
-        ("select id from service where strike_team_participation_level_id in (select id from strike_team_participation_level where description in ('" + included_descriptions_csv_clause + "'))",connection)
-        ;
+        (
+        "select service.id as id"
+        + " from service"
+        +   " join county_region_map on (county_region_map.county_code=service.county_code)"
+        +   " join region_code_name_map on (region_code_name_map.code=county_region_map.region_code)"
+        + " where strike_team_participation_level_id in (select id from strike_team_participation_level where description in ('" + included_descriptions_csv_clause + "'))"
+        +   "  and be_pacrat_subscriber",
+        connection
+        );
       var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
