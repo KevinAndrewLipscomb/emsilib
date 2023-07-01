@@ -159,7 +159,7 @@ namespace Class_biz_services
             return result;
         }
 
-    public string DesignatorCompetingShortName
+    public string DesignatorWithCompetingShortName
       (
       string affiliate_num,
       string short_name
