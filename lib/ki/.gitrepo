@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/KevinAndrewLipscomb/KiDotnetFoundation.git
 	branch = master
-	commit = a84650235b93b0581c511c507d561a375fc6245a
+	commit = cb5f54ac6ce7ba290c5e6d3c00e54183c3bd381b
 	parent = 099bd60a5bfa129b2a7ab5b473e2ff7508f2e55d
 	method = merge
 	cmdver = 0.4.6
