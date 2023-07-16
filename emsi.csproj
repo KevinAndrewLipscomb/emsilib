@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="external_data_binding\emsams\000-README.txt" />
+    <Content Include="lib\000-DROP-JUNCTION-TO-KiDotnetFoundation-IN-THIS-FOLDER.txt" />
     <None Include="Service References\ServiceReference_emsams_Practitioner\Practitioner1.disco" />
     <None Include="Service References\ServiceReference_emsams_ConEd\ConEd1.disco" />
   </ItemGroup>
